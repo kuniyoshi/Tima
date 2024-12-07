@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		911E95512D03F944003071FC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 911E95502D03F93F003071FC /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		911E953C2D03F8FD003071FC /* Tima.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tima.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		911E95502D03F93F003071FC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		911E95332D03F8FD003071FC = {
 			isa = PBXGroup;
 			children = (
+				911E95502D03F93F003071FC /* README.md */,
 				911E953E2D03F8FD003071FC /* Tima */,
 				911E953D2D03F8FD003071FC /* Products */,
 			);
@@ -109,6 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				911E95512D03F944003071FC /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
