@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Tima
-//
-//  Created by Koji Kuniyoshi on 2024-12-07.
-//
-
 import SwiftUI
 import SwiftData
 
