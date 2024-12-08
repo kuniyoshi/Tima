@@ -3,15 +3,15 @@ import SwiftData
 
 @Model
 final class Measurement {
-    var group: String
+    var genre: String
     var work: String
     var start: Date
     var end: Date
 
-    init(group: String, work: String, start: Date, end: Date?) {
-        self.group = group
+    init(genre: String, work: String, start: Date, end: Date) {
+        self.genre = genre
         self.work = work
         self.start = start
-        self.end = end ?? start
+        self.end = end
     }
 }

@@ -7,6 +7,8 @@ struct ContentView: View {
     @State private var genre: String = ""
     @State private var work: String = ""
     @State private var isRunning: Bool = false
+    @State private var startedAt: Date?
+    @State private var endedAt: Date?
 
     var body: some View {
         VStack {
@@ -19,13 +21,39 @@ struct ContentView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
 
-                Button(action: {
-                    isRunning.toggle()
-                }) {
-                    Image(systemName: isRunning ? "pause.circle" : "play.circle")
-                        .font(.title)
-                }
-                .padding()
+                Button(
+                    action: {
+                        if isRunning {
+                            startedAt = Date()
+                        } else {
+                            endedAt = Date()
+                        }
+
+                        assert(!isRunning || (isRunning && startedAt != nil && endedAt != nil))
+
+//                        if isRunning,
+//                           let startedAt,
+//                           let endedAt{
+//                            let mesurement = Measurement(
+//                                genre: genre,
+//                                work: work,
+//                                start: startedAt,
+//                                end: endedAt
+//                            )
+//                            modelContext.insert(mesurement)
+//                            do {
+//                                try modelContext.save()
+//                            } catch {
+//                                print("Failed to save mesurement: \(error)")
+//                            }
+//                        }
+
+                        isRunning.toggle()
+                    }) {
+                        Image(systemName: isRunning ? "pause.circle" : "play.circle")
+                            .font(.title)
+                    }
+                    .padding()
             }
             List {
                 ForEach(measurements) { measurement in
