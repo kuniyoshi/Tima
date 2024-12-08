@@ -6,6 +6,7 @@ struct ContentView: View {
     @Query private var items: [Item]
     @State private var genre: String = ""
     @State private var work: String = ""
+    @State private var isRunning: Bool = false
 
     var body: some View {
         VStack {
@@ -17,6 +18,14 @@ struct ContentView: View {
                 TextField("Input work...", text: $work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
+
+                Button(action: {
+                    isRunning.toggle()
+                }) {
+                    Image(systemName: isRunning ? "pause.circle" : "play.circle")
+                        .font(.title)
+                }
+                .padding()
             }
             List {
                 ForEach(items) { item in
@@ -31,14 +40,14 @@ struct ContentView: View {
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
         }
     }
-    
+
     private func addItem() {
         withAnimation {
             let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
         }
     }
-    
+
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
