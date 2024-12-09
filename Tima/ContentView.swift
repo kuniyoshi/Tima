@@ -31,22 +31,22 @@ struct ContentView: View {
 
                         assert(!isRunning || (isRunning && startedAt != nil && endedAt != nil))
 
-//                        if isRunning,
-//                           let startedAt,
-//                           let endedAt{
-//                            let mesurement = Measurement(
-//                                genre: genre,
-//                                work: work,
-//                                start: startedAt,
-//                                end: endedAt
-//                            )
-//                            modelContext.insert(mesurement)
-//                            do {
-//                                try modelContext.save()
-//                            } catch {
-//                                print("Failed to save mesurement: \(error)")
-//                            }
-//                        }
+                        if isRunning,
+                           let startedAt,
+                           let endedAt{
+                            let mesurement = Measurement(
+                                genre: genre,
+                                work: work,
+                                start: startedAt,
+                                end: endedAt
+                            )
+                            modelContext.insert(mesurement)
+                            do {
+                                try modelContext.save()
+                            } catch {
+                                print("Failed to save mesurement: \(error)")
+                            }
+                        }
 
                         isRunning.toggle()
                     }) {
@@ -67,5 +67,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Measurement.self, inMemory: true)
 }
