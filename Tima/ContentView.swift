@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var isRunning: Bool = false
     @State private var startedAt: Date?
     @State private var endedAt: Date?
+    @State private var exportURL: URL?
 
     var body: some View {
         VStack {
@@ -55,12 +56,44 @@ struct ContentView: View {
                     }
                     .padding()
             }
+            HStack {
+                Spacer()
+                if let exportURL {
+                    ShareLink("Export Data", item: exportURL)
+                        .padding()
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                } else {
+                    Button(action: exportMeasurements) {
+                        Text("Export Data")
+                            .padding()
+                            .background(.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                }
+                Spacer()
+            }
+            .padding()
+
             List {
                 ForEach(measurements) { measurement in
                     MeasurementView(measurement: measurement)
                 }
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
+        }
+    }
+
+    private func exportMeasurements() {
+        do {
+            let jsonData = try JSONEncoder().encode(measurements)
+            let temporaryURL = FileManager.default.temporaryDirectory.appendingPathComponent("measurements.json")
+            try jsonData.write(to: temporaryURL)
+            exportURL = temporaryURL
+        } catch {
+            print("Failed to encode measurements: \(error)")
         }
     }
 }
