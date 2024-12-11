@@ -9,7 +9,7 @@ struct ContentView: View {
     @State private var isRunning: Bool = false
     @State private var startedAt: Date?
     @State private var endedAt: Date?
-    @State private var exportURL: URL?
+
 
     var body: some View {
         VStack {
@@ -58,20 +58,12 @@ struct ContentView: View {
             }
             HStack {
                 Spacer()
-                if let exportURL {
-                    ShareLink("Export Data", item: exportURL)
+                Button(action: exportMeasurements) {
+                    Text("Export Data")
                         .padding()
                         .background(.blue)
                         .foregroundColor(.white)
                         .cornerRadius(8)
-                } else {
-                    Button(action: exportMeasurements) {
-                        Text("Export Data")
-                            .padding()
-                            .background(.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
                 }
                 Spacer()
             }
@@ -88,10 +80,24 @@ struct ContentView: View {
 
     private func exportMeasurements() {
         do {
-            let jsonData = try JSONEncoder().encode(measurements)
-            let temporaryURL = FileManager.default.temporaryDirectory.appendingPathComponent("measurements.json")
-            try jsonData.write(to: temporaryURL)
-            exportURL = temporaryURL
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let jsonData = try encoder.encode(measurements)
+            let savePanel = NSSavePanel()
+            savePanel.allowedContentTypes = [.json]
+            savePanel.nameFieldStringValue = "measurements.json"
+            savePanel.canCreateDirectories = true
+            savePanel.begin { response in
+                if response == .OK, let url = savePanel.url {
+                    do {
+                        try jsonData.write(to: url)
+                    } catch {
+                        //
+                    }
+                } else {
+                    //
+                }
+            }
         } catch {
             print("Failed to encode measurements: \(error)")
         }
