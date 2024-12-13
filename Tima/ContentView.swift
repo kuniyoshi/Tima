@@ -103,14 +103,24 @@ struct ContentView: View {
                     do {
                         try jsonData.write(to: url)
                     } catch {
-                        //
+                        print("Could not write JSON data to \(url): \(error)")
+                        alertDisplay = alertDisplay
+                            .weakWritten(
+                                title: "Failed to write JSON data",
+                                message: "\(error)"
+                            )
                     }
                 } else {
-                    //
+                    print("savePanel cancelled")
                 }
             }
         } catch {
             print("Failed to encode measurements: \(error)")
+            alertDisplay = alertDisplay
+                .weakWritten(
+                    title: "Failed to encode measurements",
+                    message: "\(error)"
+                )
         }
     }
 }
