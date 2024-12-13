@@ -9,7 +9,7 @@ struct ContentView: View {
     @State private var isRunning: Bool = false
     @State private var startedAt: Date?
     @State private var endedAt: Date?
-
+    @State private var alertDisplay = AlertDisplay(error: nil)
 
     var body: some View {
         VStack {
@@ -46,6 +46,8 @@ struct ContentView: View {
                                 try modelContext.save()
                             } catch {
                                 print("Failed to save mesurement: \(error)")
+                                alertDisplay = alertDisplay
+                                    .weakWritten(title: "ERROR", message: "Failed to save measurement: \(error)")
                             }
                         }
 
@@ -75,6 +77,15 @@ struct ContentView: View {
                 }
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
+
+            .alert(isPresented: .constant(alertDisplay.error != nil)) {
+                assert(alertDisplay.error != nil)
+                return Alert(
+                    title: Text(alertDisplay.error?.title ?? "ERROR"),
+                    message: Text(alertDisplay.error?.message ?? "Some error occurred"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
         }
     }
 
@@ -100,6 +111,27 @@ struct ContentView: View {
             }
         } catch {
             print("Failed to encode measurements: \(error)")
+        }
+    }
+}
+
+struct AlertDisplay {
+    struct Error {
+        var title: String
+        var message: String
+    }
+
+    var error: Error?
+
+    func cleared() -> AlertDisplay {
+        AlertDisplay(error: nil)
+    }
+
+    func weakWritten(title: String, message: String) -> AlertDisplay {
+        if let error {
+            AlertDisplay(error: error)
+        } else {
+            AlertDisplay(error: Error(title: title, message: message))
         }
     }
 }
