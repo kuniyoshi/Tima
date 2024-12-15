@@ -35,13 +35,13 @@ struct ContentView: View {
                         if isRunning,
                            let startedAt,
                            let endedAt{
-                            let mesurement = Measurement(
+                            let measurement = Measurement(
                                 genre: genre,
                                 work: work,
                                 start: startedAt,
                                 end: endedAt
                             )
-                            modelContext.insert(mesurement)
+                            modelContext.insert(measurement)
                             do {
                                 try modelContext.save()
                             } catch {
@@ -71,9 +71,17 @@ struct ContentView: View {
             }
             .padding()
 
-            List {
-                ForEach(measurements) { measurement in
-                    MeasurementView(measurement: measurement)
+            ScrollViewReader { proxy in
+                List {
+                    ForEach(measurements.reversed()) { measurement in
+                        MeasurementView(measurement: measurement)
+                            .id(measurement.id)
+                    }
+                }
+                .onChange(of: measurements) {
+                    if let lastId = measurements.last?.id {
+                        proxy.scrollTo(lastId, anchor: .top)
+                    }
                 }
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
