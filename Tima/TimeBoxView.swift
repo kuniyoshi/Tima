@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
+import AVFoundation
 
 struct TimeBoxView: View {
     enum RunningState: String {
@@ -52,8 +54,21 @@ struct TimeBoxView: View {
 
                 Spacer()
             }
-
         }
+        .onAppear {
+            requestNotificationPermission()
+        }
+    }
+
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter
+            .current()
+            .requestAuthorization(options: [.alert, .sound]) { granted, error in
+                print("Notification permission: \(granted)")
+                if let error {
+                    print("Could not request notification permission: \(error.localizedDescription)")
+                }
+            }
     }
 
     private func onTick() {
@@ -65,6 +80,28 @@ struct TimeBoxView: View {
             let seconds = Int(remain) % 60
 
             remainingTime = String(format: "%02d:%02d", minutes, seconds)
+
+            if remain == 0 {
+                notify()
+                runningState = .finished
+                self.beganAt = nil
+            }
+        }
+    }
+
+    private func notify() {
+        let content = UNMutableNotificationContent()
+        content.title = "Time's up!"
+        content.body = "TimeBox finished!  Good work!"
+        content.sound = .default
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error {
+                print("Could not schedule notification: \(error.localizedDescription)")
+            }
         }
     }
 
