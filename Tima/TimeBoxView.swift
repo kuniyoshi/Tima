@@ -42,7 +42,7 @@ struct TimeBoxView: View {
                     .padding([.top, .leading, .trailing])
 
                     HStack {
-                        if beganAt != nil {
+                        if runningState != .ready {
                             Text("Remain")
                             Text(remainingTime).monospacedDigit()
                         }
@@ -72,29 +72,76 @@ struct TimeBoxView: View {
     }
 
     private func onTick() {
-        if let beganAt {
-            let now = Date()
-            let elapsedTime = now.timeIntervalSince(beganAt)
-            let remain = max(25 * 60 - elapsedTime, 0)
-            let minutes = Int(remain) / 60
-            let seconds = Int(remain) % 60
-
-            remainingTime = String(format: "%02d:%02d", minutes, seconds)
-
-            if remain == 0 {
-                notify()
-                runningState = .finished
-                self.beganAt = nil
-            }
+        switch runningState {
+            case .ready:
+                break
+            case .running:
+                tickWhileRunning()
+            case .finished:
+                tickWhileFinished()
         }
     }
 
-    private func notify() {
+    private func tickWhileFinished() {
+        assert(endAt != nil)
+
+        guard let endAt else {
+            return
+        }
+
+        let now = Date()
+        let elapsedTime = now.timeIntervalSince(endAt)
+        let remain = max(5 * 60 - elapsedTime, 0)
+        let minutes = Int(remain) / 60
+        let seconds = Int(remain) % 60
+
+        remainingTime = String(format: "%02d:%02d", minutes, seconds)
+
+        if remain == 0 {
+            notify(content: endRestNotification())
+            runningState = .ready
+            self.endAt = nil
+        }
+    }
+
+    private func tickWhileRunning() {
+        guard let beganAt else {
+            return
+        }
+
+        let now = Date()
+        let elapsedTime = now.timeIntervalSince(beganAt)
+        let remain = max(25 * 60 - elapsedTime, 0)
+        let minutes = Int(remain) / 60
+        let seconds = Int(remain) % 60
+
+        remainingTime = String(format: "%02d:%02d", minutes, seconds)
+
+        if remain == 0 {
+            notify(content: endWorkNotification())
+            runningState = .finished
+            self.beganAt = nil
+            endAt = Date()
+        }
+    }
+
+    private func endRestNotification() -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = "Time to Focus"
+        content.body = "Break is over.  It's time to focus and get back to work!"
+        content.sound = .default
+        return content
+    }
+
+    private func endWorkNotification() -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = "Time's up!"
         content.body = "TimeBox finished!  Good work!"
         content.sound = .default
+        return content
+    }
 
+    private func notify(content: UNMutableNotificationContent) {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
