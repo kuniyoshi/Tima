@@ -36,10 +36,17 @@ struct TimaApp: App {
         }
     }()
 
+    @State private var showPreferences: Bool = false
+
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
+        .windowStyle(HiddenTitleBarWindowStyle())
+
+        Settings {
+            PreferencesView()
+        }
     }
 }
