@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct MeasurementView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var measurements: [Measurement]
     @State private var genre: String = ""
@@ -189,6 +189,6 @@ struct AlertDisplay {
 }
 
 #Preview {
-    ContentView()
+    MeasurementView()
         .modelContainer(for: Measurement.self, inMemory: true)
 }
