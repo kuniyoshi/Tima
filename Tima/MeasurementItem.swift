@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MeasurementView: View {
+struct MeasurementItem: View {
     let measurement: Measurement
 
     var body: some View {
@@ -15,7 +15,7 @@ struct MeasurementView: View {
 }
 
 #Preview {
-    MeasurementView(measurement: Measurement(
+    MeasurementItem(measurement: Measurement(
         genre: "デザイン",
         work: "UIスケッチ",
         start: Date(),

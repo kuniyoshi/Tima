@@ -97,7 +97,7 @@ struct ContentView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(measurements.reversed()) { measurement in
-                        MeasurementView(measurement: measurement)
+                        MeasurementItem(measurement: measurement)
                             .id(measurement.id)
                     }
                 }
