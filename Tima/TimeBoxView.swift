@@ -21,7 +21,8 @@ struct TimeBoxView: View {
     @State private var runningState = RunningState.ready
     @State private var beganAt: Date?
     @State private var endAt: Date?
-    @State private var remainingTime: String = "00::00"
+    @State private var remainingTime: String = "00:00"
+    @State var audioPlayer: AVAudioPlayer?
 
     private let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
@@ -121,7 +122,6 @@ struct TimeBoxView: View {
             notify(content: endWorkNotification())
             runningState = .finished
             self.beganAt = nil
-            endAt = Date()
         }
     }
 
@@ -157,11 +157,29 @@ struct TimeBoxView: View {
 
         switch runningState {
             case .ready:
+                playSe(fileName: "rest_end", fileType: "mp3")
                 beganAt = nil
             case .running:
+                playSe(fileName: "time_box_begin", fileType: "mp3")
                 beganAt = Date()
             case .finished:
+                playSe(fileName: "time_box_end", fileType: "mp3")
                 beganAt = nil
+                endAt = Date()
+        }
+    }
+
+    func playSe(fileName: String, fileType: String = "wav") {
+        guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
+            print("Could not find \(fileName).\(fileType)")
+            return
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        } catch {
+            print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
         }
     }
 }
