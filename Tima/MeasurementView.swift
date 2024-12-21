@@ -58,28 +58,6 @@ struct MeasurementView: View {
                     }
                     .padding()
             }
-            HStack {
-                Spacer()
-
-                VStack {
-                    Button(action: toggleTimeBox) {
-                        Image(systemName: "hourglass.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 80)
-                            .foregroundColor(.green)
-                            .padding()
-                    }
-                    .padding([.top, .leading, .trailing])
-
-                    HStack {
-                        Text("Remain")
-                        Text("28:00")
-                    }
-                }
-
-                Spacer()
-            }
 
             HStack {
                 Spacer()
@@ -118,17 +96,6 @@ struct MeasurementView: View {
                 )
             }
         }
-    }
-
-    private func toggleTimeBox() {
-//        let willCancel = isInTimeBox
-//        isInTimeBox = !isInTimeBox
-//
-//        if willCancel {
-//
-//        } else {
-//
-//        }
     }
 
     private func exportMeasurements() {
