@@ -52,8 +52,8 @@ struct TimaApp: App {
 
     init() {
         UserDefaults.standard.register(defaults: [
-            UserDefaultsKeys.TimeBox.isSoundNotification.rawValue: true,
-            UserDefaultsKeys.TimeBox.isBannerNotification.rawValue: true
+            UserDefaultsKeys.TimeBox.isSoundNotification.rawValue: SettingsDefaults.TimeBox.isSoundNotification,
+            UserDefaultsKeys.TimeBox.isBannerNotification.rawValue: SettingsDefaults.TimeBox.isBannerNotification
         ])
     }
 }

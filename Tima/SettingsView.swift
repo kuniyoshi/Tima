@@ -1,12 +1,11 @@
 import SwiftUI
 
 struct SettingsView: View {
-    // TODO: time box と measurement とで構造化して分ける?
     @AppStorage(UserDefaultsKeys.TimeBox.isSoundNotification.rawValue)
-    private var notificationWithSound: Bool = true // TODO: user defaults values も必要
+    private var notificationWithSound: Bool = SettingsDefaults.TimeBox.isSoundNotification
 
     @AppStorage(UserDefaultsKeys.TimeBox.isBannerNotification.rawValue)
-    private var notificationFromCenter: Bool = true
+    private var notificationFromCenter: Bool = SettingsDefaults.TimeBox.isBannerNotification
 
     @State private var workMinutes: String = UserDefaults.standard
         .string(forKey: "timeBoxDuration") ?? "25"
