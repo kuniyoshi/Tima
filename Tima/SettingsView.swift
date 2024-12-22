@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("notificationWithSound") var notificationWithSound: Bool = true
-    @AppStorage("notificationFromCenter") var notificationFromCenter: Bool = true
+    @AppStorage(UserDefaultsKeys.notificationWithSound.rawValue) var notificationWithSound: Bool = true
+    @AppStorage(UserDefaultsKeys.notificationFromCenter.rawValue) var notificationFromCenter: Bool = true
 
     var body: some View {
         Form {
