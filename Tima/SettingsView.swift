@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage(UserDefaultsKeys.TimeBox.isSoundNotification.rawValue)
+    @AppStorage(SettingsKeys.TimeBox.isSoundNotification.rawValue)
     private var notificationWithSound: Bool = SettingsDefaults.TimeBox.isSoundNotification
 
-    @AppStorage(UserDefaultsKeys.TimeBox.isBannerNotification.rawValue)
+    @AppStorage(SettingsKeys.TimeBox.isBannerNotification.rawValue)
     private var notificationFromCenter: Bool = SettingsDefaults.TimeBox.isBannerNotification
 
     @State private var workMinutes: String = UserDefaults.standard

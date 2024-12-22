@@ -142,7 +142,7 @@ struct TimeBoxView: View {
     }
 
     private func notify(content: UNMutableNotificationContent) {
-        if (!UserDefaults.standard.bool(forKey: UserDefaultsKeys.TimeBox.isBannerNotification.rawValue)) {
+        if (!UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)) {
             return
         }
 
@@ -174,7 +174,7 @@ struct TimeBoxView: View {
     }
 
     func playSe(fileName: String, fileType: String = "wav") {
-        if (!UserDefaults.standard.bool(forKey: UserDefaultsKeys.TimeBox.isSoundNotification.rawValue)) {
+        if (!UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)) {
             return
         }
 

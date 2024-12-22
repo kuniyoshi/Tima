@@ -1,4 +1,4 @@
-enum UserDefaultsKeys  {
+enum SettingsKeys  {
     enum TimeBox: String {
         case isSoundNotification = "timeBox.isSoundNotification"
         case isBannerNotification = "timeBox.isBannerNotification"
