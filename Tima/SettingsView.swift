@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PreferencesView: View {
+struct SettingsView: View {
     @AppStorage("notificationWithSound") var notificationWithSound: Bool = true
     @AppStorage("notificationFromCenter") var notificationFromCenter: Bool = true
 
@@ -20,5 +20,5 @@ struct PreferencesView: View {
 }
 
 #Preview {
-    PreferencesView()
+    SettingsView()
 }

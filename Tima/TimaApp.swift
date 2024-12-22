@@ -46,7 +46,7 @@ struct TimaApp: App {
         .windowStyle(HiddenTitleBarWindowStyle())
 
         Settings {
-            PreferencesView()
+            SettingsView()
         }
     }
 }
