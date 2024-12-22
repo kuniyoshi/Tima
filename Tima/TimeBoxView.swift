@@ -142,6 +142,10 @@ struct TimeBoxView: View {
     }
 
     private func notify(content: UNMutableNotificationContent) {
+        if (!UserDefaults.standard .bool(forKey: UserDefaultsKeys.notificationFromCenter.rawValue)) {
+            return
+        }
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
@@ -170,6 +174,10 @@ struct TimeBoxView: View {
     }
 
     func playSe(fileName: String, fileType: String = "wav") {
+        if (!UserDefaults.standard .bool(forKey: UserDefaultsKeys.notificationWithSound.rawValue)) {
+            return
+        }
+
         guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
             print("Could not find \(fileName).\(fileType)")
             return
