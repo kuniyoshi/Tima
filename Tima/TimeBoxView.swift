@@ -178,6 +178,8 @@ struct TimeBoxView: View {
             return
         }
 
+        // TODO: 通知のサウンドをカスタムする?
+
         guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
             print("Could not find \(fileName).\(fileType)")
             return

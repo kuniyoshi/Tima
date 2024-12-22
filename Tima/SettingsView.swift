@@ -1,11 +1,12 @@
 import SwiftUI
 
 struct SettingsView: View {
+    // TODO: time box と measurement とで構造化して分ける?
     @AppStorage(UserDefaultsKeys.notificationWithSound.rawValue) private var notificationWithSound: Bool = true // TODO: user defaults values も必要
     @AppStorage(UserDefaultsKeys.notificationFromCenter.rawValue) private var notificationFromCenter: Bool = true
-    @State private var workingMinutes: String = UserDefaults.standard
+    @State private var workMinutes: String = UserDefaults.standard
         .string(forKey: "timeBoxDuration") ?? "25"
-    @State private var errorMessageForWorkingMinutes: String?
+    @State private var errorMessageForWorkMinutes: String?
     // TODO: 長い
     @State private var breakMinutes: String = UserDefaults.standard
         .string(forKey: "timeBoxBreakMinutes") ?? "5"
@@ -26,17 +27,17 @@ struct SettingsView: View {
                         VStack {
                             HStack {
                                 Text("Work Minutes")
-                                TextField("", text: $workingMinutes)
+                                TextField("", text: $workMinutes)
                                     .frame(width: 50)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: workingMinutes) {
-                                        setWorkingMinute(workingMinutes)
+                                    .onChange(of: workMinutes) {
+                                        setWorkMinutes(workMinutes)
                                     }
 
                             }
-                            if let errorMessageForWorkingMinutes {
-                                Text(errorMessageForWorkingMinutes)
+                            if let errorMessageForWorkMinutes {
+                                Text(errorMessageForWorkMinutes)
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }
@@ -67,12 +68,12 @@ struct SettingsView: View {
         .padding()
     }
 
-    private func setWorkingMinute(_ minutes: String) {
+    private func setWorkMinutes(_ minutes: String) {
         if let value = Int(minutes) {
-            errorMessageForWorkingMinutes = nil
+            errorMessageForWorkMinutes = nil
             UserDefaults.standard.set(value, forKey: "timeBoxDuration")
         } else {
-            errorMessageForWorkingMinutes = "Please enter a valid number."
+            errorMessageForWorkMinutes = "Please enter a valid number."
         }
     }
 
