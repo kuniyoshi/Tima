@@ -92,7 +92,11 @@ struct TimeBoxView: View {
 
         let now = Date()
         let elapsedTime = now.timeIntervalSince(endAt)
-        let remain = max(5 * 60 - elapsedTime, 0)
+        let remain = max(
+            UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
+            * 60 - Int(elapsedTime),
+            0
+        )
         let minutes = Int(remain) / 60
         let seconds = Int(remain) % 60
 
@@ -112,7 +116,11 @@ struct TimeBoxView: View {
 
         let now = Date()
         let elapsedTime = now.timeIntervalSince(beganAt)
-        let remain = max(25 * 60 - elapsedTime, 0)
+        let remain = max(
+            UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+            * 60 - Int(elapsedTime),
+            0
+        )
         let minutes = Int(remain) / 60
         let seconds = Int(remain) % 60
 
