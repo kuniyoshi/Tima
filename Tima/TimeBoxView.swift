@@ -137,7 +137,7 @@ struct TimeBoxView: View {
         let content = UNMutableNotificationContent()
         content.title = "Time to Focus"
         content.body = "Break is over.  It's time to focus and get back to work!"
-        content.sound = .default
+        content.sound = nil
         return content
     }
 
@@ -145,7 +145,7 @@ struct TimeBoxView: View {
         let content = UNMutableNotificationContent()
         content.title = "Time's up!"
         content.body = "TimeBox finished!  Good work!"
-        content.sound = .default
+        content.sound = nil
         return content
     }
 
