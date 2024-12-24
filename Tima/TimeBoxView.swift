@@ -18,6 +18,7 @@ struct TimeBoxView: View {
         }
     }
 
+    @Environment(\.modelContext) private var modelContext
     @State private var runningState = RunningState.ready
     @State private var beganAt: Date?
     @State private var endAt: Date?
@@ -175,10 +176,28 @@ struct TimeBoxView: View {
                 playSe(fileName: "time_box_begin", fileType: "mp3")
                 beganAt = Date()
             case .finished:
+                pushTimeBoxData(beganAt)
                 playSe(fileName: "time_box_end", fileType: "mp3")
                 beganAt = nil
                 endAt = Date()
         }
+    }
+
+    func pushTimeBoxData(_ beganAt: Date?) {
+        guard let beganAt else {
+            return
+        }
+
+        let duration = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+        let adjustedDuration = TimeInterval(duration) * 0.9
+
+        if (Date().timeIntervalSince(beganAt) >= adjustedDuration) {
+            return
+        }
+
+        let timeBoxData = TimeBox(start: beganAt, workMinutes: duration)
+
+        modelContext.insert(timeBoxData)
     }
 
     func playSe(fileName: String, fileType: String = "wav") {
