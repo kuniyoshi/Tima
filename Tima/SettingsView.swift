@@ -8,11 +8,11 @@ struct SettingsView: View {
     private var notificationFromCenter: Bool = SettingsDefaults.TimeBox.isBannerNotification
 
     @State private var workMinutes: String = UserDefaults.standard
-        .string(forKey: "timeBoxDuration") ?? "25"
+        .string(forKey: SettingsKeys.TimeBox.workMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.workMinutes)
     @State private var errorMessageForWorkMinutes: String?
     // TODO: 長い
     @State private var breakMinutes: String = UserDefaults.standard
-        .string(forKey: "timeBoxBreakMinutes") ?? "5"
+        .string(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.breakMinutes)
     @State private var errorMessageForBreakMinutes: String?
 
     var body: some View {
@@ -74,7 +74,7 @@ struct SettingsView: View {
     private func setWorkMinutes(_ minutes: String) {
         if let value = Int(minutes) {
             errorMessageForWorkMinutes = nil
-            UserDefaults.standard.set(value, forKey: "timeBoxDuration")
+            UserDefaults.standard.set(value, forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
         } else {
             errorMessageForWorkMinutes = "Please enter a valid number."
         }
@@ -83,7 +83,7 @@ struct SettingsView: View {
     private func setBreakMinutes(_ minutes: String) {
         if let value = Int(minutes) {
             errorMessageForBreakMinutes = nil
-            UserDefaults.standard.set(value, forKey: "timeBoxBreakMinutes")
+            UserDefaults.standard.set(value, forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
         } else {
             errorMessageForBreakMinutes = "Please enter a valid number."
         }
