@@ -25,6 +25,7 @@ struct TimaApp: App {
 
         let schema = Schema([
             Measurement.self,
+            TimeBox.self,
         ])
 
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
