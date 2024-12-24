@@ -131,6 +131,7 @@ struct TimeBoxView: View {
             notify(content: endWorkNotification())
             runningState = .finished
             self.beganAt = nil
+            endAt = Date()
         }
     }
 
