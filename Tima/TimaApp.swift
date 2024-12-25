@@ -45,6 +45,14 @@ struct TimaApp: App {
         }
         .modelContainer(sharedModelContainer)
         .windowStyle(HiddenTitleBarWindowStyle())
+        .commands {
+            CommandGroup(after: .newItem) {
+                Button("Export Data") {
+                    exportData()
+                }
+                .keyboardShortcut("E", modifiers: [.command])
+            }
+        }
 
         Settings {
             SettingsView()
@@ -56,5 +64,15 @@ struct TimaApp: App {
             SettingsKeys.TimeBox.isSoundNotification.rawValue: SettingsDefaults.TimeBox.isSoundNotification,
             SettingsKeys.TimeBox.isBannerNotification.rawValue: SettingsDefaults.TimeBox.isBannerNotification
         ])
+    }
+
+    private func exportData() {
+        print("Exporting data...")
+        do {
+            let path = try ModelExporter(container: sharedModelContainer).exportToJSON()
+            print("### export to \(path)") // TODO: change path, name, handle errors
+        } catch {
+            print("Error exporting data: \(error.localizedDescription)")
+        }
     }
 }
