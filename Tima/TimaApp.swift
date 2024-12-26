@@ -38,10 +38,19 @@ struct TimaApp: App {
     }()
 
     @State private var showPreferences: Bool = false
+    @State private var showErrorDialog: Bool = false
+    @State private var errorMessage: String = ""
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .alert(isPresented: $showErrorDialog) {
+                    Alert(
+                        title: Text("Export Error"),
+                        message: Text(errorMessage),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
         }
         .modelContainer(sharedModelContainer)
         .windowStyle(HiddenTitleBarWindowStyle())
@@ -67,12 +76,14 @@ struct TimaApp: App {
     }
 
     private func exportData() {
-        print("Exporting data...")
         do {
             let path = try ModelExporter(container: sharedModelContainer).exportToJSON()
             print("### export to \(path)") // TODO: change path, name, handle errors
+            errorMessage = ""
         } catch {
-            print("Error exporting data: \(error.localizedDescription)")
+            print("Could not export data: \(error.localizedDescription)")
+            errorMessage = "Could not export data."
+            showErrorDialog = true
         }
     }
 }
