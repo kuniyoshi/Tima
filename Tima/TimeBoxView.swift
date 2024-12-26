@@ -130,7 +130,6 @@ struct TimeBoxView: View {
         if remain == 0 {
             notify(content: endWorkNotification())
             runningState = .finished
-            self.beganAt = nil
             endAt = Date()
         }
     }
@@ -192,7 +191,7 @@ struct TimeBoxView: View {
         let duration = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
         let adjustedDuration = TimeInterval(duration) * 0.9
 
-        if (Date().timeIntervalSince(beganAt) >= adjustedDuration) {
+        if (Date().timeIntervalSince(beganAt) < adjustedDuration) {
             return
         }
 
