@@ -59,19 +59,6 @@ struct MeasurementView: View {
                     .padding()
             }
 
-            HStack {
-                Spacer()
-                Button(action: exportMeasurements) {
-                    Text("Export Data")
-                        .padding()
-                        .background(.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
-                Spacer()
-            }
-            .padding()
-
             ScrollViewReader { proxy in
                 List {
                     ForEach(measurements.reversed()) { measurement in
@@ -95,41 +82,6 @@ struct MeasurementView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
-        }
-    }
-
-    private func exportMeasurements() {
-        do {
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            let jsonData = try encoder.encode(measurements)
-            let savePanel = NSSavePanel()
-            savePanel.allowedContentTypes = [.json]
-            savePanel.nameFieldStringValue = "measurements.json"
-            savePanel.canCreateDirectories = true
-            savePanel.begin { response in
-                if response == .OK, let url = savePanel.url {
-                    do {
-                        try jsonData.write(to: url)
-                    } catch {
-                        print("Could not write JSON data to \(url): \(error)")
-                        alertDisplay = alertDisplay
-                            .weakWritten(
-                                title: "Failed to write JSON data",
-                                message: "\(error)"
-                            )
-                    }
-                } else {
-                    print("savePanel cancelled")
-                }
-            }
-        } catch {
-            print("Failed to encode measurements: \(error)")
-            alertDisplay = alertDisplay
-                .weakWritten(
-                    title: "Failed to encode measurements",
-                    message: "\(error)"
-                )
         }
     }
 }
