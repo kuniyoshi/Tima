@@ -5,7 +5,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Picker("Select", selection: $selectedView) {
+            Picker(selection: $selectedView, label: EmptyView()) {
                 Text("Measurement").tag(0)
                 Text("TimeBox").tag(1)
             }
