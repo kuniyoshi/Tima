@@ -61,9 +61,8 @@ struct MeasurementView: View {
 
             ScrollViewReader { proxy in
                 List {
-                    ForEach(measurements.reversed()) { measurement in
-                        MeasurementItem(measurement: measurement)
-                            .id(measurement.id)
+                    ForEach(groupedMeasurements(measurements), id: \.self) { items in
+                        MeasurementGroupItem(measurements: items)
                     }
                 }
                 .onChange(of: measurements) {
@@ -82,6 +81,22 @@ struct MeasurementView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
+        }
+    }
+
+    private func groupedMeasurements(_ measurements: [Measurement]) -> [[Measurement]] {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+
+        let grouped = Dictionary(
+            grouping: measurements.reversed()
+        ) { measurement in
+            return formatter.string(from: measurement.start)
+        }
+
+        return grouped.keys.sorted().map { key in
+            return grouped[key] ?? []
         }
     }
 }

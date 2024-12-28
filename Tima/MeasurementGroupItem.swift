@@ -1,25 +1,22 @@
 import SwiftUI
 
-struct MeasurementGroupItem: View {
+struct MeasurementGroupItem: View, Identifiable {
     let measurements: [Measurement]
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading) {
             if let first = measurements.first {
                 Text(date(first.start))
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.headline)
-                    .padding(8)
             }
-
-            List {
-                ForEach(measurements) { measurement in
+            ForEach(measurements.reversed()) { measurement in
                     MeasurementItem(measurement: measurement)
-                }
             }
-            .listStyle(.plain)
-            .padding(0)
         }
+    }
+
+    var id: Int {
+        measurements.first?.id.hashValue ?? 0
     }
 
     private func date(_ date: Date) -> String {
