@@ -11,6 +11,10 @@ struct Memory24HourHorizontalView: View {
                     .frame(height: 40)
                     .cornerRadius(5)
 
+                ForEach(Array(spans.enumerated()), id: \.0) { _, span in
+                    MemorySpanView(startMinutes: span.0, durationMinutes: span.1)
+                }
+
                 ForEach(0..<25) { hour in
                     DividerView(hour: hour)
                 }
@@ -21,7 +25,7 @@ struct Memory24HourHorizontalView: View {
     }
 }
 
-struct DividerView: View {
+private struct DividerView: View {
     let hour: Int
 
     var body: some View {
@@ -45,6 +49,26 @@ struct DividerView: View {
     }
 }
 
+private struct MemorySpanView: View {
+    let startMinutes: Int
+    let durationMinutes: Int
+
+    var body: some View {
+        GeometryReader { geometry in
+            let totalMinutes = 24 * 60
+            let width = geometry.size.width
+            let startX = width * CGFloat(startMinutes) / CGFloat(totalMinutes)
+            let spanWidth = width * CGFloat(durationMinutes) / CGFloat(totalMinutes)
+
+            Rectangle()
+                .fill(Color.blue.opacity(0.5))
+                .frame(width: spanWidth, height: 40)
+                .cornerRadius(5)
+                .offset(x: startX)
+        }
+    }
+}
+
 #Preview {
-    Memory24HourHorizontalView(spans: [(300, 2)])
+    Memory24HourHorizontalView(spans: [(300, 20), (600, 60)])
 }
