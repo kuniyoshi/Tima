@@ -109,5 +109,5 @@ struct AlertDisplay {
 
 #Preview {
     MeasurementView()
-        .modelContainer(for: Measurement.self, inMemory: true)
+        .modelContainer(for: Measurement.self, inMemory: false)
 }

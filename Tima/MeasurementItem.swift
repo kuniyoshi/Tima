@@ -10,7 +10,7 @@ struct MeasurementItem: View {
             Text(measurement.start, format: Date.FormatStyle(time: .shortened))
             Text(measurement.end, format: Date.FormatStyle(time: .shortened))
         }
-        .padding()
+        .padding(0)
     }
 }
 
