@@ -9,7 +9,7 @@ struct MeasurementGroupItem: View, Identifiable {
                 Text(date(first.start))
                     .font(.headline)
             }
-            ForEach(measurements.reversed()) { measurement in
+            ForEach(measurements) { measurement in
                     MeasurementItem(measurement: measurement)
             }
         }

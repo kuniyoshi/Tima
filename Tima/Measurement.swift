@@ -9,6 +9,10 @@ final class Measurement: Codable {
     var start: Date
     var end: Date
 
+    var duration: TimeInterval {
+        end.timeIntervalSince(start)
+    }
+
     init(id: UUID = UUID(), genre: String, work: String, start: Date, end: Date) {
         self.id = id
         self.genre = genre
