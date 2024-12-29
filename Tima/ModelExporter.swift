@@ -22,7 +22,7 @@ struct ModelExporter {
         let savePanel = NSSavePanel()
         savePanel.title = "Export Data"
         savePanel.allowedContentTypes = [UTType.json]
-        savePanel.nameFieldStringValue = "ExportData.json"
+        savePanel.nameFieldStringValue = "\(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "ExportData").json"
         savePanel.directoryURL = FileManager.default.urls(
             for: .downloadsDirectory,
             in: .userDomainMask

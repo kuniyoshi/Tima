@@ -78,7 +78,7 @@ struct TimaApp: App {
     private func exportData() {
         do {
             if let path = try ModelExporter(container: sharedModelContainer).exportToJSON() {
-                print("### export to \(path)")
+                print("Exported to \(path)")
             }
             errorMessage = ""
         } catch {
