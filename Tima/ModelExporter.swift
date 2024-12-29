@@ -1,5 +1,7 @@
+import Cocoa
 import Foundation
 import SwiftData
+import UniformTypeIdentifiers
 
 struct ModelExporter {
     private let container: ModelContainer
@@ -8,7 +10,7 @@ struct ModelExporter {
         self.container = container
     }
 
-    @MainActor func exportToJSON() throws -> URL {
+    @MainActor func exportToJSON() throws -> URL? {
         let context = container.mainContext
         let measurements = try context.fetch(FetchDescriptor<Measurement>())
         let timeBoxes = try context.fetch(FetchDescriptor<TimeBox>())
@@ -17,15 +19,25 @@ struct ModelExporter {
 
         let json = try JSONEncoder().encode(exportData)
 
-        let temporaryDirectory = FileManager.default.temporaryDirectory
-        let exportFileURL = temporaryDirectory.appendingPathComponent("ExportData").appendingPathExtension("json")
-        try json.write(to: exportFileURL)
+        let savePanel = NSSavePanel()
+        savePanel.title = "Export Data"
+        savePanel.allowedContentTypes = [UTType.json]
+        savePanel.nameFieldStringValue = "ExportData.json"
+        savePanel.directoryURL = FileManager.default.urls(
+            for: .downloadsDirectory,
+            in: .userDomainMask
+        ).first
 
-        return exportFileURL
+        if savePanel.runModal() == .OK, let url = savePanel.url {
+            try json.write(to: url)
+            return url
+        }
+
+        return nil
     }
 }
 
-struct ExportData: Codable {
+private struct ExportData: Codable {
     let measurements: [Measurement]
     let timeBoxes: [TimeBox]
 }
