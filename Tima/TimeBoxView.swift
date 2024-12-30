@@ -23,7 +23,7 @@ struct TimeBoxView: View {
     @State private var beganAt: Date?
     @State private var endAt: Date?
     @State private var remainingTime: String = "00:00"
-    @State var audioPlayer: AVAudioPlayer?
+    @State private var audioPlayer: AVAudioPlayer?
 
     private let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
@@ -184,6 +184,8 @@ struct TimeBoxView: View {
     }
 
     func pushTimeBoxData(_ beganAt: Date?) {
+        assert(beganAt != nil)
+
         guard let beganAt else {
             return
         }
