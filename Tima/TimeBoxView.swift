@@ -4,7 +4,7 @@ import UserNotifications
 import AVFoundation
 
 struct TimeBoxView: View {
-    enum RunningState: String {
+    private enum RunningState: String {
         case ready = "hourglass.bottomhalf.filled"
         case running = "hourglass"
         case finished = "hourglass.tophalf.filled"
