@@ -18,12 +18,23 @@ struct TimeBoxView: View {
         }
     }
 
+    private enum QueryType {
+        case Auto
+        case Button
+    }
+
+    private struct Transition {
+        var state: RunningState
+        var queryType: QueryType
+    }
+
     @Environment(\.modelContext) private var modelContext
     @State private var runningState = RunningState.ready
     @State private var beganAt: Date?
     @State private var endAt: Date?
     @State private var remainingTime: String = "00:00"
-    @State private var audioPlayer: AVAudioPlayer?
+    @State private var audioPlayer: AVAudioPlayer? // TODO: 通知にでならせないのかどうか
+    @State private var transition: Transition?
 
     private let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
@@ -33,7 +44,7 @@ struct TimeBoxView: View {
                 Spacer()
 
                 VStack {
-                    Button(action: toggleTimeBox) {
+                    Button(action: onButton) {
                         Image(systemName: runningState.rawValue)
                             .resizable()
                             .scaledToFit()
@@ -73,7 +84,54 @@ struct TimeBoxView: View {
             }
     }
 
+    private func onButton() {
+        transition = Transition(
+            state: runningState.progressed(),
+            queryType: .Button
+        )
+    }
+
     private func onTick() {
+        if let transition {
+            runningState = transition.state
+
+            switch transition.queryType {
+                case .Auto:
+                    switch transition.state {
+                        case .ready:
+                            playSe(fileName: "rest_end", fileType: "mp3")
+                            notify(content: endRestNotification())
+                        case .running:
+                            assert(false, "Should not be running automatically")
+                        case .finished:
+                            playSe(fileName: "time_box_end", fileType: "mp3")
+                            notify(content: endWorkNotification())
+                    }
+                case .Button:
+                    switch transition.state {
+                        case .ready:
+                            break
+                        case .running:
+                            playSe(fileName: "time_box_begin", fileType: "mp3")
+                        case .finished:
+                            break
+                    }
+            }
+
+            switch transition.state {
+                case .ready:
+                    beganAt = nil
+                    endAt = nil
+                case .running:
+                    beganAt = Date()
+                case .finished:
+                    endAt = Date()
+                    pushTimeBoxData(beganAt)
+            }
+
+            self.transition = nil
+        }
+
         switch runningState {
             case .ready:
                 break
@@ -104,13 +162,16 @@ struct TimeBoxView: View {
         remainingTime = String(format: "%02d:%02d", minutes, seconds)
 
         if remain == 0 {
-            notify(content: endRestNotification())
-            runningState = .ready
-            self.endAt = nil
+            transition = Transition(
+                state: runningState.progressed(),
+                queryType: .Auto
+            )
         }
     }
 
     private func tickWhileRunning() {
+        assert(beganAt != nil)
+
         guard let beganAt else {
             return
         }
@@ -128,9 +189,10 @@ struct TimeBoxView: View {
         remainingTime = String(format: "%02d:%02d", minutes, seconds)
 
         if remain == 0 {
-            notify(content: endWorkNotification())
-            runningState = .finished
-            endAt = Date()
+            transition = Transition(
+                state: runningState.progressed(),
+                queryType: .Auto
+            )
         }
     }
 
@@ -162,24 +224,6 @@ struct TimeBoxView: View {
             if let error {
                 print("Could not schedule notification: \(error.localizedDescription)")
             }
-        }
-    }
-
-    private func toggleTimeBox() {
-        runningState = runningState.progressed()
-
-        switch runningState {
-            case .ready:
-                playSe(fileName: "rest_end", fileType: "mp3")
-                beganAt = nil
-            case .running:
-                playSe(fileName: "time_box_begin", fileType: "mp3")
-                beganAt = Date()
-            case .finished:
-                pushTimeBoxData(beganAt)
-                playSe(fileName: "time_box_end", fileType: "mp3")
-                beganAt = nil
-                endAt = Date()
         }
     }
 
