@@ -3,14 +3,6 @@ import SwiftData
 
 @Model
 final class Measurement: Codable {
-    private static let iso8601DateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = .autoupdatingCurrent
-        return formatter
-    }()
-
     var id: UUID
     var genre: String
     var work: String
@@ -46,8 +38,8 @@ final class Measurement: Codable {
         let startString = try container.decode(String.self, forKey: .start)
         let endString = try container.decode(String.self, forKey: .end)
 
-        guard let startDate = Measurement.iso8601DateFormatter.date(from: startString),
-              let endDate = Measurement.iso8601DateFormatter.date(from: endString) else {
+        guard let startDate = Util.iso8601DateFormatter.date(from: startString),
+              let endDate = Util.iso8601DateFormatter.date(from: endString) else {
             throw DecodingError.dataCorruptedError(forKey: .start, in: container, debugDescription: "Could not decode start: \(startString)")
         }
 
@@ -60,7 +52,7 @@ final class Measurement: Codable {
         try container.encode(id, forKey: .id)
         try container.encode(genre, forKey: .genre)
         try container.encode(work, forKey: .work)
-        try container.encode(Measurement.iso8601DateFormatter.string(from: start), forKey: .start)
-        try container.encode(Measurement.iso8601DateFormatter.string(from: end), forKey: .end)
+        try container.encode(Util.iso8601DateFormatter.string(from: start), forKey: .start)
+        try container.encode(Util.iso8601DateFormatter.string(from: end), forKey: .end)
     }
 }
