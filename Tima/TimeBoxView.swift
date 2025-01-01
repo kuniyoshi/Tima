@@ -29,6 +29,7 @@ struct TimeBoxView: View {
     }
 
     @Environment(\.modelContext) private var modelContext
+    @Query private var timeBoxes: [TimeBox]
     @State private var runningState = RunningState.ready
     @State private var beganAt: Date?
     @State private var endAt: Date?
@@ -63,6 +64,9 @@ struct TimeBoxView: View {
                     .onReceive(timer) { _ in
                         onTick()
                     }
+
+                    TimeBoxCountView(spans: makeSpans(timeBoxes))
+                        .padding()
                 }
 
                 Spacer()
@@ -70,6 +74,15 @@ struct TimeBoxView: View {
         }
         .onAppear {
             requestNotificationPermission()
+        }
+    }
+
+    private func makeSpans(_ timeBoxes: [TimeBox]) -> [(Int, Int)] {
+        let from = Calendar.current.startOfDay(for: Date())
+        let list = timeBoxes.filter { $0.start >= from }
+        return list.map { timeBox in
+            let minutes = Int(timeBox.start.timeIntervalSince(from)) / 60
+            return (minutes, timeBox.workMinutes)
         }
     }
 
