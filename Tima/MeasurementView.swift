@@ -59,6 +59,10 @@ struct MeasurementView: View {
                     .padding()
             }
 
+            Memory24HourHorizontalView(spans: makeSpans(measurements))
+                .onChange(of: measurements) {
+                }
+
             ScrollViewReader { proxy in
                 List {
                     ForEach(groupedMeasurements(measurements), id: \.self) { items in
@@ -81,6 +85,16 @@ struct MeasurementView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
+        }
+    }
+
+    private func makeSpans(_ measurements: [Measurement]) -> [(Int, Int)] {
+        let from = Calendar.current.startOfDay(for: Date())
+        let list = measurements.filter { $0.start >= from }
+        return list.map { measurement in
+            let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
+            let duration = Int(measurement.duration) / 60
+            return (minutes, duration)
         }
     }
 
