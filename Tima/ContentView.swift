@@ -11,7 +11,6 @@ struct ContentView: View {
             }
             .pickerStyle(.segmented)
             .padding()
-            .keyboardShortcut(.space, modifiers: .command)
 
             Button(action: {
                 selectedView = 0
