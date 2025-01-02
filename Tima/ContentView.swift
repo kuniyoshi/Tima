@@ -9,8 +9,27 @@ struct ContentView: View {
                 Text("Measurement").tag(0)
                 Text("TimeBox").tag(1)
             }
-            .pickerStyle(SegmentedPickerStyle())
+            .pickerStyle(.segmented)
             .padding()
+            .keyboardShortcut(.space, modifiers: .command)
+
+            Button(action: {
+                selectedView = 0
+            }) {
+                Text("Select measurement")
+            }
+            .keyboardShortcut("1", modifiers: .command)
+            .frame(width: 0, height: 0)
+            .opacity(0)
+
+            Button(action: {
+                selectedView = 1
+            }) {
+                Text("Select timeBox")
+            }
+            .keyboardShortcut("2", modifiers: .command)
+            .frame(width: 0, height: 0)
+            .opacity(0)
 
             Spacer()
 
