@@ -54,6 +54,7 @@ struct TimeBoxView: View {
                             .padding()
                     }
                     .padding([.top, .leading, .trailing])
+                    .keyboardShortcut(" ", modifiers: [])
 
                     HStack {
                         if runningState != .ready {
