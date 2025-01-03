@@ -2,6 +2,11 @@ import SwiftUI
 import SwiftData
 
 struct MeasurementView: View {
+    private enum Field {
+        case genre
+        case work
+    }
+
     @Environment(\.modelContext) private var modelContext
     @Query private var measurements: [Measurement]
     @State private var genre: String = ""
@@ -10,17 +15,26 @@ struct MeasurementView: View {
     @State private var startedAt: Date?
     @State private var endedAt: Date?
     @State private var alertDisplay = AlertDisplay(error: nil)
+    @FocusState private var focusedField: Field?
 
     var body: some View {
         VStack {
             HStack {
                 TextField("Input genre...", text: $genre)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .focused($focusedField, equals: .genre)
                     .padding()
 
                 TextField("Input work...", text: $work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .focused($focusedField, equals: .work)
                     .padding()
+
+                Button("Focus Field") {
+                    focusedField = .genre
+                }
+                .keyboardShortcut("I", modifiers: [.command])
+                .hidden()
 
                 Button(
                     action: {
