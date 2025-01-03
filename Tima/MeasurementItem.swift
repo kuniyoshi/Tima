@@ -3,18 +3,115 @@ import SwiftUI
 struct MeasurementItem: View {
     let measurement: Measurement
 
+    @State private var genre: String
+    @State private var work: String
+    @State private var startDate: Date
+    @State private var endDate: Date
+
+    @State private var isGenreEditing = false
+    @State private var isWorkEditing = false
+    @State private var isStartDateEditing = false
+    @State private var isEndDateEditing = false
+
+    @FocusState private var isGenreFocused: Bool
+    @FocusState private var isWorkFocused: Bool
+    @FocusState private var isStartDateFocused: Bool
+    @FocusState private var isEndDateFocused: Bool
+
+    init(measurement: Measurement) {
+        self.measurement = measurement
+        self._genre = State(initialValue: measurement.genre)
+        self._work = State(initialValue: measurement.work)
+        self._startDate = State(initialValue: measurement.start)
+        self._endDate = State(initialValue: measurement.end)
+    }
+
     var body: some View {
         HStack {
-            Text(measurement.genre)
-                .foregroundColor(.primary)
-            Text(measurement.work)
+            if isGenreEditing {
+                TextField(genre, text: $genre)
+                    .focused($isGenreFocused)
+                    .onAppear {
+                        isGenreFocused = true
+                    }
+                    .onSubmit {
+                        isGenreEditing = false
+                    }
+            } else {
+                Text(measurement.genre)
+                    .onTapGesture {
+                        isGenreEditing = true
+                    }
+                    .foregroundColor(.primary)
+            }
+
+            if isWorkEditing {
+                TextField(work, text: $work)
+                    .focused($isWorkFocused)
+                    .onAppear {
+                        isWorkFocused = true
+                    }
+                    .onSubmit {
+                        isWorkEditing = false
+                    }
+            } else {
+                Text(measurement.work)
+                    .onTapGesture {
+                        isWorkEditing = true
+                    }
+                    .foregroundColor(.primary)
+            }
 
             Spacer()
 
             HStack {
-                Text(measurement.start, format: Date.FormatStyle(time: .shortened))
+                if isStartDateEditing {
+                    DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                        .focused($isStartDateFocused)
+                        .onChange(of: isStartDateFocused) { _, newValue in
+                            if !newValue {
+                                isStartDateEditing = false
+                            }
+                        }
+                        .onAppear {
+                            isStartDateFocused = true
+                        }
+                        .onSubmit {
+                            isStartDateEditing = false
+                        }
+                } else {
+                    Text(measurement.start, format: Date.FormatStyle(time: .shortened))
+                        .onTapGesture {
+                            isStartDateEditing = true
+                        }
+                }
                 Text("〜")
-                Text(measurement.end, format: Date.FormatStyle(time: .shortened))
+                if isEndDateEditing {
+                    DatePicker(
+                        "",
+                        selection: $endDate,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .labelsHidden()
+                    .focused($isEndDateFocused)
+                    .onChange(of: isEndDateFocused) { _, newValue in
+                        if !newValue {
+                            isEndDateEditing = false
+                        }
+                    }
+                    .onAppear {
+                        isEndDateFocused = true
+                    }
+                    .onSubmit {
+                        isEndDateEditing = false
+                    }
+                } else {
+                    Text(measurement.end, format: Date.FormatStyle(time: .shortened))
+                        .onTapGesture {
+                            isEndDateEditing = true
+                        }
+                }
                 Text(String(humanReadableDuration(measurement.duration)))
             }
         }
