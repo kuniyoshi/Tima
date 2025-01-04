@@ -278,6 +278,11 @@ struct TimeBoxView: View {
 }
 
 #Preview {
-    TimeBoxView()
-        .modelContainer(for: TimeBox.self)
+    let container = try! ModelContainer(for: TimeBox.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+
+    context.insert(TimeBox(start: Date(), workMinutes: 25))
+
+    return TimeBoxView()
+        .modelContainer(container)
 }
