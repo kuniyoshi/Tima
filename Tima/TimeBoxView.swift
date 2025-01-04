@@ -41,36 +41,36 @@ struct TimeBoxView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
+            VStack {
+                Button(action: onButton) {
+                    Image(systemName: runningState.rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .foregroundColor(.green)
+                        .padding()
+                }
+                .padding([.top, .leading, .trailing])
+                .keyboardShortcut(" ", modifiers: [])
 
-                VStack {
-                    Button(action: onButton) {
-                        Image(systemName: runningState.rawValue)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 80)
-                            .foregroundColor(.green)
-                            .padding()
+                HStack {
+                    if runningState != .ready {
+                        Text("Remain")
+                        Text(remainingTime).monospacedDigit()
                     }
-                    .padding([.top, .leading, .trailing])
-                    .keyboardShortcut(" ", modifiers: [])
+                }
+                .onReceive(timer) { _ in
+                    onTick()
+                }
 
-                    HStack {
-                        if runningState != .ready {
-                            Text("Remain")
-                            Text(remainingTime).monospacedDigit()
-                        }
-                    }
-                    .onReceive(timer) { _ in
-                        onTick()
-                    }
+                HStack {
+                    Spacer()
 
                     TimeBoxCountView(spans: makeSpans(timeBoxes))
                         .padding()
-                }
 
-                Spacer()
+                    Spacer()
+                }
             }
         }
         .onAppear {
