@@ -9,19 +9,21 @@ struct TimeBoxListView: View {
 
     var body: some View {
         List {
-            ForEach(counts, id: \.0) { (date, count) in
-                HStack {
-                    Text("\(date)")
-                        .font(.headline)
-                    Spacer()
-                    HStack(spacing: 2) {
-                        ForEach(0..<count, id: \.self) { _ in
-                            Image(systemName: "circle.fill")
-                                .font(.caption)
+            Section(header: Text("Daily TimeBoxes")) {
+                ForEach(counts, id: \.0) { (date, count) in
+                    HStack {
+                        Text("\(date)")
+                            .font(.headline)
+                        Spacer()
+                        HStack(spacing: 2) {
+                            ForEach(0..<count, id: \.self) { _ in
+                                Image(systemName: "circle.fill")
+                                    .font(.caption)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
             }
         }
     }
