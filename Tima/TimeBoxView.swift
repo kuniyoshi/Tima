@@ -70,9 +70,26 @@ struct TimeBoxView: View {
 
                 Spacer()
             }
+
+            TimeBoxListView(makeCounts(timeBoxes))
         }
         .onAppear {
             requestNotificationPermission()
+        }
+    }
+
+    private func makeCounts(_ timeBoxes: [TimeBox]) -> [(String, Int)] {
+        let map = Dictionary(grouping: timeBoxes) { timeBox in
+            Calendar.current.startOfDay(for: timeBox.start)
+        }
+        let keys = map.keys.sorted(by: <)
+        return keys.map { key in
+            let date = DateFormatter.localizedString(
+                from: key,
+                dateStyle: .medium,
+                timeStyle: .none
+            )
+            return (date, map[key]?.count ?? 00)
         }
     }
 
