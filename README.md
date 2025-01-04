@@ -57,5 +57,13 @@ Tima
 - 履歴
   - 時間バーに実行履歴をマーク
 
+# KEY BINDINGS
+
+- `⌘-1` to show Measurement view
+- `⌘-2` to show TimeBox view
+- `⌘-I` to focus new item field in Measurement view
+- `⌘-I` to focus new item field in Measurement view
+- `space` to progress time box in TimeBox view
+
 # TODO
 
