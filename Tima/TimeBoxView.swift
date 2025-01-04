@@ -279,4 +279,5 @@ struct TimeBoxView: View {
 
 #Preview {
     TimeBoxView()
+        .modelContainer(for: TimeBox.self)
 }
