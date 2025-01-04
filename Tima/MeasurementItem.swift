@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct MeasurementItem: View {
-    let measurement: Measurement
+    @Environment(\.modelContext) private var context
+    @State private var measurement: Measurement
 
     @State private var genre: String
     @State private var work: String
@@ -36,6 +37,9 @@ struct MeasurementItem: View {
                     }
                     .onSubmit {
                         isGenreEditing = false
+                        updateMeasurement {
+                            measurement.genre = genre
+                        }
                     }
             } else {
                 Text(measurement.genre)
@@ -53,6 +57,9 @@ struct MeasurementItem: View {
                     }
                     .onSubmit {
                         isWorkEditing = false
+                        updateMeasurement{
+                            measurement.work = work
+                        }
                     }
             } else {
                 Text(measurement.work)
@@ -72,6 +79,9 @@ struct MeasurementItem: View {
                         .onChange(of: isStartDateFocused) { _, newValue in
                             if !newValue {
                                 isStartDateEditing = false
+                                updateMeasurement {
+                                    measurement.start = startDate
+                                }
                             }
                         }
                         .onAppear {
@@ -98,6 +108,9 @@ struct MeasurementItem: View {
                     .onChange(of: isEndDateFocused) { _, newValue in
                         if !newValue {
                             isEndDateEditing = false
+                            updateMeasurement {
+                                measurement.end = endDate
+                            }
                         }
                     }
                     .onAppear {
@@ -126,6 +139,15 @@ struct MeasurementItem: View {
 
     private func humanReadableDuration(_ duration: TimeInterval) -> String {
         "\(Int(duration / 60)) m"
+    }
+
+    private func updateMeasurement(_ update: () -> Void) {
+        update()
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save context: \(error)")
+        }
     }
 }
 
