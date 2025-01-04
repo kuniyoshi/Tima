@@ -12,6 +12,7 @@ struct TimeBoxListView: View {
             ForEach(counts, id: \.0) { (date, count) in
                 HStack {
                     Text("\(date)")
+                        .font(.headline)
                     Spacer()
                     HStack(spacing: 2) {
                         ForEach(0..<count, id: \.self) { _ in
@@ -20,6 +21,7 @@ struct TimeBoxListView: View {
                         }
                     }
                 }
+                .padding()
             }
         }
     }
