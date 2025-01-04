@@ -138,7 +138,11 @@ struct TimeBoxView: View {
                     beganAt = Date()
                 case .finished:
                     endAt = Date()
-                    pushTimeBoxData(beganAt)
+                    if let beganAt {
+                        pushTimeBoxData(beganAt)
+                    } else {
+                        print("No beganAt found")
+                    }
             }
 
             self.transition = nil
@@ -239,21 +243,15 @@ struct TimeBoxView: View {
         }
     }
 
-    func pushTimeBoxData(_ beganAt: Date?) {
-        assert(beganAt != nil)
-
-        guard let beganAt else {
-            return
-        }
-
-        let duration = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
-        let adjustedDuration = TimeInterval(duration) * 0.9
+    func pushTimeBoxData(_ beganAt: Date) {
+        let durationMinutes = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+        let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
 
         if (Date().timeIntervalSince(beganAt) < adjustedDuration) {
             return
         }
 
-        let timeBoxData = TimeBox(start: beganAt, workMinutes: duration)
+        let timeBoxData = TimeBox(start: beganAt, workMinutes: durationMinutes)
 
         modelContext.insert(timeBoxData)
     }
