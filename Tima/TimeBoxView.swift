@@ -41,36 +41,34 @@ struct TimeBoxView: View {
 
     var body: some View {
         VStack {
-            VStack {
-                Button(action: onButton) {
-                    Image(systemName: runningState.rawValue)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                        .foregroundColor(.green)
-                        .padding()
-                }
-                .padding([.top, .leading, .trailing])
-                .keyboardShortcut(" ", modifiers: [])
+            Button(action: onButton) {
+                Image(systemName: runningState.rawValue)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+                    .foregroundColor(.green)
+                    .padding()
+            }
+            .padding([.top, .leading, .trailing])
+            .keyboardShortcut(" ", modifiers: [])
 
-                HStack {
-                    if runningState != .ready {
-                        Text("Remain")
-                        Text(remainingTime).monospacedDigit()
-                    }
+            HStack {
+                if runningState != .ready {
+                    Text("Remain")
+                    Text(remainingTime).monospacedDigit()
                 }
-                .onReceive(timer) { _ in
-                    onTick()
-                }
+            }
+            .onReceive(timer) { _ in
+                onTick()
+            }
 
-                HStack {
-                    Spacer()
+            HStack {
+                Spacer()
 
-                    TimeBoxCountView(spans: makeSpans(timeBoxes))
-                        .padding()
+                TimeBoxCountView(spans: makeSpans(timeBoxes))
+                    .padding()
 
-                    Spacer()
-                }
+                Spacer()
             }
         }
         .onAppear {
