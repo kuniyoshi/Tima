@@ -152,6 +152,11 @@ struct AlertDisplay {
 }
 
 #Preview {
-    MeasurementView()
-        .modelContainer(for: Measurement.self, inMemory: false)
+    let container = try! ModelContainer(for: Measurement.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = ModelContext(container)
+
+    context.insert(Measurement(genre: "asdf", work: "work", start: Date(), end: Date()))
+
+    return MeasurementView()
+        .modelContainer(container)
 }
