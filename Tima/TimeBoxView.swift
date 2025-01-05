@@ -76,6 +76,18 @@ struct TimeBoxView: View {
         .onAppear {
             requestNotificationPermission()
         }
+        .toolbar {
+            ToolbarItem {
+                switch runningState {
+                    case .ready:
+                        EmptyView()
+                    case .running:
+                        Image(systemName: "alarm")
+                    case .finished:
+                        EmptyView()
+                }
+            }
+        }
     }
 
     private func makeCounts(_ timeBoxes: [TimeBox]) -> [(String, Int)] {
