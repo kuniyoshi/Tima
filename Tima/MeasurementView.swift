@@ -16,6 +16,8 @@ struct MeasurementView: View {
     @State private var endedAt: Date?
     @State private var alertDisplay = AlertDisplay(error: nil)
     @FocusState private var focusedField: Field?
+    @State private var elapsedSeconds: String = ""
+    @State private var timer: Timer?
 
     var body: some View {
         VStack {
@@ -35,6 +37,10 @@ struct MeasurementView: View {
                 }
                 .keyboardShortcut("I", modifiers: [.command])
                 .hidden()
+
+                Text(isRunning ? elapsedSeconds : "")
+                    .font(.headline.monospaced())
+                    .padding()
 
                 Button(
                     action: {
@@ -65,6 +71,22 @@ struct MeasurementView: View {
                                 alertDisplay = alertDisplay
                                     .weakWritten(title: "ERROR", message: "Failed to save measurement: \(error)")
                             }
+                        }
+
+                        if isRunning {
+                            timer = Timer
+                                .scheduledTimer(
+                                    withTimeInterval: 0.5,
+                                    repeats: true
+                                ) { _ in
+                                    if let startedAt {
+                                        let duration = Int(Date().timeIntervalSince(startedAt))
+                                        elapsedSeconds = "\(duration / 60):\(duration % 60)"
+                                    }
+                                }
+                        } else {
+                            timer?.invalidate()
+                            timer = nil
                         }
 
                     }) {
