@@ -147,7 +147,7 @@ struct MeasurementView: View {
             return formatter.string(from: measurement.start)
         }
 
-        return grouped.keys.sorted().map { key in
+        return grouped.keys.sorted(by: >).map { key in
             return grouped[key] ?? []
         }
     }
