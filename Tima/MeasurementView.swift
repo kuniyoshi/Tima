@@ -124,6 +124,17 @@ struct MeasurementView: View {
                 )
             }
         }
+        .toolbar {
+            ToolbarItem {
+                switch isRunning {
+                    case true:
+                        Image(systemName: "ruler")
+                            .padding()
+                    case false:
+                        EmptyView()
+                }
+            }
+        }
     }
 
     private func makeSpans(_ measurements: [Measurement]) -> [(Int, Int)] {
