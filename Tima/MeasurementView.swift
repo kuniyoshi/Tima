@@ -38,17 +38,19 @@ struct MeasurementView: View {
 
                 Button(
                     action: {
+                        isRunning.toggle()
+
                         if isRunning {
                             startedAt = Date()
                         } else {
                             endedAt = Date()
                         }
 
-                        assert(!isRunning || (isRunning && startedAt != nil && endedAt != nil))
+                        assert(!isRunning || (isRunning && startedAt != nil))
 
-                        if isRunning,
+                        if !isRunning,
                            let startedAt,
-                           let endedAt{
+                           let endedAt {
                             let measurement = Measurement(
                                 genre: genre,
                                 work: work,
@@ -65,7 +67,6 @@ struct MeasurementView: View {
                             }
                         }
 
-                        isRunning.toggle()
                     }) {
                         Image(systemName: isRunning ? "stop.circle" : "play.circle")
                             .font(.title)
