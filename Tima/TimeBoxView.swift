@@ -83,6 +83,7 @@ struct TimeBoxView: View {
                         EmptyView()
                     case .running:
                         Image(systemName: "alarm")
+                            .padding()
                     case .finished:
                         EmptyView()
                 }
