@@ -1,29 +1,45 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedView = 0
+    private enum MenuItem: String, CaseIterable {
+        case measurement = "Measurement"
+        case timeBox = "Time Box"
+    }
+
+    @State private var selection = MenuItem.measurement
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                if selectedView == 0 {
+        VStack {
+            switch selection {
+                case .measurement:
                     MeasurementView()
-                } else {
+                case .timeBox:
                     TimeBoxView()
-                }
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .automatic) {
-                    Button("Measurement") {
-                        selectedView = 0
+        }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Picker(selection: $selection, label: EmptyView()) {
+                    ForEach(MenuItem.allCases, id: \.self) { item in
+                        Text(item.rawValue).tag(item)
                     }
-                    .keyboardShortcut("1", modifiers: .command)
-
-                    Button("TimeBox") {
-                        selectedView = 1
-                    }
-                    .keyboardShortcut("2", modifiers: .command)
                 }
+                .pickerStyle(SegmentedPickerStyle())
+            }
+        }
+        .overlay {
+            Group {
+                Button(action: { selection = .measurement }) {
+                    EmptyView()
+                }
+                .hidden()
+                .keyboardShortcut("1", modifiers: .command)
+
+                Button(action: { selection = .timeBox }) {
+                    EmptyView()
+                }
+                .hidden()
+                .keyboardShortcut("2", modifiers: .command)
             }
         }
     }
