@@ -67,7 +67,7 @@ struct MeasurementView: View {
 
                         isRunning.toggle()
                     }) {
-                        Image(systemName: isRunning ? "pause.circle" : "play.circle")
+                        Image(systemName: isRunning ? "stop.circle" : "play.circle")
                             .font(.title)
                     }
                     .padding()
