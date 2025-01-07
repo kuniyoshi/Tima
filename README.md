@@ -2,7 +2,22 @@
 
 Tima
 
-# SPECIFICATION
+# USAGE
+
+First, select a view from, `Measurement` or `TimeBoxe`.
+
+in `Measurement`,
+  
+
+# KEY BINDINGS
+
+- `⌘-1` to show Measurement view
+- `⌘-2` to show TimeBox view
+- `⌘-I` to focus new item field in Measurement view
+- `space` to progress time box in TimeBox view
+- `⌘-E` to export model data
+
+# SPECIFICATION NOTE
 
 - やることを宣言する
 - かかった時間を振り返ることができる
@@ -57,13 +72,16 @@ Tima
 - 履歴
   - 時間バーに実行履歴をマーク
 
-# KEY BINDINGS
-
-- `⌘-1` to show Measurement view
-- `⌘-2` to show TimeBox view
-- `⌘-I` to focus new item field in Measurement view
-- `space` to progress time box in TimeBox view
-- `⌘-E` to export model data
-
 # TODO
 
+- TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
+- Measurement で日付が編集できない
+- view のスワイプ移動 <- iOS じゃないので難しそう
+- Measurement に色をつける
+- import model data
+- empty can be edit in measurement view
+- rename from genre to group
+- graph
+- add a bit animation while time box
+- add a bit animation while measurement
+- github action
