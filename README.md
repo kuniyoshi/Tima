@@ -74,14 +74,14 @@ in `Measurement`,
 
 # TODO
 
-- TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
-- Measurement で日付が編集できない
-- view のスワイプ移動 <- iOS じゃないので難しそう
 - Measurement に色をつける
-- import model data
+- TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
+- Measurement で日付が編集できない <- 時間はできる
+- view のスワイプ移動 <- iOS じゃないので難しそう
+- インポート機能をつける
 - empty can be edit in measurement view
 - rename from genre to group
-- graph
+- show graph
 - add a bit animation while time box
 - add a bit animation while measurement
 - github action
