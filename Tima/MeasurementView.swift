@@ -9,25 +9,19 @@ struct MeasurementView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Query private var measurements: [Measurement]
-    @State private var genre: String = ""
-    @State private var work: String = ""
-    @State private var isRunning: Bool = false
-    @State private var startedAt: Date?
-    @State private var endedAt: Date?
-    @State private var alertDisplay = AlertDisplay(error: nil)
+    @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
-    @State private var elapsedSeconds: String = ""
     @State private var timer: Timer?
 
     var body: some View {
         VStack {
             HStack {
-                TextField("Input genre...", text: $genre)
+                TextField("Input genre...", text: $model.genre)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .genre)
                     .padding()
 
-                TextField("Input work...", text: $work)
+                TextField("Input work...", text: $model.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .work)
                     .padding()
@@ -38,28 +32,28 @@ struct MeasurementView: View {
                 .keyboardShortcut("I", modifiers: [.command])
                 .hidden()
 
-                Text(isRunning ? elapsedSeconds : "")
+                Text(model.isRunning ? model.elapsedSeconds : "")
                     .font(.headline.monospaced())
                     .padding()
 
                 Button(
                     action: {
-                        isRunning.toggle()
+                        model.isRunning.toggle()
 
-                        if isRunning {
-                            startedAt = Date()
+                        if model.isRunning {
+                            model.startedAt = Date()
                         } else {
-                            endedAt = Date()
+                            model.endedAt = Date()
                         }
 
-                        assert(!isRunning || (isRunning && startedAt != nil))
+                        assert(!model.isRunning || (model.isRunning && model.startedAt != nil))
 
-                        if !isRunning,
-                           let startedAt,
-                           let endedAt {
+                        if !model.isRunning,
+                           let startedAt = model.startedAt,
+                           let endedAt = model.endedAt {
                             let measurement = Measurement(
-                                genre: genre,
-                                work: work,
+                                genre: model.genre,
+                                work: model.work,
                                 start: startedAt,
                                 end: endedAt
                             )
@@ -68,20 +62,20 @@ struct MeasurementView: View {
                                 try modelContext.save()
                             } catch {
                                 print("Failed to save mesurement: \(error)")
-                                alertDisplay = alertDisplay
+                                model.alertDisplay = model.alertDisplay
                                     .weakWritten(title: "ERROR", message: "Failed to save measurement: \(error)")
                             }
                         }
 
-                        if isRunning {
+                        if model.isRunning {
                             timer = Timer
                                 .scheduledTimer(
                                     withTimeInterval: 0.5,
                                     repeats: true
                                 ) { _ in
-                                    if let startedAt {
+                                    if let startedAt = model.startedAt {
                                         let duration = Int(Date().timeIntervalSince(startedAt))
-                                        elapsedSeconds = "\(duration / 60):\(duration % 60)"
+                                        model.elapsedSeconds = "\(duration / 60):\(duration % 60)"
                                     }
                                 }
                         } else {
@@ -90,7 +84,7 @@ struct MeasurementView: View {
                         }
 
                     }) {
-                        Image(systemName: isRunning ? "stop.circle" : "play.circle")
+                        Image(systemName: model.isRunning ? "stop.circle" : "play.circle")
                             .font(.title)
                     }
                     .padding()
@@ -115,18 +109,18 @@ struct MeasurementView: View {
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
 
-            .alert(isPresented: .constant(alertDisplay.error != nil)) {
-                assert(alertDisplay.error != nil)
+            .alert(isPresented: .constant(model.alertDisplay.error != nil)) {
+                assert(model.alertDisplay.error != nil)
                 return Alert(
-                    title: Text(alertDisplay.error?.title ?? "ERROR"),
-                    message: Text(alertDisplay.error?.message ?? "Some error occurred"),
+                    title: Text(model.alertDisplay.error?.title ?? "ERROR"),
+                    message: Text(model.alertDisplay.error?.message ?? "Some error occurred"),
                     dismissButton: .default(Text("OK"))
                 )
             }
         }
         .toolbar {
             ToolbarItem {
-                switch isRunning {
+                switch model.isRunning {
                     case true:
                         Image(systemName: "ruler")
                             .padding()
@@ -135,6 +129,10 @@ struct MeasurementView: View {
                 }
             }
         }
+    }
+
+    init(model: MeasurementModel) {
+        _model = .init(wrappedValue: model)
     }
 
     private func makeSpans(_ measurements: [Measurement]) -> [(Int, Int)] {
@@ -191,6 +189,6 @@ struct AlertDisplay {
 
     context.insert(Measurement(genre: "asdf", work: "work", start: Date(), end: Date()))
 
-    return MeasurementView()
+    return MeasurementView(model: MeasurementModel())
         .modelContainer(container)
 }

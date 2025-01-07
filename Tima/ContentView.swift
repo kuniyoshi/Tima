@@ -7,14 +7,16 @@ struct ContentView: View {
     }
 
     @State private var selection = MenuItem.measurement
+    @StateObject private var measurementModel = MeasurementModel()
+    @StateObject private var timeBoxModel = TimeBoxModel()
 
     var body: some View {
         VStack {
             switch selection {
                 case .measurement:
-                    MeasurementView()
+                    MeasurementView(model: measurementModel)
                 case .timeBox:
-                    TimeBoxView()
+                    TimeBoxView(model: timeBoxModel)
             }
         }
         .toolbar {

@@ -4,45 +4,15 @@ import UserNotifications
 import AVFoundation
 
 struct TimeBoxView: View {
-    private enum RunningState: String {
-        case ready = "hourglass.bottomhalf.filled"
-        case running = "hourglass"
-        case finished = "hourglass.tophalf.filled"
-
-        func progressed() -> RunningState {
-            switch self {
-                case .ready: return .running
-                case .running: return .finished
-                case .finished: return .ready
-            }
-        }
-    }
-
-    private enum QueryType {
-        case Auto
-        case Button
-    }
-
-    private struct Transition {
-        var state: RunningState
-        var queryType: QueryType
-    }
-
     @Environment(\.modelContext) private var modelContext
     @Query private var timeBoxes: [TimeBox]
-    @State private var runningState = RunningState.ready
-    @State private var beganAt: Date?
-    @State private var endAt: Date?
-    @State private var remainingTime: String = "00:00"
-    @State private var audioPlayer: AVAudioPlayer? // TODO: 通知にでならせないのかどうか
-    @State private var transition: Transition?
-
-    private let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    @StateObject private var model: TimeBoxModel
+    @State private var timer: Timer?
 
     var body: some View {
         VStack {
             Button(action: onButton) {
-                Image(systemName: runningState.rawValue)
+                Image(systemName: model.runningState.rawValue)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
@@ -53,13 +23,10 @@ struct TimeBoxView: View {
             .keyboardShortcut(" ", modifiers: [])
 
             HStack {
-                if runningState != .ready {
+                if model.runningState != .ready {
                     Text("Remain")
-                    Text(remainingTime).monospacedDigit()
+                    Text(model.remainingTime).monospacedDigit()
                 }
-            }
-            .onReceive(timer) { _ in
-                onTick()
             }
 
             HStack {
@@ -75,10 +42,17 @@ struct TimeBoxView: View {
         }
         .onAppear {
             requestNotificationPermission()
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+                onTick()
+            }
+        }
+        .onDisappear {
+            timer?.invalidate()
+            timer = nil
         }
         .toolbar {
             ToolbarItem {
-                switch runningState {
+                switch model.runningState {
                     case .ready:
                         EmptyView()
                     case .running:
@@ -89,6 +63,10 @@ struct TimeBoxView: View {
                 }
             }
         }
+    }
+
+    init(model: TimeBoxModel) {
+        _model = .init(wrappedValue: model)
     }
 
     private func makeCounts(_ timeBoxes: [TimeBox]) -> [(String, Int)] {
@@ -127,15 +105,15 @@ struct TimeBoxView: View {
     }
 
     private func onButton() {
-        transition = Transition(
-            state: runningState.progressed(),
+        model.transition = .init(
+            state: model.runningState.progressed(),
             queryType: .Button
         )
     }
 
     private func onTick() {
-        if let transition {
-            runningState = transition.state
+        if let transition = model.transition {
+            model.runningState = transition.state
 
             switch transition.queryType {
                 case .Auto:
@@ -162,23 +140,24 @@ struct TimeBoxView: View {
 
             switch transition.state {
                 case .ready:
-                    beganAt = nil
-                    endAt = nil
+                    model.beganAt = nil
+                    model.endAt = nil
+                    timer = nil
                 case .running:
-                    beganAt = Date()
+                    model.beganAt = Date()
                 case .finished:
-                    endAt = Date()
-                    if let beganAt {
+                    model.endAt = Date()
+                    if let beganAt = model.beganAt {
                         pushTimeBoxData(beganAt)
                     } else {
                         print("No beganAt found")
                     }
             }
 
-            self.transition = nil
+            self.model.transition = nil
         }
 
-        switch runningState {
+        switch model.runningState {
             case .ready:
                 break
             case .running:
@@ -189,9 +168,9 @@ struct TimeBoxView: View {
     }
 
     private func tickWhileFinished() {
-        assert(endAt != nil)
+        assert(model.endAt != nil)
 
-        guard let endAt else {
+        guard let endAt = model.endAt else {
             return
         }
 
@@ -205,20 +184,20 @@ struct TimeBoxView: View {
         let minutes = Int(remain) / 60
         let seconds = Int(remain) % 60
 
-        remainingTime = String(format: "%02d:%02d", minutes, seconds)
+        model.remainingTime = String(format: "%02d:%02d", minutes, seconds)
 
         if remain == 0 {
-            transition = Transition(
-                state: runningState.progressed(),
+            model.transition = .init(
+                state: model.runningState.progressed(),
                 queryType: .Auto
             )
         }
     }
 
     private func tickWhileRunning() {
-        assert(beganAt != nil)
+        assert(model.beganAt != nil)
 
-        guard let beganAt else {
+        guard let beganAt = model.beganAt else {
             return
         }
 
@@ -232,11 +211,11 @@ struct TimeBoxView: View {
         let minutes = Int(remain) / 60
         let seconds = Int(remain) % 60
 
-        remainingTime = String(format: "%02d:%02d", minutes, seconds)
+        model.remainingTime = String(format: "%02d:%02d", minutes, seconds)
 
         if remain == 0 {
-            transition = Transition(
-                state: runningState.progressed(),
+            model.transition = .init(
+                state: model.runningState.progressed(),
                 queryType: .Auto
             )
         }
@@ -299,8 +278,8 @@ struct TimeBoxView: View {
         }
 
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
+            model.audioPlayer = try AVAudioPlayer(contentsOf: url)
+            model.audioPlayer?.play()
         } catch {
             print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
         }
@@ -313,6 +292,6 @@ struct TimeBoxView: View {
 
     context.insert(TimeBox(start: Date(), workMinutes: 25))
 
-    return TimeBoxView()
+    return TimeBoxView(model: TimeBoxModel())
         .modelContainer(container)
 }
