@@ -1,3 +1,5 @@
+import SwiftUI
+
 struct TimaColor: Codable, Hashable, Identifiable {
     static var red = TimaColor(red: 1.0, green: 0.0, blue: 0.0)
     static var magenta = TimaColor(red: 1.0, green: 0.0, blue: 1.0)
@@ -16,5 +18,9 @@ struct TimaColor: Codable, Hashable, Identifiable {
 
     var id: String {
         "\(red):\(green):\(blue)"
+    }
+
+    var uiColor: Color {
+        .init(red: red, green: green, blue: blue)
     }
 }
