@@ -1,5 +1,7 @@
 import Foundation
+import SwiftData
 
+@Model
 final class MeasurementGroup: Codable {
     private enum CodingKeys: String, CodingKey {
         case id
