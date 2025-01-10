@@ -6,7 +6,7 @@ import AppKit
 @Model
 final class Measurement: Codable {
     var id: UUID
-    var group
+    var group: 
     var work: String
     var start: Date
     var end: Date
