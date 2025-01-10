@@ -55,7 +55,8 @@ struct MeasurementView: View {
                                 genre: model.genre,
                                 work: model.work,
                                 start: startedAt,
-                                end: endedAt
+                                end: endedAt,
+                                color: .blue
                             )
                             modelContext.insert(measurement)
                             do {
@@ -187,7 +188,7 @@ struct AlertDisplay {
     let container = try! ModelContainer(for: Measurement.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
-    context.insert(Measurement(genre: "asdf", work: "work", start: Date(), end: Date()))
+    context.insert(Measurement(genre: "asdf", work: "work", start: Date(), end: Date(), color: .blue))
 
     return MeasurementView(model: MeasurementModel())
         .modelContainer(container)

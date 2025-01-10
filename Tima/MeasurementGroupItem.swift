@@ -33,19 +33,22 @@ struct MeasurementGroupItem: View, Identifiable {
             genre: "デザイン",
             work: "UIスケッチ",
             start: Date(timeInterval: 700, since: Date()),
-            end: Date(timeInterval: 1080, since: Date())
+            end: Date(timeInterval: 1080, since: Date()),
+            color: .red
         ),
         Measurement(
             genre: "デザイン",
             work: "UIスケッチ",
             start: Date(),
-            end: Date(timeInterval: 300, since: Date())
+            end: Date(timeInterval: 300, since: Date()),
+            color: .magenta
         ),
         Measurement(
             genre: "デザイン",
             work: "UIスケッチ",
             start: Date(),
-            end: Date(timeInterval: 300, since: Date())
+            end: Date(timeInterval: 300, since: Date()),
+            color: .cyan
         )
     ])
 }
