@@ -30,25 +30,22 @@ struct MeasurementGroupItem: View, Identifiable {
 #Preview {
     MeasurementGroupItem(measurements: [
         Measurement(
-            genre: "デザイン",
+            task: MeasurementTask(name: "デザイン", color: TimaColor.red),
             work: "UIスケッチ",
             start: Date(timeInterval: 700, since: Date()),
-            end: Date(timeInterval: 1080, since: Date()),
-            color: .red
+            end: Date(timeInterval: 1080, since: Date())
         ),
         Measurement(
-            genre: "デザイン",
+            task: MeasurementTask(name: "デザイン", color: TimaColor.blue),
             work: "UIスケッチ",
             start: Date(),
-            end: Date(timeInterval: 300, since: Date()),
-            color: .magenta
+            end: Date(timeInterval: 300, since: Date())
         ),
         Measurement(
-            genre: "デザイン",
+            task: MeasurementTask(name: "デザイン", color: TimaColor.cyan),
             work: "UIスケッチ",
             start: Date(),
-            end: Date(timeInterval: 300, since: Date()),
-            color: .cyan
+            end: Date(timeInterval: 300, since: Date())
         )
     ])
 }

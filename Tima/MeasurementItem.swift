@@ -53,32 +53,27 @@ struct MeasurementItem: View {
     @Environment(\.modelContext) private var context
     @State private var measurement: Measurement
 
-    @State private var genre: String
+    @State private var task: MeasurementTask
     @State private var work: String
     @State private var startDate: Date
     @State private var endDate: Date
 
-    @State private var isGenreEditing = false
+    @State private var isTaskEditing = false
     @State private var isWorkEditing = false
     @State private var isStartDateEditing = false
     @State private var isEndDateEditing = false
 
-    @FocusState private var isGenreFocused: Bool
+    @FocusState private var isTaskFocused: Bool
     @FocusState private var isWorkFocused: Bool
     @FocusState private var isStartDateFocused: Bool
     @FocusState private var isEndDateFocused: Bool
 
     init(measurement: Measurement) {
         self.measurement = measurement
-//        self._color = State(initialValue: MeasurementItem.convertColor(measurement.color))
-        self._genre = State(initialValue: measurement.genre)
+        self._task = State(initialValue: measurement.task)
         self._work = State(initialValue: measurement.work)
         self._startDate = State(initialValue: measurement.start)
         self._endDate = State(initialValue: measurement.end)
-    }
-
-    static func convertColor(_ color: Measurement.Color) -> Color {
-        Color(red: color.red, green: color.green, blue: color.blue)
     }
 
     var body: some View {
@@ -106,26 +101,32 @@ struct MeasurementItem: View {
 //                        isColorEditing = true
 //                    }
 //            }
-            ColorView(measurement: measurement)
+//            ColorView(measurement: measurement)
 
-            if isGenreEditing {
-                TextField(genre, text: $genre)
-                    .focused($isGenreFocused)
-                    .onAppear {
-                        isGenreFocused = true
-                    }
-                    .onSubmit {
-                        isGenreEditing = false
-                        updateMeasurement {
-                            measurement.genre = genre
-                        }
-                    }
+//            if isGenreEditing {
+//                TextField(genre, text: $genre)
+//                    .focused($isGenreFocused)
+//                    .onAppear {
+//                        isGenreFocused = true
+//                    }
+//                    .onSubmit {
+//                        isGenreEditing = false
+//                        updateMeasurement {
+//                            measurement.genre = genre
+//                        }
+//                    }
+//            } else {
+//                Text(measurement.genre)
+//                    .onTapGesture {
+//                        isGenreEditing = true
+//                    }
+//                    .foregroundColor(.primary)
+//            }
+
+            if isTaskEditing {
+
             } else {
-                Text(measurement.genre)
-                    .onTapGesture {
-                        isGenreEditing = true
-                    }
-                    .foregroundColor(.primary)
+                MeasurementTaskView(task: measurement.task)
             }
 
             if isWorkEditing {
@@ -232,10 +233,9 @@ struct MeasurementItem: View {
 
 #Preview {
     MeasurementItem(measurement: Measurement(
-        genre: "デザイン",
+        task: MeasurementTask(name: "デザイン", color: TimaColor.blue),
         work: "UIスケッチ",
         start: Date(),
-        end: Date(timeInterval: 180, since: Date()),
-        color: .gray
+        end: Date(timeInterval: 180, since: Date())
     ))
 }

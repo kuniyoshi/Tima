@@ -16,10 +16,10 @@ struct MeasurementView: View {
     var body: some View {
         VStack {
             HStack {
-                TextField("Input genre...", text: $model.genre)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .focused($focusedField, equals: .genre)
-                    .padding()
+//                TextField("Input genre...", text: $model.genre)
+//                    .textFieldStyle(RoundedBorderTextFieldStyle())
+//                    .focused($focusedField, equals: .genre)
+//                    .padding()
 
                 TextField("Input work...", text: $model.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -52,11 +52,10 @@ struct MeasurementView: View {
                            let startedAt = model.startedAt,
                            let endedAt = model.endedAt {
                             let measurement = Measurement(
-                                genre: model.genre,
+                                task: model.task,
                                 work: model.work,
                                 start: startedAt,
-                                end: endedAt,
-                                color: .blue
+                                end: endedAt
                             )
                             modelContext.insert(measurement)
                             do {
@@ -188,7 +187,15 @@ struct AlertDisplay {
     let container = try! ModelContainer(for: Measurement.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
-    context.insert(Measurement(genre: "asdf", work: "work", start: Date(), end: Date(), color: .blue))
+    context
+        .insert(
+            Measurement(
+                task: MeasurementTask(name: "task", color: .blue),
+                work: "work",
+                start: Date(),
+                end: Date()
+            )
+        )
 
     return MeasurementView(model: MeasurementModel())
         .modelContainer(container)

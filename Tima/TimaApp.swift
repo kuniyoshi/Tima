@@ -20,7 +20,7 @@ struct TimaApp: App {
             }
         }
 
-//        clearPersistentStore()
+        clearPersistentStore()
 #endif
 
         let schema = Schema([
