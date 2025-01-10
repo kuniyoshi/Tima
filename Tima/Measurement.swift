@@ -5,38 +5,8 @@ import AppKit
 
 @Model
 final class Measurement: Codable {
-    struct Color: Codable {
-        var red: Double
-        var green: Double
-        var blue: Double
-
-        static var red: Color {
-            Color(red: 1.0, green: 0.0, blue: 0.0)
-        }
-
-        static var magenta: Color {
-            Color(red: 1.0, green: 0.0, blue: 1.0)
-        }
-
-        static var cyan: Color {
-            Color(red: 0.0, green: 1.0, blue: 1.0)
-        }
-
-        static var green: Color {
-            Color(red: 0.0, green: 1.0, blue: 0.0)
-        }
-
-        static var blue: Color {
-            Color(red: 0.0, green: 0.0, blue: 1.0)
-        }
-
-        static var gray: Color {
-            Color(red: 0.5, green: 0.5, blue: 0.5)
-        }
-    }
-
     var id: UUID
-    var genre: String
+    var group
     var work: String
     var start: Date
     var end: Date

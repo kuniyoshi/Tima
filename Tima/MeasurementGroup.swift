@@ -11,9 +11,9 @@ final class MeasurementGroup: Codable {
 
     var id: UUID
     var name: String
-    var color: MeasurementColor
+    var color: TimaColor
 
-    init(id: UUID = UUID(), name: String, color: MeasurementColor) {
+    init(id: UUID = UUID(), name: String, color: TimaColor) {
         self.id = id
         self.name = name
         self.color = color
@@ -32,7 +32,7 @@ final class MeasurementGroup: Codable {
                 debugDescription: "Invalid RGBA array: \(rgb)"
             )
         }
-        color = MeasurementColor(
+        color = TimaColor(
             red: rgb[0],
             green: rgb[1],
             blue: rgb[2]
