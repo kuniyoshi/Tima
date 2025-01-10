@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct MeasurementTaskView: View {
     @State private var task: MeasurementTask
@@ -18,5 +19,15 @@ struct MeasurementTaskView: View {
 }
 
 #Preview {
-    MeasurementTaskView(task: MeasurementTask(name: "デザイン", color: TimaColor.red))
+    let container = try! ModelContainer(
+        for: MeasurementTask.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    let context = ModelContext(container)
+
+    context.insert(MeasurementTask(name: "blue", color: .blue))
+    context.insert(MeasurementTask(name: "red", color: .red))
+    context.insert(MeasurementTask(name: "green", color: .green))
+
+    return MeasurementTaskView(task: MeasurementTask(name: "デザイン", color: .red))
 }

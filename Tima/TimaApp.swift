@@ -24,6 +24,7 @@ struct TimaApp: App {
 #endif
 
         let schema = Schema([
+            MeasurementTask.self,
             Measurement.self,
             TimeBox.self,
         ])
