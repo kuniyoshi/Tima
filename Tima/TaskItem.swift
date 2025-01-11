@@ -22,18 +22,28 @@ struct TaskItem: View {
                     }
             }
             .popover(isPresented: $isNameEditing) {
-                VStack {
-                    ForEach(tasks) { task in
-                        Text(task.name)
-                            .font(.headline)
-                            .onTapGesture {
-                                self.task = task
-                                name = task.name
-                                isNameEditing = false
+                ScrollViewReader { reader in
+                    ScrollView(.vertical, showsIndicators: true) {
+                        VStack {
+                            ForEach(tasks) { task in
+                                Text(task.name)
+                                    .id(task.id)
+                                    .font(.headline)
+                                    .background(task == self.task ? Color.secondary.opacity(0.3) : Color.clear)
+                                    .padding(2)
+                                    .onTapGesture {
+                                        self.task = task
+                                        name = task.name
+                                        isNameEditing = false
+                                    }
                             }
+                        }
+                    }
+                    .padding()
+                    .onAppear {
+                        reader.scrollTo(task.id, anchor: .center)
                     }
                 }
-                .padding()
             }
         }
     }
@@ -55,6 +65,8 @@ struct TaskItem: View {
     context.insert(Task(name: "red", color: .red))
     context.insert(Task(name: "green", color: .green))
 
-    return TaskItem(task: Task(name: "デザイン", color: .red))
+    let initial = Task(name: "デザイン", color: .red)
+
+    return TaskItem(task: initial)
         .modelContainer(container)
 }
