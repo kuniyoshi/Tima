@@ -53,7 +53,7 @@ struct MeasurementItem: View {
     @Environment(\.modelContext) private var context
     @State private var measurement: Measurement
 
-    @State private var task: MeasurementTask
+    @State private var task: Task
     @State private var work: String
     @State private var startDate: Date
     @State private var endDate: Date
@@ -233,7 +233,7 @@ struct MeasurementItem: View {
 
 #Preview {
     MeasurementItem(measurement: Measurement(
-        task: MeasurementTask(name: "デザイン", color: TimaColor.blue),
+        task: Task(name: "デザイン", color: TimaColor.blue),
         work: "UIスケッチ",
         start: Date(),
         end: Date(timeInterval: 180, since: Date())

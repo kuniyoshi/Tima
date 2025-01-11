@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class MeasurementTask: Codable {
+final class Task: Codable {
     private enum CodingKeys: String, CodingKey {
         case id
         case name

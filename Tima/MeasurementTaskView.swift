@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct MeasurementTaskView: View {
-    @State private var task: MeasurementTask
+    @State private var task: Task
 
     var body: some View {
         HStack {
@@ -13,21 +13,21 @@ struct MeasurementTaskView: View {
         }
     }
 
-    init(task: MeasurementTask) {
+    init(task: Task) {
         self.task = task
     }
 }
 
 #Preview {
     let container = try! ModelContainer(
-        for: MeasurementTask.self,
+        for: Task.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
 
-    context.insert(MeasurementTask(name: "blue", color: .blue))
-    context.insert(MeasurementTask(name: "red", color: .red))
-    context.insert(MeasurementTask(name: "green", color: .green))
+    context.insert(Task(name: "blue", color: .blue))
+    context.insert(Task(name: "red", color: .red))
+    context.insert(Task(name: "green", color: .green))
 
-    return MeasurementTaskView(task: MeasurementTask(name: "デザイン", color: .red))
+    return MeasurementTaskView(task: Task(name: "デザイン", color: .red))
 }

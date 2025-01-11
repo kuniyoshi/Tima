@@ -14,7 +14,7 @@ final class Measurement: Codable {
     }
 
     var id: UUID
-    var task: MeasurementTask
+    var task: Task
     var work: String
     var start: Date
     var end: Date
@@ -23,7 +23,7 @@ final class Measurement: Codable {
         end.timeIntervalSince(start)
     }
 
-    init(id: UUID = UUID(), task: MeasurementTask, work: String, start: Date, end: Date) {
+    init(id: UUID = UUID(), task: Task, work: String, start: Date, end: Date) {
         self.id = id
         self.task = task
         self.work = work
@@ -34,7 +34,7 @@ final class Measurement: Codable {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
-        task = try container.decode(MeasurementTask.self, forKey: .task)
+        task = try container.decode(Task.self, forKey: .task)
         work = try container.decode(String.self, forKey: .work)
 
         let startString = try container.decode(String.self, forKey: .start)

@@ -190,7 +190,7 @@ struct AlertDisplay {
     context
         .insert(
             Measurement(
-                task: MeasurementTask(name: "task", color: .blue),
+                task: Task(name: "task", color: .blue),
                 work: "work",
                 start: Date(),
                 end: Date()
