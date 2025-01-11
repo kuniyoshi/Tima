@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct TaskView: View {
+struct TaskList: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var tasks: [Task]
 
@@ -23,6 +23,6 @@ struct TaskView: View {
     context.insert(Task(name: "red", color: .red))
     context.insert(Task(name: "green", color: .green))
 
-    return TaskView()
+    return TaskList()
         .modelContext(context)
 }
