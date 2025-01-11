@@ -11,18 +11,7 @@ struct TaskItem: View {
     @FocusState private var isNameFocused: Bool
 
     var body: some View {
-        VStack {
-            HStack {
-                Image(systemName: "circle.fill")
-                    .foregroundColor(task.color.uiColor)
-                Text(task.name)
-                    .font(.headline)
-                    .onTapGesture {
-                        isNameEditing = true
-                    }
-            }
-        }
-        .sheet(isPresented: $isNameEditing) {
+        if isNameEditing {
             VStack {
                 Picker("", selection: $name) {
                     ForEach(tasks) { task in
@@ -30,7 +19,7 @@ struct TaskItem: View {
                             .tag(task.name)
                     }
                 }
-                .pickerStyle(MenuPickerStyle())
+                .pickerStyle(PopUpButtonPickerStyle())
                 .onChange(of: name) {
                     isNameEditing = false
                     if let newValue = tasks.first(where: { $0.name == name }) {
@@ -39,6 +28,16 @@ struct TaskItem: View {
                         name = task.name
                     }
                 }
+            }
+        } else {
+            HStack {
+                Image(systemName: "circle.fill")
+                    .foregroundColor(task.color.uiColor)
+                Text(task.name)
+                    .font(.headline)
+                    .onTapGesture {
+                        isNameEditing = true
+                    }
             }
         }
     }
