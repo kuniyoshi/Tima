@@ -15,6 +15,9 @@ struct TaskItem: View {
             HStack {
                 Image(systemName: "circle.fill")
                     .foregroundColor(task.color.uiColor)
+                    .onTapGesture {
+                        // TODO: isColorEditing
+                    }
                 Text(task.name)
                     .font(.headline)
                     .onTapGesture {
