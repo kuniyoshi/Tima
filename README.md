@@ -7,7 +7,7 @@ Tima
 First, select a view from, `Measurement` or `TimeBoxe`.
 
 in `Measurement`,
-  
+
 
 # KEY BINDINGS
 
@@ -18,6 +18,10 @@ in `Measurement`,
 - `⌘-E` to export model data
 
 # SPECIFICATION NOTE
+
+- TimeBox
+- Task
+- Measurement includes Task
 
 - やることを宣言する
 - かかった時間を振り返ることができる

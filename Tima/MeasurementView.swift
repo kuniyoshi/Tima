@@ -187,15 +187,22 @@ struct AlertDisplay {
     let container = try! ModelContainer(for: Measurement.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
-    context
-        .insert(
-            Measurement(
-                task: Task(name: "task", color: .blue),
-                work: "work",
-                start: Date(),
-                end: Date()
-            )
+    context.insert(
+        Measurement(
+            task: Task(name: "task", color: .blue),
+            work: "work",
+            start: Date(timeIntervalSinceNow: TimeInterval(-3600)),
+            end: Date()
         )
+    )
+    context.insert(
+        Measurement(
+            task: Task(name: "task2", color: .red),
+            work: "work",
+            start: Date(timeIntervalSinceNow: -7200),
+            end: Date(timeIntervalSinceNow: -3600)
+        )
+    )
 
     return MeasurementView(model: MeasurementModel())
         .modelContainer(container)
