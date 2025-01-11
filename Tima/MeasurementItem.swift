@@ -126,7 +126,7 @@ struct MeasurementItem: View {
             if isTaskEditing {
 
             } else {
-                MeasurementTaskView(task: measurement.task)
+                TaskItem(task: measurement.task)
             }
 
             if isWorkEditing {

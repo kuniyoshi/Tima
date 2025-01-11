@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct MeasurementTaskView: View {
+struct TaskItem: View {
     @State private var task: Task
 
     var body: some View {
@@ -29,5 +29,5 @@ struct MeasurementTaskView: View {
     context.insert(Task(name: "red", color: .red))
     context.insert(Task(name: "green", color: .green))
 
-    return MeasurementTaskView(task: Task(name: "デザイン", color: .red))
+    return TaskItem(task: Task(name: "デザイン", color: .red))
 }
