@@ -1,6 +1,17 @@
 import SwiftData
 import SwiftUI
 
+extension ModelContext {
+    func update(_ update: () -> Void) {
+        do {
+            update()
+            try self.save()
+        } catch {
+            print("Failed to save context: \(error)")
+        }
+    }
+}
+
 extension Tima.Task {
     static func findOrCreate(name: String, in context: ModelContext) throws -> Tima.Task {
         let request = FetchDescriptor<Tima.Task>(
@@ -21,4 +32,3 @@ extension Tima.Task {
         }
     }
 }
-

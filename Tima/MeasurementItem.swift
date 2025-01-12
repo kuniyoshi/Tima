@@ -37,7 +37,7 @@ struct MeasurementItem: View {
                 }
                 .onSubmit {
                     isWorkEditing = false
-                    updateMeasurement {
+                    context.update {
                         measurement.work = work
                     }
                 }
@@ -59,7 +59,7 @@ struct MeasurementItem: View {
                     .onChange(of: isStartDateFocused) { _, newValue in
                         if !newValue {
                             isStartDateEditing = false
-                            updateMeasurement {
+                            context.update {
                                 measurement.start = startDate
                             }
                         }
@@ -88,7 +88,7 @@ struct MeasurementItem: View {
                     .onChange(of: isEndDateFocused) { _, newValue in
                         if !newValue {
                             isEndDateEditing = false
-                            updateMeasurement {
+                            context.update {
                                 measurement.end = endDate
                             }
                         }
@@ -115,15 +115,6 @@ struct MeasurementItem: View {
                 .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
         .padding(0)
-    }
-
-    private func updateMeasurement(_ update: () -> Void) {
-        update()
-        do {
-            try context.save()
-        } catch {
-            print("Failed to save context: \(error)")
-        }
     }
 }
 
