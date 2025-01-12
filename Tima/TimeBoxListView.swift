@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Shows TimeBox count by text
 struct TimeBoxListView: View {
     private let counts: [(String, Int)]
 

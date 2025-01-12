@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Shows TimeBox counts to time bar
 struct TimeBoxCountView: View {
     let spans: [(Int, Int)] // TODO: 共通化する?
 
