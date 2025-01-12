@@ -112,7 +112,7 @@ struct MeasurementItem: View {
         .padding(8)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(SwiftUI.Color.primary.opacity(0.05))
+                .fill(.primary.opacity(0.05))
                 .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
         .padding(0)
