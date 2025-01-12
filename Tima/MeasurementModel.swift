@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Measurement model for editor
 class MeasurementModel: ObservableObject {
     @Published var taskName: String = ""
     @Published var work: String = ""
