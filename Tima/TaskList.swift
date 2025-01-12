@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+// List view for task
 struct TaskList: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var tasks: [Tima.Task]
