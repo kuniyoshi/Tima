@@ -52,22 +52,21 @@ struct MeasurementView: View {
                         if !model.isRunning,
                            let startedAt = model.startedAt,
                            let endedAt = model.endedAt {
-                            let task = Tima.Task(name: model.taskName, color: .blue) // TODO: change
-                            // TODO: find or create task
-
-                            let measurement = Measurement(
-                                taskID: task.id,
-                                work: model.work,
-                                start: startedAt,
-                                end: endedAt
-                            )
-                            modelContext.insert(measurement)
                             do {
+                                let task = try Tima.Task.findOrCreate(name: model.taskName, in: modelContext)
+                                let measurement = Measurement(
+                                    taskID: task.id,
+                                    work: model.work,
+                                    start: startedAt,
+                                    end: endedAt
+                                )
+
+                                modelContext.insert(measurement)
+
                                 try modelContext.save()
                             } catch {
-                                print("Failed to save mesurement: \(error)")
                                 model.alertDisplay = model.alertDisplay
-                                    .weakWritten(title: "ERROR", message: "Failed to save measurement: \(error)")
+                                    .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
                             }
                         }
 
