@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+// Main view of measurement
 struct MeasurementView: View {
     private enum Field {
         case task

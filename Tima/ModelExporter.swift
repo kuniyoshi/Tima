@@ -3,6 +3,7 @@ import Foundation
 import SwiftData
 import UniformTypeIdentifiers
 
+// An exporter of App's data
 struct ModelExporter {
     private let container: ModelContainer
 

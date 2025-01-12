@@ -1,3 +1,4 @@
+// Application settings
 struct SettingsDefaults {
     struct TimeBox {
         static let isSoundNotification: Bool = true

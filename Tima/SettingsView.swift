@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Represents App's settings
 struct SettingsView: View {
     @AppStorage(SettingsKeys.TimeBox.isSoundNotification.rawValue)
     private var notificationWithSound: Bool = SettingsDefaults.TimeBox.isSoundNotification

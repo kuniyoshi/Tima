@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Ruler for memoried span
 struct Memory24HourHorizontalView: View {
     let spans: [(Int, Int)]
 

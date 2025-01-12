@@ -1,3 +1,4 @@
+// Application settings keys
 enum SettingsKeys {
     enum TimeBox: String {
         case isSoundNotification = "timeBox.isSoundNotification"
