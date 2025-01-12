@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 
+// TimeBox model
 @Model
 final class TimeBox: Codable {
     private enum CodingKeys: String, CodingKey {
