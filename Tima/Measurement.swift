@@ -41,7 +41,8 @@ final class Measurement: Codable {
         let endString = try container.decode(String.self, forKey: .end)
 
         guard let startDate = Util.iso8601DateFormatter.date(from: startString),
-              let endDate = Util.iso8601DateFormatter.date(from: endString) else {
+              let endDate = Util.iso8601DateFormatter.date(from: endString)
+        else {
             throw DecodingError.dataCorruptedError(
                 forKey: .start,
                 in: container,

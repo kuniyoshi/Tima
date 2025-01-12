@@ -125,22 +125,22 @@ struct MeasurementItem: View {
 
             if isWorkEditing {
                 TextField(work, text: $work)
-                    .focused($isWorkFocused)
-                    .onAppear {
-                        isWorkFocused = true
+                .focused($isWorkFocused)
+                .onAppear {
+                    isWorkFocused = true
+                }
+                .onSubmit {
+                    isWorkEditing = false
+                    updateMeasurement {
+                        measurement.work = work
                     }
-                    .onSubmit {
-                        isWorkEditing = false
-                        updateMeasurement{
-                            measurement.work = work
-                        }
-                    }
+                }
             } else {
                 Text(measurement.work)
-                    .onTapGesture {
-                        isWorkEditing = true
-                    }
-                    .foregroundColor(.primary)
+                .onTapGesture {
+                    isWorkEditing = true
+                }
+                .foregroundColor(.primary)
             }
 
             Spacer()
@@ -148,22 +148,22 @@ struct MeasurementItem: View {
             HStack {
                 if isStartDateEditing {
                     DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
-                        .labelsHidden()
-                        .focused($isStartDateFocused)
-                        .onChange(of: isStartDateFocused) { _, newValue in
-                            if !newValue {
-                                isStartDateEditing = false
-                                updateMeasurement {
-                                    measurement.start = startDate
-                                }
+                    .labelsHidden()
+                    .focused($isStartDateFocused)
+                    .onChange(of: isStartDateFocused) { _, newValue in
+                        if !newValue {
+                            isStartDateEditing = false
+                            updateMeasurement {
+                                measurement.start = startDate
                             }
                         }
-                        .onAppear {
-                            isStartDateFocused = true
-                        }
-                        .onSubmit {
-                            isStartDateEditing = false
-                        }
+                    }
+                    .onAppear {
+                        isStartDateFocused = true
+                    }
+                    .onSubmit {
+                        isStartDateEditing = false
+                    }
                 } else {
                     Text(measurement.start, format: Date.FormatStyle(time: .shortened))
                         .onTapGesture {
@@ -227,5 +227,5 @@ struct MeasurementItem: View {
 
 #Preview {
     let task = Tima.Task(name: "デザイン", color: .blue)
-    MeasurementItem(measurement: Measurement( taskID: task.id, work: "UIスケッチ", start: Date(), end: Date(timeInterval: 180, since: Date()) ), task: task)
+    MeasurementItem(measurement: Measurement(taskID: task.id, work: "UIスケッチ", start: Date(), end: Date(timeInterval: 180, since: Date())), task: task)
 }

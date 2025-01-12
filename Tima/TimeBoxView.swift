@@ -55,13 +55,13 @@ struct TimeBoxView: View {
         .toolbar {
             ToolbarItem {
                 switch model.runningState {
-                    case .ready:
-                        EmptyView()
-                    case .running:
-                        Image(systemName: "alarm")
-                            .padding()
-                    case .finished:
-                        EmptyView()
+                case .ready:
+                    EmptyView()
+                case .running:
+                    Image(systemName: "alarm")
+                        .padding()
+                case .finished:
+                    EmptyView()
                 }
             }
         }
@@ -88,7 +88,9 @@ struct TimeBoxView: View {
 
     private func makeSpans(_ timeBoxes: [TimeBox]) -> [(Int, Int)] {
         let from = Calendar.current.startOfDay(for: Date())
-        let list = timeBoxes.filter { $0.start >= from }
+        let list = timeBoxes.filter {
+            $0.start >= from
+        }
         return list.map { timeBox in
             let minutes = Int(timeBox.start.timeIntervalSince(from)) / 60
             return (minutes, timeBox.workMinutes)
@@ -118,54 +120,54 @@ struct TimeBoxView: View {
             model.runningState = transition.state
 
             switch transition.queryType {
-                case .Auto:
-                    switch transition.state {
-                        case .ready:
-                            playSe(fileName: "rest_end", fileType: "mp3")
-                            notify(content: endRestNotification())
-                        case .running:
-                            assert(false, "Should not be running automatically")
-                        case .finished:
-                            playSe(fileName: "time_box_end", fileType: "mp3")
-                            notify(content: endWorkNotification())
-                    }
-                case .Button:
-                    switch transition.state {
-                        case .ready:
-                            break
-                        case .running:
-                            playSe(fileName: "time_box_begin", fileType: "mp3")
-                        case .finished:
-                            break
-                    }
+            case .Auto:
+                switch transition.state {
+                case .ready:
+                    playSe(fileName: "rest_end", fileType: "mp3")
+                    notify(content: endRestNotification())
+                case .running:
+                    assert(false, "Should not be running automatically")
+                case .finished:
+                    playSe(fileName: "time_box_end", fileType: "mp3")
+                    notify(content: endWorkNotification())
+                }
+            case .Button:
+                switch transition.state {
+                case .ready:
+                    break
+                case .running:
+                    playSe(fileName: "time_box_begin", fileType: "mp3")
+                case .finished:
+                    break
+                }
             }
 
             switch transition.state {
-                case .ready:
-                    model.beganAt = nil
-                    model.endAt = nil
-                    timer = nil
-                case .running:
-                    model.beganAt = Date()
-                case .finished:
-                    model.endAt = Date()
-                    if let beganAt = model.beganAt {
-                        pushTimeBoxData(beganAt)
-                    } else {
-                        print("No beganAt found")
-                    }
+            case .ready:
+                model.beganAt = nil
+                model.endAt = nil
+                timer = nil
+            case .running:
+                model.beganAt = Date()
+            case .finished:
+                model.endAt = Date()
+                if let beganAt = model.beganAt {
+                    pushTimeBoxData(beganAt)
+                } else {
+                    print("No beganAt found")
+                }
             }
 
             self.model.transition = nil
         }
 
         switch model.runningState {
-            case .ready:
-                break
-            case .running:
-                tickWhileRunning()
-            case .finished:
-                tickWhileFinished()
+        case .ready:
+            break
+        case .running:
+            tickWhileRunning()
+        case .finished:
+            tickWhileFinished()
         }
     }
 
@@ -180,7 +182,7 @@ struct TimeBoxView: View {
         let elapsedTime = now.timeIntervalSince(endAt)
         let remain = max(
             UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
-            * 60 - Int(elapsedTime),
+                * 60 - Int(elapsedTime),
             0
         )
         let minutes = Int(remain) / 60
@@ -207,7 +209,7 @@ struct TimeBoxView: View {
         let elapsedTime = now.timeIntervalSince(beganAt)
         let remain = max(
             UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
-            * 60 - Int(elapsedTime),
+                * 60 - Int(elapsedTime),
             0
         )
         let minutes = Int(remain) / 60

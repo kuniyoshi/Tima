@@ -26,7 +26,7 @@ struct SettingsView: View {
                 }
 
                 Section(header: Text("TimeBox").font(.headline)) {
-                    VStack{
+                    VStack {
                         VStack {
                             HStack {
                                 Text("Work Minutes")

@@ -9,9 +9,9 @@ class TimeBoxModel: ObservableObject {
 
         func progressed() -> RunningState {
             switch self {
-                case .ready: return .running
-                case .running: return .finished
-                case .finished: return .ready
+            case .ready: return .running
+            case .running: return .finished
+            case .finished: return .ready
             }
         }
     }

@@ -4,7 +4,9 @@ import SwiftUI
 extension Tima.Task {
     static func findOrCreate(name: String, in context: ModelContext) throws -> Tima.Task {
         let request = FetchDescriptor<Tima.Task>(
-            predicate: #Predicate { $0.name == name }
+            predicate: #Predicate {
+                $0.name == name
+            }
         )
 
         let results = try context.fetch(request)

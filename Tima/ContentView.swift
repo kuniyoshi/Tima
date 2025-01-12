@@ -13,10 +13,10 @@ struct ContentView: View {
     var body: some View {
         VStack {
             switch selection {
-                case .measurement:
-                    MeasurementView(model: measurementModel)
-                case .timeBox:
-                    TimeBoxView(model: timeBoxModel)
+            case .measurement:
+                MeasurementView(model: measurementModel)
+            case .timeBox:
+                TimeBoxView(model: timeBoxModel)
             }
         }
         .toolbar {

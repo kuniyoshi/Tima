@@ -86,16 +86,16 @@ struct MeasurementView: View {
                         }
 
                     }) {
-                        Image(systemName: model.isRunning ? "stop.circle" : "play.circle")
-                            .font(.title)
-                    }
-                    .padding()
+                    Image(systemName: model.isRunning ? "stop.circle" : "play.circle")
+                        .font(.title)
+                }
+                .padding()
             }
 
             Memory24HourHorizontalView(spans: makeSpans(measurements))
-                .onChange(of: measurements) {
-                }
-                .padding()
+            .onChange(of: measurements) {
+            }
+            .padding()
 
             ScrollViewReader { proxy in
                 List {
@@ -123,11 +123,11 @@ struct MeasurementView: View {
         .toolbar {
             ToolbarItem {
                 switch model.isRunning {
-                    case true:
-                        Image(systemName: "ruler")
-                            .padding()
-                    case false:
-                        EmptyView()
+                case true:
+                    Image(systemName: "ruler")
+                        .padding()
+                case false:
+                    EmptyView()
                 }
             }
         }
@@ -139,7 +139,9 @@ struct MeasurementView: View {
 
     private func makeSpans(_ measurements: [Measurement]) -> [(Int, Int)] {
         let from = Calendar.current.startOfDay(for: Date())
-        let list = measurements.filter { $0.start >= from }
+        let list = measurements.filter {
+            $0.start >= from
+        }
         return list.map { measurement in
             let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
             let duration = Int(measurement.duration) / 60
@@ -158,7 +160,9 @@ struct MeasurementView: View {
             formatter.string(from: measurement.start)
         }
 
-        return grouped.keys.sorted(by: >).map { key in grouped[key] ?? [] }
+        return grouped.keys.sorted(by: >).map { key in
+            grouped[key] ?? []
+        }
     }
 }
 
