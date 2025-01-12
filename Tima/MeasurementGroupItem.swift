@@ -3,6 +3,14 @@ import SwiftUI
 // TODO: rename to dailyworks
 struct MeasurementGroupItem: View, Identifiable {
     let measurements: [Measurement]
+    let tasks: [Tima.Task]
+    let id: Int
+
+    init(measurements: [Measurement], tasks: [Tima.Task]) {
+        self.measurements = measurements
+        self.tasks = tasks
+        self.id = measurements.first?.id.hashValue ?? 0
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -11,13 +19,11 @@ struct MeasurementGroupItem: View, Identifiable {
                     .font(.headline)
             }
             ForEach(measurements) { measurement in
-                    MeasurementItem(measurement: measurement)
+                if let task = tasks.first(where: { $0.id == measurement.taskID }) {
+                    MeasurementItem(measurement: measurement, task: task)
+                }
             }
         }
-    }
-
-    var id: Int {
-        measurements.first?.id.hashValue ?? 0
     }
 
     private func date(_ date: Date) -> String {
@@ -29,24 +35,29 @@ struct MeasurementGroupItem: View, Identifiable {
 }
 
 #Preview {
-    MeasurementGroupItem(measurements: [
-        Measurement(
-            task: Task(name: "デザイン", color: TimaColor.red),
-            work: "UIスケッチ",
-            start: Date(timeInterval: 700, since: Date()),
-            end: Date(timeInterval: 1080, since: Date())
-        ),
-        Measurement(
-            task: Task(name: "デザイン", color: TimaColor.blue),
-            work: "UIスケッチ",
-            start: Date(),
-            end: Date(timeInterval: 300, since: Date())
-        ),
-        Measurement(
-            task: Task(name: "デザイン", color: TimaColor.cyan),
-            work: "UIスケッチ",
-            start: Date(),
-            end: Date(timeInterval: 300, since: Date())
-        )
-    ])
+    let taskB = Tima.Task(name: "デザインb", color: .blue)
+    let taskR = Tima.Task(name: "デザインr", color: .red)
+    return MeasurementGroupItem(
+        measurements: [
+            Measurement(
+                taskID: taskB.id,
+                work: "UIスケッチ",
+                start: Date(timeInterval: 700, since: Date()),
+                end: Date(timeInterval: 1080, since: Date())
+            ),
+            Measurement(
+                taskID: taskB.id,
+                work: "UIスケッチ",
+                start: Date(),
+                end: Date(timeInterval: 300, since: Date())
+            ),
+            Measurement(
+                taskID: taskR.id,
+                work: "UIスケッチ",
+                start: Date(),
+                end: Date(timeInterval: 300, since: Date())
+            )
+        ],
+        tasks: [taskB, taskR]
+    )
 }

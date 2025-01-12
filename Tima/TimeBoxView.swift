@@ -43,7 +43,9 @@ struct TimeBoxView: View {
         .onAppear {
             requestNotificationPermission()
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
-                onTick()
+                DispatchQueue.main.async {
+                    onTick()
+                }
             }
         }
         .onDisappear {

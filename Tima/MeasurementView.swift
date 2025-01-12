@@ -3,12 +3,13 @@ import SwiftData
 
 struct MeasurementView: View {
     private enum Field {
-        case genre
+        case task
         case work
     }
 
     @Environment(\.modelContext) private var modelContext
     @Query private var measurements: [Measurement]
+    @Query private var tasks: [Tima.Task]
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
     @State private var timer: Timer?
@@ -16,10 +17,10 @@ struct MeasurementView: View {
     var body: some View {
         VStack {
             HStack {
-//                TextField("Input genre...", text: $model.genre)
-//                    .textFieldStyle(RoundedBorderTextFieldStyle())
-//                    .focused($focusedField, equals: .genre)
-//                    .padding()
+                TextField("Input group...", text: $model.taskName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .focused($focusedField, equals: .task)
+                    .padding()
 
                 TextField("Input work...", text: $model.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -27,7 +28,7 @@ struct MeasurementView: View {
                     .padding()
 
                 Button("Focus Field") {
-                    focusedField = .genre
+                    focusedField = .task
                 }
                 .keyboardShortcut("I", modifiers: [.command])
                 .hidden()
@@ -51,8 +52,11 @@ struct MeasurementView: View {
                         if !model.isRunning,
                            let startedAt = model.startedAt,
                            let endedAt = model.endedAt {
+                            let task = Tima.Task(name: model.taskName, color: .blue) // TODO: change
+                            // TODO: find or create task
+
                             let measurement = Measurement(
-                                task: model.task,
+                                taskID: task.id,
                                 work: model.work,
                                 start: startedAt,
                                 end: endedAt
@@ -68,16 +72,14 @@ struct MeasurementView: View {
                         }
 
                         if model.isRunning {
-                            timer = Timer
-                                .scheduledTimer(
-                                    withTimeInterval: 0.5,
-                                    repeats: true
-                                ) { _ in
+                            timer = Timer(timeInterval: 0.5, repeats: true) { _ in
+                                DispatchQueue.main.async {
                                     if let startedAt = model.startedAt {
                                         let duration = Int(Date().timeIntervalSince(startedAt))
                                         model.elapsedSeconds = "\(duration / 60):\(duration % 60)"
                                     }
                                 }
+                            }
                         } else {
                             timer?.invalidate()
                             timer = nil
@@ -98,7 +100,7 @@ struct MeasurementView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(groupedMeasurements(measurements), id: \.self) { items in
-                        MeasurementGroupItem(measurements: items)
+                        MeasurementGroupItem(measurements: items, tasks: tasks)
                     }
                 }
                 .onChange(of: measurements) {
@@ -153,12 +155,10 @@ struct MeasurementView: View {
         let grouped = Dictionary(
             grouping: measurements.reversed()
         ) { measurement in
-            return formatter.string(from: measurement.start)
+            formatter.string(from: measurement.start)
         }
 
-        return grouped.keys.sorted(by: >).map { key in
-            return grouped[key] ?? []
-        }
+        return grouped.keys.sorted(by: >).map { key in grouped[key] ?? [] }
     }
 }
 
@@ -187,9 +187,12 @@ struct AlertDisplay {
     let container = try! ModelContainer(for: Measurement.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
+    let taskA = Tima.Task(name: "task", color: .blue)
+    let taskB = Tima.Task(name: "task2", color: .red)
+
     context.insert(
         Measurement(
-            task: Task(name: "task", color: .blue),
+            taskID: taskA.id,
             work: "work",
             start: Date(timeIntervalSinceNow: TimeInterval(-3600)),
             end: Date()
@@ -197,7 +200,7 @@ struct AlertDisplay {
     )
     context.insert(
         Measurement(
-            task: Task(name: "task2", color: .red),
+            taskID: taskB.id,
             work: "work",
             start: Date(timeIntervalSinceNow: -7200),
             end: Date(timeIntervalSinceNow: -3600)

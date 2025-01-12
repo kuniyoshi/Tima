@@ -7,14 +7,14 @@ import AppKit
 final class Measurement: Codable {
     private enum CodingKeys: String, CodingKey {
         case id
-        case task
+        case taskID
         case work
         case start
         case end
     }
 
     var id: UUID
-    var task: Task
+    var taskID: UUID?
     var work: String
     var start: Date
     var end: Date
@@ -23,9 +23,9 @@ final class Measurement: Codable {
         end.timeIntervalSince(start)
     }
 
-    init(id: UUID = UUID(), task: Task, work: String, start: Date, end: Date) {
+    init(id: UUID = UUID(), taskID: UUID? = nil, work: String, start: Date, end: Date) {
         self.id = id
-        self.task = task
+        self.taskID = taskID
         self.work = work
         self.start = start
         self.end = end
@@ -34,7 +34,7 @@ final class Measurement: Codable {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
-        task = try container.decode(Task.self, forKey: .task)
+        taskID = try container.decode(UUID.self, forKey: .taskID)
         work = try container.decode(String.self, forKey: .work)
 
         let startString = try container.decode(String.self, forKey: .start)
@@ -55,7 +55,7 @@ final class Measurement: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
-        try container.encode(task, forKey: .task)
+        try container.encode(taskID, forKey: .taskID)
         try container.encode(work, forKey: .work)
         try container.encode(
             Util.iso8601DateFormatter.string(from: start),

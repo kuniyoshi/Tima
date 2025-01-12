@@ -3,9 +3,9 @@ import SwiftData
 
 struct TaskItem: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var tasks: [Task]
+    @Query private var tasks: [Tima.Task]
 
-    @State private var task: Task
+    @State private var task: Tima.Task
     @State private var name: String = ""
     @State private var isNameEditing = false
     @FocusState private var isNameFocused: Bool
@@ -51,7 +51,7 @@ struct TaskItem: View {
         }
     }
 
-    init(task: Task) {
+    init(task: Tima.Task) {
         self.task = task
         self._name = State(initialValue: task.name)
     }
@@ -59,16 +59,16 @@ struct TaskItem: View {
 
 #Preview {
     let container = try! ModelContainer(
-        for: Task.self,
+        for: Tima.Task.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
 
-    context.insert(Task(name: "blue", color: .blue))
-    context.insert(Task(name: "red", color: .red))
-    context.insert(Task(name: "green", color: .green))
+    context.insert(Tima.Task(name: "blue", color: .blue))
+    context.insert(Tima.Task(name: "red", color: .red))
+    context.insert(Tima.Task(name: "green", color: .green))
 
-    let initial = Task(name: "デザイン", color: .red)
+    let initial = Tima.Task(name: "デザイン", color: .red)
 
     return TaskItem(task: initial)
         .modelContainer(container)

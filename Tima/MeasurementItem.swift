@@ -53,7 +53,7 @@ struct MeasurementItem: View {
     @Environment(\.modelContext) private var context
     @State private var measurement: Measurement
 
-    @State private var task: Task
+    @State private var task: Tima.Task
     @State private var work: String
     @State private var startDate: Date
     @State private var endDate: Date
@@ -68,9 +68,9 @@ struct MeasurementItem: View {
     @FocusState private var isStartDateFocused: Bool
     @FocusState private var isEndDateFocused: Bool
 
-    init(measurement: Measurement) {
+    init(measurement: Measurement, task: Tima.Task) {
         self.measurement = measurement
-        self._task = State(initialValue: measurement.task)
+        self._task = State(initialValue: task)
         self._work = State(initialValue: measurement.work)
         self._startDate = State(initialValue: measurement.start)
         self._endDate = State(initialValue: measurement.end)
@@ -122,12 +122,6 @@ struct MeasurementItem: View {
 //                    }
 //                    .foregroundColor(.primary)
 //            }
-
-            if isTaskEditing {
-
-            } else {
-                TaskItem(task: measurement.task)
-            }
 
             if isWorkEditing {
                 TextField(work, text: $work)
@@ -232,10 +226,6 @@ struct MeasurementItem: View {
 }
 
 #Preview {
-    MeasurementItem(measurement: Measurement(
-        task: Task(name: "デザイン", color: TimaColor.blue),
-        work: "UIスケッチ",
-        start: Date(),
-        end: Date(timeInterval: 180, since: Date())
-    ))
+    let task = Tima.Task(name: "デザイン", color: .blue)
+    MeasurementItem(measurement: Measurement( taskID: task.id, work: "UIスケッチ", start: Date(), end: Date(timeInterval: 180, since: Date()) ), task: task)
 }
