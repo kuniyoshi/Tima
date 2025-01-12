@@ -105,7 +105,7 @@ struct MeasurementItem: View {
                             isEndDateEditing = true
                         }
                 }
-                Text(String(humanReadableDuration(measurement.duration)))
+                Text(String(Util.humanReadableDuration(measurement.duration)))
             }
         }
         .padding(8)
@@ -115,10 +115,6 @@ struct MeasurementItem: View {
                 .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
         )
         .padding(0)
-    }
-
-    private func humanReadableDuration(_ duration: TimeInterval) -> String {
-        "\(Int(duration / 60)) m"
     }
 
     private func updateMeasurement(_ update: () -> Void) {
