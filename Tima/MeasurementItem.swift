@@ -121,5 +121,13 @@ struct MeasurementItem: View {
 
 #Preview {
     let task = Tima.Task(name: "デザイン", color: .blue)
-    MeasurementItem(measurement: Measurement(taskID: task.id, work: "UIスケッチ", start: Date(), end: Date(timeInterval: 180, since: Date())), task: task)
+    MeasurementItem(
+        measurement: Measurement(
+            taskName: task.name,
+            work: "UIスケッチ",
+            start: Date(),
+            end: Date(timeInterval: 180, since: Date())
+        ),
+        task: task
+    )
 }

@@ -19,10 +19,10 @@ struct MeasurementDailyList: View, Identifiable {
                     .font(.headline)
             }
             ForEach(measurements) { measurement in
-                if let task = tasks.first(where: { $0.id == measurement.taskID }) {
+                if let task = tasks.first(where: { $0.name == measurement.taskName }) {
                     MeasurementItem(measurement: measurement, task: task)
                 } else {
-                    Text("Task not found for \(String(describing: measurement.taskID)).")
+                    Text("Task not found for \(String(describing: measurement.taskName)).")
                         .foregroundColor(.red)
                 }
             }
@@ -36,19 +36,19 @@ struct MeasurementDailyList: View, Identifiable {
     return MeasurementDailyList(
         measurements: [
             Measurement(
-                taskID: taskB.id,
+                taskName: taskB.name,
                 work: "UIスケッチ",
                 start: Date(timeInterval: 700, since: Date()),
                 end: Date(timeInterval: 1080, since: Date())
             ),
             Measurement(
-                taskID: taskB.id,
+                taskName: taskB.name,
                 work: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
             ),
             Measurement(
-                taskID: taskR.id,
+                taskName: taskR.name,
                 work: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())

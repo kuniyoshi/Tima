@@ -56,7 +56,7 @@ struct MeasurementView: View {
                             do {
                                 let task = try Tima.Task.findOrCreate(name: model.taskName, in: modelContext)
                                 let measurement = Measurement(
-                                    taskID: task.id,
+                                    taskName: task.name,
                                     work: model.work,
                                     start: startedAt,
                                     end: endedAt
@@ -194,7 +194,7 @@ struct AlertDisplay {
 
     context.insert(
         Measurement(
-            taskID: taskA.id,
+            taskName: taskA.name,
             work: "work",
             start: Date(timeIntervalSinceNow: TimeInterval(-3600)),
             end: Date()
@@ -202,7 +202,7 @@ struct AlertDisplay {
     )
     context.insert(
         Measurement(
-            taskID: taskB.id,
+            taskName: taskB.name,
             work: "work",
             start: Date(timeIntervalSinceNow: -7200),
             end: Date(timeIntervalSinceNow: -3600)
