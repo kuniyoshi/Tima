@@ -3,6 +3,7 @@ import SwiftData
 import UserNotifications
 import AVFoundation
 
+// TimeBox main view
 struct TimeBoxView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var timeBoxes: [TimeBox]

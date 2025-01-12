@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 
+// TimeBox model
 class TimeBoxModel: ObservableObject {
     enum RunningState: String {
         case ready = "hourglass.bottomhalf.filled"
