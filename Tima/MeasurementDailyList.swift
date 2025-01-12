@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Represents daily measuerments
 struct MeasurementDailyList: View, Identifiable {
     let measurements: [Measurement]
     let tasks: [Tima.Task]
