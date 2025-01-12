@@ -4,7 +4,7 @@ import SwiftData
 @main
 struct TimaApp: App {
     var sharedModelContainer: ModelContainer = {
-#if DEBUG
+        #if DEBUG
         // モデルコンテナに破壊的な変更が入ったときに削除するためのコード
         func clearPersistentStore() {
             let fileManager = FileManager.default
@@ -21,13 +21,13 @@ struct TimaApp: App {
         }
 
 //        clearPersistentStore()
-#endif
+        #endif
 
         let schema = Schema([
-            Tima.Task.self,
-            Measurement.self,
-            TimeBox.self,
-        ])
+                                Tima.Task.self,
+                                Measurement.self,
+                                TimeBox.self,
+                            ])
 
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
