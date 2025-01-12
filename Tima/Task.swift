@@ -11,9 +11,9 @@ final class Task: Codable, Identifiable {
 
     var id: UUID
     var name: String // TODO: @Attribute(.unique) 使える？
-    var color: Tima.TimaColor
+    var color: Tima.Color
 
-    init(id: UUID = UUID(), name: String, color: Tima.TimaColor) {
+    init(id: UUID = UUID(), name: String, color: Tima.Color) {
         self.id = id
         self.name = name
         self.color = color
@@ -32,7 +32,7 @@ final class Task: Codable, Identifiable {
                 debugDescription: "Invalid RGBA array: \(rgb)"
             )
         }
-        color = Tima.TimaColor(
+        color = Tima.Color(
             red: rgb[0],
             green: rgb[1],
             blue: rgb[2]

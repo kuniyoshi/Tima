@@ -32,7 +32,7 @@ struct TaskItem: View {
                                 Text(task.name)
                                     .id(task.id)
                                     .font(.headline)
-                                    .background(task == self.task ? Color.secondary.opacity(0.3) : Color.clear)
+                                    .background(task == self.task ? SwiftUI.Color.secondary.opacity(0.3) : SwiftUI.Color.clear)
                                     .padding(2)
                                     .onTapGesture {
                                         self.task = task

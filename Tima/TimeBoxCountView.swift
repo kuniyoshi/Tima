@@ -7,7 +7,7 @@ struct TimeBoxCountView: View {
         VStack {
             ZStack(alignment: .leading) {
                 Rectangle()
-                    .fill(Color.primary.opacity(0.2))
+                    .fill(SwiftUI.Color.primary.opacity(0.2))
                     .frame(height: 40)
                     .cornerRadius(5)
 
@@ -35,7 +35,7 @@ private struct DividerView: View {
 
             ZStack {
                 Rectangle()
-                    .fill(Color.black)
+                    .fill(SwiftUI.Color.black)
                     .frame(width: 1, height: hour % 6 == 0 ? 20 : 10)
                     .offset(x: x)
 
@@ -61,7 +61,7 @@ private struct MemorySpanView: View {
             let spanWidth = width * CGFloat(durationMinutes) / CGFloat(totalMinutes)
 
             Circle()
-                .fill(Color.blue.opacity(0.5))
+                .fill(SwiftUI.Color.blue.opacity(0.5))
                 .frame(width: spanWidth, height: 40)
                 .offset(x: startX)
         }
