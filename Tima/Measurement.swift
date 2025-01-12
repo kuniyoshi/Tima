@@ -35,7 +35,7 @@ final class Measurement: Codable {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
-        taskID = try container.decode(UUID.self, forKey: .taskID)
+        taskID = try container.decodeIfPresent(UUID.self, forKey: .taskID)
         work = try container.decode(String.self, forKey: .work)
 
         let startString = try container.decode(String.self, forKey: .start)
@@ -57,7 +57,7 @@ final class Measurement: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
-        try container.encode(taskID, forKey: .taskID)
+        try container.encodeIfPresent(taskID, forKey: .taskID)
         try container.encode(work, forKey: .work)
         try container.encode(
             Util.iso8601DateFormatter.string(from: start),
