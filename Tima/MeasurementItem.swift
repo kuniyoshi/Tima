@@ -1,55 +1,6 @@
 import SwiftUI
 
 struct MeasurementItem: View {
-//    private struct ColorView: View {
-//        @Environment(\.modelContext) private var context
-//        @State private var measurement: Measurement
-//
-//        @State private var color: Color
-//        @FocusState private var isColorFocused: Bool
-//        @State private var isColorEditing = false
-//
-//        var body: some View {
-//            if isColorEditing {
-//                Picker("", selection: $color) {
-//                    ForEach(Measurement.Color.self) { color in
-//                        let converted = MeasurementItem.convertColor(color)
-//                        Circle()
-//                            .fill(converted)
-//                    }
-//                    .tag(color)
-//                }
-//                .pickerStyle(MenuPickerStyle())
-//                .onChange(of: color) { _ in
-//                    isColorEditing = false
-//                    updateMeasurement {
-//                        measurement.color = Color(red: color.red, green: color.green, blue: color.blue)
-//                    }
-//                }
-//            } else {
-//                Circle()
-//                    .fill(color)
-//                    .onTapGesture {
-//                        isColorEditing = true
-//                    }
-//            }
-//        }
-//
-//        init(measurement: Measurement) {
-//            self.measurement = measurement
-//            self._color = State(initialValue: MeasurementItem.convertColor(measurement.color))
-//        }
-//
-//        private func updateMeasurement(_ update: () -> Void) {
-//            update()
-//            do {
-//                try context.save()
-//            } catch {
-//                print("Failed to save context: \(error)")
-//            }
-//        }
-//    }
-
     @Environment(\.modelContext) private var context
     @State private var measurement: Measurement
 
@@ -78,51 +29,6 @@ struct MeasurementItem: View {
 
     var body: some View {
         HStack {
-//            if isColorEditing {
-//                Picker("", selection: $color) {
-//                    ForEach(Measurement.Color.self) { color in
-//                        let converted = MeasurementItem.convertColor(color)
-//                        Circle()
-//                            .fill(converted)
-//                    }
-//                    .tag(color)
-//                }
-//                .pickerStyle(MenuPickerStyle())
-//                .onChange(of: color) { _ in
-//                    isColorEditing = false
-//                    updateMeasurement {
-//                        measurement.color = Color(red: color.red, green: color.green, blue: color.blue)
-//                    }
-//                }
-//            } else {
-//                Circle()
-//                    .fill(color)
-//                    .onTapGesture {
-//                        isColorEditing = true
-//                    }
-//            }
-//            ColorView(measurement: measurement)
-
-//            if isGenreEditing {
-//                TextField(genre, text: $genre)
-//                    .focused($isGenreFocused)
-//                    .onAppear {
-//                        isGenreFocused = true
-//                    }
-//                    .onSubmit {
-//                        isGenreEditing = false
-//                        updateMeasurement {
-//                            measurement.genre = genre
-//                        }
-//                    }
-//            } else {
-//                Text(measurement.genre)
-//                    .onTapGesture {
-//                        isGenreEditing = true
-//                    }
-//                    .foregroundColor(.primary)
-//            }
-
             if isWorkEditing {
                 TextField(work, text: $work)
                 .focused($isWorkFocused)
