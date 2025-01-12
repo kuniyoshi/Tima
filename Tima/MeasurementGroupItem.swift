@@ -1,5 +1,6 @@
 import SwiftUI
 
+// TODO: rename to dailyworks
 struct MeasurementGroupItem: View, Identifiable {
     let measurements: [Measurement]
 
