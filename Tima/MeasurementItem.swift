@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Shows Measurement, and it can edit
 struct MeasurementItem: View {
     @Environment(\.modelContext) private var context
     private var measurement: Measurement
