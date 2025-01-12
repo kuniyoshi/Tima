@@ -22,7 +22,8 @@ struct MeasurementDailyList: View, Identifiable {
                 if let task = tasks.first(where: { $0.id == measurement.taskID }) {
                     MeasurementItem(measurement: measurement, task: task)
                 } else {
-                    print("No task found for: \(measurement.taskID)")
+                    Text("Task not found for \(String(describing: measurement.taskID)).")
+                        .foregroundColor(.red)
                 }
             }
         }
