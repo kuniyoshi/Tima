@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct Color: Codable, Hashable, Identifiable {
-    static let red = Tima.Color(red: 1.0, green: 0.0, blue: 0.0)
-    static let magenta = Tima.Color(red: 1.0, green: 0.0, blue: 1.0)
-    static let cyan = Tima.Color(red: 0.0, green: 1.0, blue: 1.0)
-    static let green = Tima.Color(red: 0.0, green: 1.0, blue: 0.0)
-    static let blue = Tima.Color(red: 0.0, green: 0.0, blue: 1.0)
-    static let gray = Tima.Color(red: 0.5, green: 0.5, blue: 0.5)
+    static let red = Self(red: 1.0, green: 0.0, blue: 0.0)
+    static let magenta = Self(red: 1.0, green: 0.0, blue: 1.0)
+    static let cyan = Self(red: 0.0, green: 1.0, blue: 1.0)
+    static let green = Self(red: 0.0, green: 1.0, blue: 0.0)
+    static let blue = Self(red: 0.0, green: 0.0, blue: 1.0)
+    static let gray = Self(red: 0.5, green: 0.5, blue: 0.5)
 
-    static var allCases: [Tima.Color] {
+    static var allCases: [Self] {
         [red, magenta, cyan, green, blue, gray]
     }
 
