@@ -92,8 +92,6 @@ struct MeasurementView: View {
             }
 
             Memory24HourHorizontalView(spans: makeSpans(measurements))
-            .onChange(of: measurements) {
-            }
             .padding()
 
             ScrollViewReader { proxy in
