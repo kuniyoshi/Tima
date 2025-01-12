@@ -20,6 +20,10 @@ struct Color: Codable, Hashable, Identifiable {
         [blue, brown, cyan, gray, green, indigo, mint, orange, pink, purple, red, teal, yellow]
     }
 
+    static var random: Self {
+        allCases.randomElement()!
+    }
+
     var red: Double
     var green: Double
     var blue: Double

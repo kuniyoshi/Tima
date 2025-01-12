@@ -26,7 +26,7 @@ extension Tima.Task {
         if let existing = results.first {
             return existing
         } else {
-            let newTask = Tima.Task(name: name, color: .cyan) // TODO: viable
+            let newTask = Tima.Task(name: name, color: .random)
             context.insert(newTask)
             return newTask
         }
