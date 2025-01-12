@@ -14,22 +14,17 @@ struct MeasurementDailyList: View, Identifiable {
     var body: some View {
         VStack(alignment: .leading) {
             if let first = measurements.first {
-                Text(date(first.start))
+                Text(Util.date(first.start))
                     .font(.headline)
             }
             ForEach(measurements) { measurement in
                 if let task = tasks.first(where: { $0.id == measurement.taskID }) {
                     MeasurementItem(measurement: measurement, task: task)
+                } else {
+                    print("No task found for: \(measurement.taskID)")
                 }
             }
         }
-    }
-
-    private func date(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
     }
 }
 
