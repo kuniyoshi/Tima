@@ -3,6 +3,7 @@ import SwiftData
 import SwiftUI
 import AppKit
 
+// Model data to represent time measurement
 @Model
 final class Measurement: Codable {
     private enum CodingKeys: String, CodingKey {

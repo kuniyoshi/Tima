@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Main view
 struct ContentView: View {
     private enum MenuItem: String, CaseIterable {
         case measurement = "Measurement"
