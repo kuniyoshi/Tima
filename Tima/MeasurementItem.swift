@@ -2,9 +2,9 @@ import SwiftUI
 
 struct MeasurementItem: View {
     @Environment(\.modelContext) private var context
-    @State private var measurement: Measurement
+    private var measurement: Measurement
 
-    @State private var task: Tima.Task
+    private var task: Tima.Task
     @State private var work: String
     @State private var startDate: Date
     @State private var endDate: Date
@@ -21,7 +21,7 @@ struct MeasurementItem: View {
 
     init(measurement: Measurement, task: Tima.Task) {
         self.measurement = measurement
-        self._task = State(initialValue: task)
+        self.task = task
         self._work = State(initialValue: measurement.work)
         self._startDate = State(initialValue: measurement.start)
         self._endDate = State(initialValue: measurement.end)
