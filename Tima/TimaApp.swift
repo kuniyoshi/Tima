@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+// Entry point
 @main
 struct TimaApp: App {
     var sharedModelContainer: ModelContainer = {
