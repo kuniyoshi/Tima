@@ -154,7 +154,7 @@ struct MeasurementView: View {
         let grouped = Dictionary(
             grouping: measurements.reversed()
         ) { measurement in
-            formatter.string(from: measurement.start)
+            Util.date(measurement.start)
         }
 
         return grouped.keys.sorted(by: >).map { key in
