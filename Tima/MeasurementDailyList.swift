@@ -1,7 +1,6 @@
 import SwiftUI
 
-// TODO: rename to dailyworks
-struct MeasurementGroupItem: View, Identifiable {
+struct MeasurementDailyList: View, Identifiable {
     let measurements: [Measurement]
     let tasks: [Tima.Task]
     let id: Int
@@ -37,7 +36,7 @@ struct MeasurementGroupItem: View, Identifiable {
 #Preview {
     let taskB = Tima.Task(name: "デザインb", color: .blue)
     let taskR = Tima.Task(name: "デザインr", color: .red)
-    return MeasurementGroupItem(
+    return MeasurementDailyList(
         measurements: [
             Measurement(
                 taskID: taskB.id,

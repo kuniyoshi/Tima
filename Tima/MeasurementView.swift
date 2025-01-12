@@ -100,7 +100,7 @@ struct MeasurementView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(groupedMeasurements(measurements), id: \.self) { items in
-                        MeasurementGroupItem(measurements: items, tasks: tasks)
+                        MeasurementDailyList(measurements: items, tasks: tasks)
                     }
                 }
                 .onChange(of: measurements) {
