@@ -78,12 +78,7 @@ struct TimeBoxView: View {
         }
         let keys = map.keys.sorted(by: <)
         return keys.map { key in
-            let date = DateFormatter.localizedString(
-                from: key,
-                dateStyle: .medium,
-                timeStyle: .none
-            )
-            return (date, map[key]?.count ?? 00)
+            (Util.date(key), map[key]?.count ?? 00)
         }
     }
 
