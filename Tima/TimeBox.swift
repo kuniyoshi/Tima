@@ -3,17 +3,17 @@ import SwiftData
 
 @Model
 final class TimeBox: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case start
+        case workMinutes
+    }
+
     var start: Date
     var workMinutes: Int
 
     init(start: Date, workMinutes: Int) {
         self.start = start
         self.workMinutes = workMinutes
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case start
-        case workMinutes
     }
 
     required init(from decoder: Decoder) throws {
