@@ -20,7 +20,10 @@ struct MeasurementDailyList: View, Identifiable {
             }
             ForEach(measurements) { measurement in
                 if let task = tasks.first(where: { $0.name == measurement.taskName }) {
-                    MeasurementItem(measurement: measurement, task: task)
+                    HStack {
+                        TaskItem(task: task)
+                        MeasurementItem(measurement: measurement, task: task)
+                    }
                 } else {
                     Text("Task not found for \(String(describing: measurement.taskName)).")
                         .foregroundColor(.red)
