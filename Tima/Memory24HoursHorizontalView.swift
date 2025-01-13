@@ -2,7 +2,7 @@ import SwiftUI
 
 // Ruler for memoried span
 struct Memory24HourHorizontalView: View {
-    let spans: [(Int, Int)]
+    let spans: [(Int, Int, SwiftUI.Color)]
 
     var body: some View {
         VStack {
@@ -13,7 +13,7 @@ struct Memory24HourHorizontalView: View {
                     .cornerRadius(5)
 
                 ForEach(Array(spans.enumerated()), id: \.0) { _, span in
-                    MemorySpanView(startMinutes: span.0, durationMinutes: span.1)
+                    MemorySpanView(startMinutes: span.0, durationMinutes: span.1, color: span.2)
                 }
 
                 ForEach(0..<25) { hour in
@@ -53,6 +53,7 @@ private struct DividerView: View {
 private struct MemorySpanView: View {
     let startMinutes: Int
     let durationMinutes: Int
+    let color: SwiftUI.Color
 
     var body: some View {
         GeometryReader { geometry in
@@ -62,7 +63,7 @@ private struct MemorySpanView: View {
             let spanWidth = width * CGFloat(durationMinutes) / CGFloat(totalMinutes)
 
             Rectangle()
-                .fill(.blue.opacity(0.5))
+                .fill(color.opacity(0.5))
                 .frame(width: spanWidth, height: 40)
                 .cornerRadius(5)
                 .offset(x: startX)
@@ -71,5 +72,5 @@ private struct MemorySpanView: View {
 }
 
 #Preview {
-    Memory24HourHorizontalView(spans: [(300, 20), (600, 60)])
+    Memory24HourHorizontalView(spans: [(300, 20, .blue), (600, 60, .red)])
 }

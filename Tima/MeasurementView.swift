@@ -92,7 +92,7 @@ struct MeasurementView: View {
                 .padding()
             }
 
-            Memory24HourHorizontalView(spans: makeSpans(measurements))
+            Memory24HourHorizontalView(spans: makeSpans(measurements: measurements, tasks: tasks))
             .padding()
 
             ScrollViewReader { proxy in
@@ -135,7 +135,7 @@ struct MeasurementView: View {
         _model = .init(wrappedValue: model)
     }
 
-    private func makeSpans(_ measurements: [Measurement]) -> [(Int, Int)] {
+    private func makeSpans(measurements: [Measurement], tasks: [Tima.Task]) -> [(Int, Int, SwiftUI.Color)] {
         let from = Calendar.current.startOfDay(for: Date())
         let list = measurements.filter {
             $0.start >= from
@@ -143,7 +143,11 @@ struct MeasurementView: View {
         return list.map { measurement in
             let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
             let duration = Int(measurement.duration) / 60
-            return (minutes, duration)
+            if let task = tasks.first(where: { $0.name == measurement.taskName }) {
+                return (minutes, duration, task.color.uiColor)
+            } else {
+                return (minutes, duration, .black)
+            }
         }
     }
 
