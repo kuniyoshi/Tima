@@ -186,11 +186,14 @@ struct AlertDisplay {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Measurement.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(for: Schema([Tima.Task.self, Measurement.self]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
     let taskA = Tima.Task(name: "task", color: .blue)
     let taskB = Tima.Task(name: "task2", color: .red)
+
+    context.insert(taskA)
+    context.insert(taskB)
 
     context.insert(
         Measurement(
