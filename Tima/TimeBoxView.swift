@@ -42,7 +42,6 @@ struct TimeBoxView: View {
             TimeBoxListView(makeCounts(timeBoxes))
         }
         .onAppear {
-            requestNotificationPermission()
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
                 DispatchQueue.main.async {
                     onTick()
@@ -52,6 +51,9 @@ struct TimeBoxView: View {
         .onDisappear {
             timer?.invalidate()
             timer = nil
+        }
+        .task {
+            await requestNotificationPermission()
         }
         .toolbar {
             ToolbarItem {
@@ -93,15 +95,17 @@ struct TimeBoxView: View {
         }
     }
 
-    private func requestNotificationPermission() {
-        UNUserNotificationCenter
-            .current()
-            .requestAuthorization(options: [.alert, .sound]) { granted, error in
-                print("Notification permission: \(granted)")
-                if let error {
-                    print("Could not request notification permission: \(error.localizedDescription)")
-                }
+    private func requestNotificationPermission() async {
+        let center = UNUserNotificationCenter.current()
+        do {
+            if try await center.requestAuthorization(options: [.alert, .sound]) {
+                print("Notification granted")
+            } else {
+                print("Notification denied")
             }
+        } catch {
+            print("Could not request notification permission: \(error.localizedDescription)")
+        }
     }
 
     private func onButton() {
