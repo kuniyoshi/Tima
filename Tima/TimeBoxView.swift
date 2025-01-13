@@ -43,8 +43,8 @@ struct TimeBoxView: View {
         }
         .onAppear {
             timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
-                DispatchQueue.main.async {
-                    onTick()
+                SwiftUI.Task {
+                    await onTick()
                 }
             }
         }
@@ -249,9 +249,11 @@ struct TimeBoxView: View {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error {
-                print("Could not schedule notification: \(error.localizedDescription)")
+        SwiftUI.Task {
+            do {
+                try await UNUserNotificationCenter.current().add(request)
+            } catch {
+                print("Could not add notification: \(error.localizedDescription)")
             }
         }
     }
