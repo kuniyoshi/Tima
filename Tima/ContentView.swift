@@ -29,6 +29,26 @@ struct ContentView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
+            ToolbarItem {
+                switch measurementModel.isRunning {
+                    case true:
+                        Image(systemName: "ruler")
+                            .padding()
+                    case false:
+                        EmptyView()
+                }
+            }
+            ToolbarItem {
+                switch timeBoxModel.runningState {
+                case .ready:
+                    EmptyView()
+                case .running:
+                    Image(systemName: "alarm")
+                        .padding()
+                case .finished:
+                    EmptyView()
+                }
+            }
         }
         .overlay {
             Group {

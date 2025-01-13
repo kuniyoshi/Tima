@@ -55,19 +55,6 @@ struct TimeBoxView: View {
         .task {
             await requestNotificationPermission()
         }
-        .toolbar {
-            ToolbarItem {
-                switch model.runningState {
-                case .ready:
-                    EmptyView()
-                case .running:
-                    Image(systemName: "alarm")
-                        .padding()
-                case .finished:
-                    EmptyView()
-                }
-            }
-        }
     }
 
     init(model: TimeBoxModel) {

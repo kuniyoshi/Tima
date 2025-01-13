@@ -118,17 +118,6 @@ struct MeasurementView: View {
                 )
             }
         }
-        .toolbar {
-            ToolbarItem {
-                switch model.isRunning {
-                case true:
-                    Image(systemName: "ruler")
-                        .padding()
-                case false:
-                    EmptyView()
-                }
-            }
-        }
     }
 
     init(model: MeasurementModel) {
