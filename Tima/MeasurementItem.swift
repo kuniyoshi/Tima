@@ -73,11 +73,13 @@ struct MeasurementItem: View {
                     }
                 } else {
                     Text(measurement.start, format: Date.FormatStyle(time: .shortened))
+                        .foregroundColor(.primary.opacity(0.6))
                         .onTapGesture {
                             isStartDateEditing = true
                         }
                 }
                 Text("〜")
+                    .foregroundColor(.primary.opacity(0.6))
                 if isEndDateEditing {
                     DatePicker(
                         "",
@@ -102,6 +104,7 @@ struct MeasurementItem: View {
                     }
                 } else {
                     Text(measurement.end, format: Date.FormatStyle(time: .shortened))
+                        .foregroundColor(.primary.opacity(0.6))
                         .onTapGesture {
                             isEndDateEditing = true
                         }
