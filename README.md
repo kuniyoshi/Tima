@@ -78,7 +78,6 @@ in `Measurement`,
 
 # TODO
 
-- measurement 中に timebox が動かない
 - se のボリューム調整
 - 次のタスクに行くときに前のタスクが残ってるのが使いづらい
 - 通知メッセージを設定へ
