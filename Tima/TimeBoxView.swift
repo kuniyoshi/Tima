@@ -41,18 +41,14 @@ struct TimeBoxView: View {
 
             TimeBoxListView(makeCounts(timeBoxes))
         }
-        .onAppear {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+        .task {
+            await TickManager.shared.setTimer(interval: 0.5) {
                 SwiftUI.Task {
-                    await onTick()
+                    await MainActor.run {
+                        onTick()
+                    }
                 }
             }
-        }
-        .onDisappear {
-            timer?.invalidate()
-            timer = nil
-        }
-        .task {
             await requestNotificationPermission()
         }
     }
