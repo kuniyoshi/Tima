@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO: measurements の timer にも対応する
 actor TickManager {
     static let shared = TickManager()
     private var timer: DispatchSourceTimer?
