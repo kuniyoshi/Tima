@@ -1,4 +1,5 @@
 import SwiftUI
+import AVFoundation
 
 // Represents App's settings
 struct SettingsView: View {
@@ -16,6 +17,10 @@ struct SettingsView: View {
         .string(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.breakMinutes)
     @State private var errorMessageForBreakMinutes: String?
 
+    @State private var soundVolume: Float = 0.5 // TODO: use settings value as default
+    @State private var audioPlayer: AVAudioPlayer?
+    @State private var isPlayButtonAnimating: Bool = false
+
     var body: some View {
         Form {
             VStack {
@@ -26,6 +31,42 @@ struct SettingsView: View {
                     }
                 }
 
+                // TODO: disable while no sound notification
+                Section(header: Text("Sound Volume").font(.headline)) {
+                    HStack {
+                        Slider(value: $soundVolume)
+                            .frame(width: 240)
+                            .onChange(of: soundVolume) { _, newValue in
+                                audioPlayer?.volume = newValue
+                                // TODO: set to settings
+                            }
+
+                        Button(action: {
+                            do {
+                                // TODO: dont fix se, rotate
+                                // TODO: avoid literal
+                                guard let url = Bundle.main.url(forResource: "time_box_begin", withExtension: "mp3") else {
+                                    print("Could not find sample sound file")
+                                    return
+                                }
+
+                                let newAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                                newAudioPlayer.volume = soundVolume
+                                newAudioPlayer.play()
+                                audioPlayer = newAudioPlayer
+                            } catch {
+                                print("Could not play sound: \(error)")
+                            }
+                        }) {
+                            Image(systemName: "play")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .scaleEffect(isPlayButtonAnimating ? 1.2 : 1.0) // TODO: it is not working
+                        }
+                    }
+                }
+
+                // TODO: time box is too general
                 Section(header: Text("TimeBox").font(.headline)) {
                     VStack {
                         VStack {
