@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- add task completion
 - 次のタスクに行くときに前のタスクが残ってるのが使いづらい
 - 通知メッセージを設定へ
 - add task list view, it can edit each tasks
