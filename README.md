@@ -83,7 +83,6 @@ in `Measurement`,
 - add task list view, it can edit each tasks
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - Measurement で日付が編集できない <- 時間はできる
-- view のスワイプ移動 <- iOS じゃないので難しそう
 - インポート機能をつける
 - empty can be edit in measurement view
 - rename from genre to group
