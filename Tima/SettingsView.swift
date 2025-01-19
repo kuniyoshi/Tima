@@ -3,6 +3,31 @@ import AVFoundation
 
 // Represents App's settings
 struct SettingsView: View {
+    private enum SampleSe {
+        case begin
+        case end
+        case next
+
+        func progressed() -> Self {
+            switch self {
+                case .begin: return .end
+                case .end: return .next
+                case .next: return .begin
+            }
+        }
+
+        var url: URL? {
+            switch self {
+                case .begin:
+                    return Bundle.main.url(forResource: Constants.timeBoxBeginSound.rawValue, withExtension: "mp3")
+                case .end:
+                    return Bundle.main.url(forResource: Constants.timeBoxEndSound.rawValue, withExtension: "mp3")
+                case .next:
+                    return Bundle.main.url(forResource: Constants.timeBoxRestEndSound.rawValue, withExtension: "mp3")
+            }
+        }
+    }
+
     @AppStorage(SettingsKeys.TimeBox.isSoundNotification.rawValue)
     private var notificationWithSound: Bool = SettingsDefaults.TimeBox.isSoundNotification
 
@@ -26,7 +51,8 @@ struct SettingsView: View {
         }
     }()
     @State private var audioPlayer: AVAudioPlayer?
-    @State private var isPlayButtonAnimating: Bool = false
+    @State private var isPlayButtonAnimating: Bool = false // TODO: is this working?
+    @State private var nextSound: SampleSe = .begin
 
     var body: some View {
         Form {
@@ -56,9 +82,10 @@ struct SettingsView: View {
 
                         Button(action: {
                             do {
-                                // TODO: dont fix se, rotate
-                                // TODO: avoid literal
-                                guard let url = Bundle.main.url(forResource: "time_box_begin", withExtension: "mp3") else {
+                                let sound = nextSound
+                                nextSound = sound.progressed()
+
+                                guard let url = sound.url else {
                                     print("Could not find sample sound file")
                                     return
                                 }
