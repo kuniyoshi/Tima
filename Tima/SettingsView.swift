@@ -17,7 +17,14 @@ struct SettingsView: View {
         .string(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.breakMinutes)
     @State private var errorMessageForBreakMinutes: String?
 
-    @State private var soundVolume: Float = 0.5 // TODO: use settings value as default
+    @State private var soundVolume: Float = {
+        if UserDefaults.standard
+            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil {
+            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
+        } else {
+            return 0.5
+        }
+    }()
     @State private var audioPlayer: AVAudioPlayer?
     @State private var isPlayButtonAnimating: Bool = false
 
@@ -36,9 +43,15 @@ struct SettingsView: View {
                     HStack {
                         Slider(value: $soundVolume)
                             .frame(width: 240)
-                            .onChange(of: soundVolume) { _, newValue in
+                            .onChange(of: soundVolume) {
+ _,
+ newValue in
                                 audioPlayer?.volume = newValue
-                                // TODO: set to settings
+                                UserDefaults.standard
+                                    .set(
+                                        newValue,
+                                        forKey: SettingsKeys.TimeBox.soundVolume.rawValue
+                                    )
                             }
 
                         Button(action: {

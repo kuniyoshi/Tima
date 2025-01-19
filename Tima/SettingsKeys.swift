@@ -5,5 +5,6 @@ enum SettingsKeys {
         case isBannerNotification = "timeBox.isBannerNotification"
         case workMinutes = "timeBox.workMinutes"
         case breakMinutes = "timeBox.breakMinutes"
+        case soundVolume = "timeBox.soundVolume"
     }
 }

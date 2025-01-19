@@ -5,5 +5,6 @@ struct SettingsDefaults {
         static let isBannerNotification: Bool = true
         static let workMinutes: Int = 25
         static let breakMinutes: Int = 5
+        static let soundVolume: Float = 0.5
     }
 }
