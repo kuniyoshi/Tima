@@ -72,14 +72,13 @@ struct MeasurementView: View {
                         }
 
                         if model.isRunning {
-                            timer = Timer(timeInterval: 0.5, repeats: true) { _ in
+                            let newTimer = Timer(timeInterval: 0.5, repeats: true) { _ in
                                 DispatchQueue.main.async {
-                                    if let startedAt = model.startedAt {
-                                        let duration = Int(Date().timeIntervalSince(startedAt))
-                                        model.elapsedSeconds = "\(duration / 60):\(duration % 60)"
-                                    }
+                                    onTick()
                                 }
                             }
+                            RunLoop.main.add(newTimer, forMode: .common)
+                            timer = newTimer
                         } else {
                             timer?.invalidate()
                             timer = nil
@@ -122,6 +121,13 @@ struct MeasurementView: View {
 
     init(model: MeasurementModel) {
         _model = .init(wrappedValue: model)
+    }
+
+    private func onTick() {
+        if let startedAt = model.startedAt {
+            let duration = Int(Date().timeIntervalSince(startedAt))
+            model.elapsedSeconds = "\(duration / 60):\(duration % 60)"
+        }
     }
 
     private func makeSpans(measurements: [Measurement], tasks: [Tima.Task]) -> [(Int, Int, SwiftUI.Color)] {
