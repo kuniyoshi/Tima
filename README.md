@@ -80,7 +80,6 @@ in `Measurement`,
 
 - 次のタスクに行くときに前のタスクが残ってるのが使いづらい
 - 通知メッセージを設定へ
-- Measurement に色をつける
 - add task list view, it can edit each tasks
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - Measurement で日付が編集できない <- 時間はできる
