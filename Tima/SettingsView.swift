@@ -105,8 +105,7 @@ struct SettingsView: View {
                     }
                 }
 
-                // TODO: time box is too general
-                Section(header: Text("TimeBox").font(.headline)) {
+                Section(header: Text("Spans").font(.headline)) {
                     VStack {
                         VStack {
                             HStack {
