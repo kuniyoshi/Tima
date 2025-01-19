@@ -79,6 +79,7 @@ struct SettingsView: View {
                                         forKey: SettingsKeys.TimeBox.soundVolume.rawValue
                                     )
                             }
+                            .disabled(!notificationWithSound)
 
                         Button(action: {
                             do {
@@ -103,6 +104,7 @@ struct SettingsView: View {
                                 .frame(width: 15, height: 15)
                                 .scaleEffect(isPlayButtonAnimating ? 1.2 : 1.0) // TODO: it is not working
                         }
+                        .disabled(!notificationWithSound)
                     }
                 }
 
