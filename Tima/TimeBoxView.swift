@@ -106,12 +106,18 @@ struct TimeBoxView: View {
             case .Auto:
                 switch transition.state {
                 case .ready:
-                    playSe(fileName: "rest_end", fileType: "mp3")
+                        playSe(
+                            fileName: Constants.timeBoxRestEndSound.rawValue,
+                            fileType: "mp3"
+                        )
                     notify(content: endRestNotification())
                 case .running:
                     assert(false, "Should not be running automatically")
                 case .finished:
-                    playSe(fileName: "time_box_end", fileType: "mp3")
+                        playSe(
+                            fileName: Constants.timeBoxEndSound.rawValue,
+                            fileType: "mp3"
+                        )
                     notify(content: endWorkNotification())
                 }
             case .Button:
@@ -119,7 +125,10 @@ struct TimeBoxView: View {
                 case .ready:
                     break
                 case .running:
-                    playSe(fileName: "time_box_begin", fileType: "mp3")
+                        playSe(
+                            fileName: Constants.timeBoxBeginSound.rawValue,
+                            fileType: "mp3"
+                        )
                 case .finished:
                     break
                 }
