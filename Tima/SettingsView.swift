@@ -64,7 +64,6 @@ struct SettingsView: View {
                     }
                 }
 
-                // TODO: disable while no sound notification
                 Section(header: Text("Sound Volume").font(.headline)) {
                     HStack {
                         Slider(value: $soundVolume)
