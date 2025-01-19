@@ -51,7 +51,6 @@ struct SettingsView: View {
         }
     }()
     @State private var audioPlayer: AVAudioPlayer?
-    @State private var isPlayButtonAnimating: Bool = false // TODO: is this working?
     @State private var nextSound: SampleSe = .begin
 
     var body: some View {
@@ -101,7 +100,6 @@ struct SettingsView: View {
                             Image(systemName: "play")
                                 .resizable()
                                 .frame(width: 15, height: 15)
-                                .scaleEffect(isPlayButtonAnimating ? 1.2 : 1.0) // TODO: it is not working
                         }
                         .disabled(!notificationWithSound)
                     }
