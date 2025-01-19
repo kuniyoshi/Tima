@@ -78,7 +78,6 @@ in `Measurement`,
 
 # TODO
 
-- show elapsing minutes
 - 次のタスクに行くときに前のタスクが残ってるのが使いづらい
 - 通知メッセージを設定へ
 - Measurement に色をつける
