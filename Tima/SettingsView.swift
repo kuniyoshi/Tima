@@ -22,7 +22,7 @@ struct SettingsView: View {
             .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil {
             return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
         } else {
-            return 0.5
+            return SettingsDefaults.TimeBox.soundVolume
         }
     }()
     @State private var audioPlayer: AVAudioPlayer?
