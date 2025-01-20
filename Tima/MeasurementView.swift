@@ -38,53 +38,7 @@ struct MeasurementView: View {
                     .font(.headline.monospaced())
                     .padding()
 
-                Button(
-                    action: {
-                        model.isRunning.toggle()
-
-                        if model.isRunning {
-                            model.startedAt = Date()
-                        } else {
-                            model.endedAt = Date()
-                        }
-
-                        assert(!model.isRunning || (model.isRunning && model.startedAt != nil))
-
-                        if !model.isRunning,
-                           let startedAt = model.startedAt,
-                           let endedAt = model.endedAt {
-                            do {
-                                let task = try Tima.Task.findOrCreate(name: model.taskName, in: modelContext)
-                                let measurement = Measurement(
-                                    taskName: task.name,
-                                    work: model.work,
-                                    start: startedAt,
-                                    end: endedAt
-                                )
-
-                                modelContext.insert(measurement)
-
-                                try modelContext.save()
-                            } catch {
-                                model.alertDisplay = model.alertDisplay
-                                    .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
-                            }
-                        }
-
-                        if model.isRunning {
-                            let newTimer = Timer(timeInterval: 0.5, repeats: true) { _ in
-                                DispatchQueue.main.async {
-                                    onTick()
-                                }
-                            }
-                            RunLoop.main.add(newTimer, forMode: .common)
-                            timer = newTimer
-                        } else {
-                            timer?.invalidate()
-                            timer = nil
-                        }
-
-                    }) {
+                Button(action: onButton) {
                     Image(systemName: model.isRunning ? "stop.circle" : "play.circle")
                         .font(.title)
                 }
@@ -127,6 +81,52 @@ struct MeasurementView: View {
         if let startedAt = model.startedAt {
             let duration = Int(Date().timeIntervalSince(startedAt))
             model.elapsedSeconds = "\(duration / 60):\(duration % 60)"
+        }
+    }
+
+    private func onButton() {
+        model.isRunning.toggle()
+
+        if model.isRunning {
+            model.startedAt = Date()
+        } else {
+            model.endedAt = Date()
+        }
+
+        assert(!model.isRunning || (model.isRunning && model.startedAt != nil))
+
+        if !model.isRunning,
+           let startedAt = model.startedAt,
+           let endedAt = model.endedAt {
+            do {
+                let task = try Tima.Task.findOrCreate(name: model.taskName, in: modelContext)
+                let measurement = Measurement(
+                    taskName: task.name,
+                    work: model.work,
+                    start: startedAt,
+                    end: endedAt
+                )
+
+                modelContext.insert(measurement)
+
+                try modelContext.save()
+            } catch {
+                model.alertDisplay = model.alertDisplay
+                    .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
+            }
+        }
+
+        if model.isRunning {
+            let newTimer = Timer(timeInterval: 0.5, repeats: true) { _ in
+                DispatchQueue.main.async {
+                    onTick()
+                }
+            }
+            RunLoop.main.add(newTimer, forMode: .common)
+            timer = newTimer
+        } else {
+            timer?.invalidate()
+            timer = nil
         }
     }
 
