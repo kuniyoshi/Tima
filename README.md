@@ -78,7 +78,6 @@ in `Measurement`,
 
 # TODO
 
-- time box view is ascending, descending
 - resume measurement
 - add task completion
 - 次のタスクに行くときに前のタスクが残ってるのが使いづらい
