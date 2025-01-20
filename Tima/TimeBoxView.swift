@@ -61,7 +61,7 @@ struct TimeBoxView: View {
         let map = Dictionary(grouping: timeBoxes) { timeBox in
             Calendar.current.startOfDay(for: timeBox.start)
         }
-        let keys = map.keys.sorted(by: <)
+        let keys = map.keys.sorted(by: >)
         return keys.map { key in
             (Util.date(key), map[key]?.count ?? 00)
         }
@@ -299,6 +299,15 @@ struct TimeBoxView: View {
     let context = ModelContext(container)
 
     context.insert(TimeBox(start: Date(), workMinutes: 25))
+    context.insert(TimeBox(start: Date(), workMinutes: 25))
+    context.insert(TimeBox(start: Date(), workMinutes: 25))
+    context.insert(TimeBox(start: Date(), workMinutes: 25))
+
+    context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, workMinutes: 25))
+    context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, workMinutes: 25))
+
+    context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, workMinutes: 25))
+    context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, workMinutes: 25))
 
     return TimeBoxView(model: TimeBoxModel())
         .modelContainer(container)
