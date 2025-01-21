@@ -8,6 +8,24 @@ struct MeasurementView: View {
         case work
     }
 
+    private enum QueryType {
+        case begin
+        case stop
+
+        func toggled() -> QueryType {
+            switch self {
+                case .begin:
+                    return .stop
+                case .stop:
+                    return .begin
+            }
+        }
+    }
+
+    private struct Transaction {
+        let queryType: QueryType
+    }
+
     @Environment(\.modelContext) private var modelContext
     @Query private var measurements: [Measurement]
     @Query private var tasks: [Tima.Task]
@@ -85,7 +103,20 @@ struct MeasurementView: View {
     }
 
     private func onButton() {
-        model.isRunning.toggle()
+        if model.isRunning {
+            processTransaction(transaction: .init(queryType: .stop))
+        } else {
+            processTransaction(transaction: .init(queryType: .begin))
+        }
+    }
+
+    private func processTransaction(transaction: Transaction) {
+        switch transaction.queryType {
+            case .begin:
+                model.isRunning = true
+            case .stop:
+                model.isRunning = false
+        }
 
         if model.isRunning {
             model.startedAt = Date()
