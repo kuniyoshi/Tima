@@ -129,23 +129,16 @@ struct MeasurementView: View {
         if !model.isRunning,
            let startedAt = model.startedAt,
            let endedAt = model.endedAt {
-            do {
-                let task = try Tima.Task.findOrCreate(name: model.taskName, in: modelContext)
-                let measurement = Measurement(
-                    taskName: task.name,
-                    work: model.work,
-                    start: startedAt,
-                    end: endedAt
-                )
-
-                modelContext.insert(measurement)
-
-                try modelContext.save()
-            } catch {
-                model.alertDisplay = model.alertDisplay
-                    .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
-            }
+            saveMeasurement(
+                taskName: model.taskName,
+                work: model.work,
+                startedAt: startedAt,
+                endedAt: endedAt
+            )
         }
+
+        timer?.invalidate()
+        timer = nil
 
         if model.isRunning {
             let newTimer = Timer(timeInterval: 0.5, repeats: true) { _ in
@@ -155,9 +148,25 @@ struct MeasurementView: View {
             }
             RunLoop.main.add(newTimer, forMode: .common)
             timer = newTimer
-        } else {
-            timer?.invalidate()
-            timer = nil
+        }
+    }
+
+    private func saveMeasurement(taskName: String, work: String, startedAt: Date, endedAt: Date) {
+        do {
+            let task = try Tima.Task.findOrCreate(name: taskName, in: modelContext)
+            let measurement = Measurement(
+                taskName: taskName,
+                work: work,
+                start: startedAt,
+                end: endedAt
+            )
+
+            modelContext.insert(measurement)
+
+            try modelContext.save()
+        } catch {
+            model.alertDisplay = model.alertDisplay
+                .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
         }
     }
 
