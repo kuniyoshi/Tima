@@ -8,22 +8,10 @@ struct MeasurementView: View {
         case work
     }
 
-    private enum QueryType {
+    private enum Transaction {
         case begin
         case stop
-
-        func toggled() -> QueryType {
-            switch self {
-                case .begin:
-                    return .stop
-                case .stop:
-                    return .begin
-            }
-        }
-    }
-
-    private struct Transaction {
-        let queryType: QueryType
+        case resume(taskName: String, work: String)
     }
 
     @Environment(\.modelContext) private var modelContext
@@ -69,7 +57,9 @@ struct MeasurementView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(groupedMeasurements(measurements), id: \.self) { items in
-                        MeasurementDailyList(measurements: items, tasks: tasks)
+                        MeasurementDailyList(measurements: items, tasks: tasks) { measurement in
+                            processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
+                        }
                     }
                 }
                 .onChange(of: measurements) {
@@ -104,18 +94,33 @@ struct MeasurementView: View {
 
     private func onButton() {
         if model.isRunning {
-            processTransaction(transaction: .init(queryType: .stop))
+            processTransaction(transaction: .stop)
         } else {
-            processTransaction(transaction: .init(queryType: .begin))
+            processTransaction(transaction: .begin)
         }
     }
 
     private func processTransaction(transaction: Transaction) {
-        switch transaction.queryType {
+        switch transaction {
             case .begin:
                 model.isRunning = true
             case .stop:
                 model.isRunning = false
+            case .resume(let taskName, let work):
+                if model.isRunning,
+                   let startedAt = model.startedAt {
+                    saveMeasurement(
+                        taskName: model.taskName,
+                        work: model.work,
+                        startedAt: startedAt,
+                        endedAt: Date()
+                    )
+                }
+                model.isRunning = true
+                model.taskName = taskName
+                model.work = work
+                model.startedAt = Date()
+                model.endedAt = nil
         }
 
         if model.isRunning {
@@ -155,7 +160,7 @@ struct MeasurementView: View {
         do {
             let task = try Tima.Task.findOrCreate(name: taskName, in: modelContext)
             let measurement = Measurement(
-                taskName: taskName,
+                taskName: task.name,
                 work: work,
                 start: startedAt,
                 end: endedAt

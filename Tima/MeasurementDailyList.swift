@@ -5,11 +5,17 @@ struct MeasurementDailyList: View, Identifiable {
     let measurements: [Measurement]
     let tasks: [Tima.Task]
     let id: Int
+    let callback: (Measurement) -> Void
 
-    init(measurements: [Measurement], tasks: [Tima.Task]) {
+    init(
+        measurements: [Measurement],
+        tasks: [Tima.Task],
+        callback: @escaping (Measurement) -> Void
+    ) {
         self.measurements = measurements
         self.tasks = tasks
         self.id = measurements.first?.id.hashValue ?? 0
+        self.callback = callback
     }
 
     var body: some View {
@@ -23,6 +29,11 @@ struct MeasurementDailyList: View, Identifiable {
                     HStack {
                         TaskItem(task: task)
                         MeasurementItem(measurement: measurement, task: task)
+                        Button(action: {
+                            callback(measurement)
+                        }) {
+                            Image(systemName: "play.circle")
+                        }
                     }
                 } else {
                     Text("Task not found for \(String(describing: measurement.taskName)).")
@@ -57,6 +68,7 @@ struct MeasurementDailyList: View, Identifiable {
                 end: Date(timeInterval: 300, since: Date())
             )
         ],
-        tasks: [taskB, taskR]
+        tasks: [taskB, taskR],
+        callback: { _ in }
     )
 }
