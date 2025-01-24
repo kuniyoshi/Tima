@@ -2,15 +2,20 @@ import SwiftUI
 
 // Represents daily measuerments
 struct MeasurementDailyList: View, Identifiable {
+    struct Callback {
+        let onPlay: (Measurement) -> Void
+        let onDelete: (Measurement) -> Void
+    }
+
     let measurements: [Measurement]
     let tasks: [Tima.Task]
     let id: Int
-    let callback: (Measurement) -> Void
+    let callback: Callback
 
     init(
         measurements: [Measurement],
         tasks: [Tima.Task],
-        callback: @escaping (Measurement) -> Void
+        callback: Callback
     ) {
         self.measurements = measurements
         self.tasks = tasks
@@ -32,7 +37,7 @@ struct MeasurementDailyList: View, Identifiable {
                     TaskItem(task: task)
                     MeasurementItem(measurement: measurement, task: task)
                     Button(action: {
-                        callback(measurement)
+                        callback.onPlay(measurement)
                     }) {
                         Image(systemName: "play.circle")
                     }
@@ -78,6 +83,6 @@ struct MeasurementDailyList: View, Identifiable {
             )
         ],
         tasks: [taskB, taskR],
-        callback: { _ in }
+        callback: .init(onPlay: { _ in }, onDelete: { _ in })
     )
 }

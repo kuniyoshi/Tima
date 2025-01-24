@@ -57,9 +57,17 @@ struct MeasurementView: View {
             ScrollViewReader { proxy in
                 List {
                     ForEach(groupedMeasurements(measurements), id: \.self) { items in
-                        MeasurementDailyList(measurements: items, tasks: tasks) { measurement in
-                            processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
-                        }
+                        MeasurementDailyList(
+                            measurements: items,
+                            tasks: tasks,
+                            callback: .init(
+                                onPlay: { measurement in
+                                    processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
+                                },
+                                onDelete: { measurment in
+                                }
+                            )
+                        )
                     }
                 }
                 .onChange(of: measurements) {
