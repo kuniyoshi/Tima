@@ -19,26 +19,35 @@ struct MeasurementDailyList: View, Identifiable {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            if let first = measurements.first {
+        if let first = measurements.first {
+            HStack {
                 Text(Util.date(first.start))
                     .font(.headline)
+                Spacer()
             }
-            ForEach(measurements) { measurement in
-                if let task = tasks.first(where: { $0.name == measurement.taskName }) {
-                    HStack {
-                        TaskItem(task: task)
-                        MeasurementItem(measurement: measurement, task: task)
-                        Button(action: {
-                            callback(measurement)
-                        }) {
-                            Image(systemName: "play.circle")
-                        }
+        }
+        ForEach(measurements) { measurement in
+            if let task = tasks.first(where: { $0.name == measurement.taskName }) {
+                HStack {
+                    TaskItem(task: task)
+                    MeasurementItem(measurement: measurement, task: task)
+                    Button(action: {
+                        callback(measurement)
+                    }) {
+                        Image(systemName: "play.circle")
                     }
-                } else {
-                    Text("Task not found for \(String(describing: measurement.taskName)).")
-                        .foregroundColor(.red)
                 }
+                .contentShape(Rectangle())
+                .swipeActions {
+                    Button(role: .destructive) {
+                        print("deleted")
+                    } label: {
+                        Label("", systemImage: "trash")
+                    }
+                }
+            } else {
+                Text("Task not found for \(String(describing: measurement.taskName)).")
+                    .foregroundColor(.red)
             }
         }
     }
