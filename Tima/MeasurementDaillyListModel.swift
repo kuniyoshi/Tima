@@ -22,6 +22,10 @@ class MeasurementDaillyListModel: ObservableObject, Identifiable {
             onPlay(measurement)
         }
         .store(in: &cancellables)
+        self.onDelete.sink { measurement in
+            onDelete(measurement)
+        }
+        .store(in: &cancellables)
     }
 
     var id: Int {

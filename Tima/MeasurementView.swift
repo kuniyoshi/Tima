@@ -68,7 +68,7 @@ struct MeasurementView: View {
                                 onPlay: { measurement in
                                     processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
                                 },
-                                onDelete: { _ in } // TODO: write
+                                onDelete: onDelete
                             ),
                             tasks: tasks
                         )
@@ -95,6 +95,16 @@ struct MeasurementView: View {
 
     init(model: MeasurementModel) {
         _model = .init(wrappedValue: model)
+    }
+
+    private func onDelete(measurement: Measurement) -> Void {
+        do {
+            modelContext.delete(measurement)
+            try modelContext.save()
+        } catch {
+            model.alertDisplay = model.alertDisplay
+                .weakWritten(title: "Error", message: "Failed to delete measurement: \(error.localizedDescription)")
+        }
     }
 
     private func onTick() {
