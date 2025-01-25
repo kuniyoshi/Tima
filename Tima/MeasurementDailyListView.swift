@@ -3,7 +3,7 @@ import Combine
 
 // Represents daily measuerments
 // TODO: rename to view
-struct MeasurementDailyList: View {
+struct MeasurementDailyListView: View {
     @ObservedObject var model: MeasurementDaillyListModel
     let tasks: [Tima.Task]
 
@@ -69,5 +69,5 @@ struct MeasurementDailyList: View {
         onPlay: { _ in },
         onDelete: { _ in }
     )
-    MeasurementDailyList(model: model, tasks: [taskB, taskR])
+    MeasurementDailyListView(model: model, tasks: [taskB, taskR])
 }
