@@ -2,7 +2,6 @@ import SwiftUI
 import Combine
 
 // Represents daily measuerments
-// TODO: rename to view
 struct MeasurementDailyListView: View {
     @ObservedObject var model: MeasurementDaillyListModel
     let tasks: [Tima.Task]
