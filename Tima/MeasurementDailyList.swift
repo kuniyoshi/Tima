@@ -1,43 +1,27 @@
 import SwiftUI
+import Combine
 
 // Represents daily measuerments
-struct MeasurementDailyList: View, Identifiable {
-    struct Callback {
-        let onPlay: (Measurement) -> Void
-        let onDelete: (Measurement) -> Void
-    }
-
-    @State var measurements: [Measurement]
+// TODO: rename to view
+struct MeasurementDailyList: View {
+    @ObservedObject var model: MeasurementDaillyListModel
     let tasks: [Tima.Task]
-    let id: Int
-    let callback: Callback
-
-    init(
-        measurements: [Measurement],
-        tasks: [Tima.Task],
-        callback: Callback
-    ) {
-        self._measurements = State(initialValue: measurements)
-        self.tasks = tasks
-        self.id = measurements.first?.id.hashValue ?? 0
-        self.callback = callback
-    }
 
     var body: some View {
-        if let first = measurements.first {
+        if let first = model.head {
             HStack {
                 Text(Util.date(first.start))
                     .font(.headline)
                 Spacer()
             }
         }
-        ForEach(measurements) { measurement in
+        ForEach(model.measurements) { measurement in
             if let task = tasks.first(where: { $0.name == measurement.taskName }) {
                 HStack {
                     TaskItem(task: task)
                     MeasurementItem(measurement: measurement, task: task)
                     Button(action: {
-                        callback.onPlay(measurement)
+                        model.playMeasurement(measurement)
                     }) {
                         Image(systemName: "play.circle")
                     }
@@ -45,8 +29,7 @@ struct MeasurementDailyList: View, Identifiable {
                 .contentShape(Rectangle())
                 .swipeActions {
                     Button(role: .destructive) {
-                        print("deleted")
-                        removeMeasurement(measurement)
+                        model.removeMeasurement(measurement)
                     } label: {
                         Label("", systemImage: "trash")
                     }
@@ -57,16 +40,12 @@ struct MeasurementDailyList: View, Identifiable {
             }
         }
     }
-
-    private func removeMeasurement(_ measurement: Measurement) {
-        measurements.removeAll { $0.id == measurement.id }
-    }
 }
 
 #Preview {
     let taskB = Tima.Task(name: "デザインb", color: .blue)
     let taskR = Tima.Task(name: "デザインr", color: .red)
-    return MeasurementDailyList(
+    let model = MeasurementDaillyListModel(
         measurements: [
             Measurement(
                 taskName: taskB.name,
@@ -87,7 +66,8 @@ struct MeasurementDailyList: View, Identifiable {
                 end: Date(timeInterval: 300, since: Date())
             )
         ],
-        tasks: [taskB, taskR],
-        callback: .init(onPlay: { _ in }, onDelete: { _ in })
+        onPlay: { _ in },
+        onDelete: { _ in }
     )
+    MeasurementDailyList(model: model, tasks: [taskB, taskR])
 }

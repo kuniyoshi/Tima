@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 // Main view of measurement
 struct MeasurementView: View {
@@ -20,6 +21,10 @@ struct MeasurementView: View {
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
     @State private var timer: Timer?
+
+    private var onPlay = PassthroughSubject<Measurement, Never>()
+    private var onDelete = PassthroughSubject<Measurement, Never>()
+    private var cancellables = Set<AnyCancellable>()
 
     var body: some View {
         VStack {
@@ -58,15 +63,14 @@ struct MeasurementView: View {
                 List {
                     ForEach(groupedMeasurements(measurements), id: \.self) { items in
                         MeasurementDailyList(
-                            measurements: items,
-                            tasks: tasks,
-                            callback: .init(
+                            model: MeasurementDaillyListModel(
+                                measurements: items,
                                 onPlay: { measurement in
                                     processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
                                 },
-                                onDelete: { measurment in
-                                }
-                            )
+                                onDelete: { _ in } // TODO: write
+                            ),
+                            tasks: tasks
                         )
                     }
                 }
