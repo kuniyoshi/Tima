@@ -7,7 +7,7 @@ struct MeasurementDailyList: View, Identifiable {
         let onDelete: (Measurement) -> Void
     }
 
-    let measurements: [Measurement]
+    @State var measurements: [Measurement]
     let tasks: [Tima.Task]
     let id: Int
     let callback: Callback
@@ -17,7 +17,7 @@ struct MeasurementDailyList: View, Identifiable {
         tasks: [Tima.Task],
         callback: Callback
     ) {
-        self.measurements = measurements
+        self._measurements = State(initialValue: measurements)
         self.tasks = tasks
         self.id = measurements.first?.id.hashValue ?? 0
         self.callback = callback
@@ -46,6 +46,7 @@ struct MeasurementDailyList: View, Identifiable {
                 .swipeActions {
                     Button(role: .destructive) {
                         print("deleted")
+                        removeMeasurement(measurement)
                     } label: {
                         Label("", systemImage: "trash")
                     }
@@ -55,6 +56,10 @@ struct MeasurementDailyList: View, Identifiable {
                     .foregroundColor(.red)
             }
         }
+    }
+
+    private func removeMeasurement(_ measurement: Measurement) {
+        measurements.removeAll { $0.id == measurement.id }
     }
 }
 
