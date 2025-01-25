@@ -78,7 +78,6 @@ in `Measurement`,
 
 # TODO
 
-- add remove feature
 - begin task on enter
 - add task completion
 - 次のタスクに行くときに前のタスクが残ってるのが使いづらい
