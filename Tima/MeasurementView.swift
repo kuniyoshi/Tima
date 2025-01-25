@@ -21,6 +21,7 @@ struct MeasurementView: View {
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
     @State private var timer: Timer?
+    @State private var lastRemoved: Measurement?
 
     private var onPlay = PassthroughSubject<Measurement, Never>()
     private var onDelete = PassthroughSubject<Measurement, Never>()
@@ -61,6 +62,17 @@ struct MeasurementView: View {
 
             ScrollViewReader { proxy in
                 List {
+                    HStack {
+                        Spacer()
+                        if let lastRemoved {
+                            Button(action: {
+                                restoreRemoved(lastRemoved)
+                            }) {
+                                Image(systemName: "arrow.uturn.backward")
+                            }
+                        }
+                    }
+
                     ForEach(groupedMeasurements(measurements), id: \.self) { items in
                         MeasurementDailyListView(
                             model: MeasurementDaillyListModel(
@@ -97,10 +109,25 @@ struct MeasurementView: View {
         _model = .init(wrappedValue: model)
     }
 
+    private func restoreRemoved(_  measurement: Measurement) {
+        do {
+            modelContext.insert(measurement)
+            try modelContext.save()
+            lastRemoved = nil
+        } catch {
+            model.alertDisplay = model.alertDisplay
+                .weakWritten(
+                    title: "Error",
+                    message: "Failed to restore measurement: \(error.localizedDescription)"
+                )
+        }
+    }
+
     private func onDelete(measurement: Measurement) -> Void {
         do {
             modelContext.delete(measurement)
             try modelContext.save()
+            lastRemoved = measurement
         } catch {
             model.alertDisplay = model.alertDisplay
                 .weakWritten(title: "Error", message: "Failed to delete measurement: \(error.localizedDescription)")
