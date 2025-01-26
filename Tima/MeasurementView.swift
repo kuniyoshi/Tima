@@ -192,6 +192,7 @@ struct MeasurementView: View {
                 startedAt: startedAt,
                 endedAt: endedAt
             )
+            model.clear()
         }
 
         timer?.invalidate()
@@ -208,6 +209,7 @@ struct MeasurementView: View {
         }
     }
 
+    // receive measurement
     private func saveMeasurement(taskName: String, work: String, startedAt: Date, endedAt: Date) {
         do {
             let task = try Tima.Task.findOrCreate(name: taskName, in: modelContext)

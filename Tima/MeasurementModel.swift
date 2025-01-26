@@ -18,4 +18,10 @@ class MeasurementModel: ObservableObject {
         endedAt = nil
         elapsedSeconds = ""
     }
+
+    func clear() {
+        taskName = ""
+        work = ""
+        elapsedSeconds = ""
+    }
 }
