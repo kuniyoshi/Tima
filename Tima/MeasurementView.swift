@@ -70,6 +70,7 @@ struct MeasurementView: View {
                             }) {
                                 Image(systemName: "arrow.uturn.backward")
                             }
+                            .transition(.slide.combined(with: .opacity))
                         }
                     }
 
@@ -113,7 +114,10 @@ struct MeasurementView: View {
         do {
             modelContext.insert(measurement)
             try modelContext.save()
-            lastRemoved = nil
+
+            withAnimation {
+                lastRemoved = nil
+            }
         } catch {
             model.alertDisplay = model.alertDisplay
                 .weakWritten(
@@ -127,7 +131,10 @@ struct MeasurementView: View {
         do {
             modelContext.delete(measurement)
             try modelContext.save()
-            lastRemoved = measurement
+
+            withAnimation {
+                lastRemoved = measurement
+            }
         } catch {
             model.alertDisplay = model.alertDisplay
                 .weakWritten(title: "Error", message: "Failed to delete measurement: \(error.localizedDescription)")
