@@ -9,4 +9,13 @@ class MeasurementModel: ObservableObject {
     @Published var endedAt: Date?
     @Published var alertDisplay = AlertDisplay(error: nil)
     @Published var elapsedSeconds: String = ""
+
+    func begin(taskName: String, work: String) {
+        self.taskName = taskName
+        self.work = work
+        isRunning = true
+        startedAt = Date()
+        endedAt = nil
+        elapsedSeconds = ""
+    }
 }

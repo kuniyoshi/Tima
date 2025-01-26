@@ -172,11 +172,7 @@ struct MeasurementView: View {
                         endedAt: Date()
                     )
                 }
-                model.isRunning = true
-                model.taskName = taskName
-                model.work = work
-                model.startedAt = Date()
-                model.endedAt = nil
+                model.begin(taskName: taskName, work: work)
         }
 
         if model.isRunning {
