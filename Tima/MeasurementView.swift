@@ -200,7 +200,7 @@ struct MeasurementView: View {
 
     private func saveMeasurement(_ measurement: Measurement) {
         do {
-            let task = try Tima.Task.findOrCreate(
+            _ = try Tima.Task.findOrCreate(
                 name: measurement.taskName,
                 in: modelContext
             )
