@@ -78,6 +78,10 @@ in `Measurement`,
 
 # TODO
 
+- add measurement on begin, instead of finish
+- add indicator that wheter is in time box or not
+- fix, odd time is shown a moment on next measurement started
+- fix freezing on next day
 - begin task on enter
 - add task completion
 - 次のタスクに行くときに前のタスクが残ってるのが使いづらい
