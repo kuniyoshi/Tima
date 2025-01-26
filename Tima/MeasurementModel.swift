@@ -24,4 +24,29 @@ class MeasurementModel: ObservableObject {
         work = ""
         elapsedSeconds = ""
     }
+
+    func newMeasurementOnStop() -> Measurement? {
+        if let startedAt,
+           let endedAt {
+            return Measurement(
+                taskName: taskName,
+                work: work,
+                start: startedAt,
+                end: endedAt
+            )
+        }
+        return nil
+    }
+
+    func newMeasurementOnResume() -> Measurement? {
+        if let startedAt {
+            return Measurement(
+                taskName: taskName,
+                work: work,
+                start: startedAt,
+                end: Date()
+            )
+        }
+        return nil
+    }
 }

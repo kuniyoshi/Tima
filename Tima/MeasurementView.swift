@@ -164,13 +164,8 @@ struct MeasurementView: View {
                 model.isRunning = false
             case .resume(let taskName, let work):
                 if model.isRunning,
-                   let startedAt = model.startedAt {
-                    saveMeasurement(
-                        taskName: model.taskName,
-                        work: model.work,
-                        startedAt: startedAt,
-                        endedAt: Date()
-                    )
+                   let newMeasurement = model.newMeasurementOnResume() {
+                    saveMeasurement(newMeasurement)
                 }
                 model.begin(taskName: taskName, work: work)
         }
@@ -184,14 +179,8 @@ struct MeasurementView: View {
         assert(!model.isRunning || (model.isRunning && model.startedAt != nil))
 
         if !model.isRunning,
-           let startedAt = model.startedAt,
-           let endedAt = model.endedAt {
-            saveMeasurement(
-                taskName: model.taskName,
-                work: model.work,
-                startedAt: startedAt,
-                endedAt: endedAt
-            )
+           let newMeasurement = model.newMeasurementOnStop() {
+            saveMeasurement(newMeasurement)
             model.clear()
         }
 
@@ -209,15 +198,11 @@ struct MeasurementView: View {
         }
     }
 
-    // receive measurement
-    private func saveMeasurement(taskName: String, work: String, startedAt: Date, endedAt: Date) {
+    private func saveMeasurement(_ measurement: Measurement) {
         do {
-            let task = try Tima.Task.findOrCreate(name: taskName, in: modelContext)
-            let measurement = Measurement(
-                taskName: task.name,
-                work: work,
-                start: startedAt,
-                end: endedAt
+            let task = try Tima.Task.findOrCreate(
+                name: measurement.taskName,
+                in: modelContext
             )
 
             modelContext.insert(measurement)
