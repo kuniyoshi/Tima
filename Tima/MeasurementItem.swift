@@ -39,7 +39,7 @@ struct MeasurementItem: View {
                 .onSubmit {
                     isWorkEditing = false
                     context.update {
-                        measurement.work = work
+                        measurement.work = work // TODO: need trim by robust way
                     }
                 }
             } else {
