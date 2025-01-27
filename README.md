@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- slow on measurement finish somehow
 - fix scroll on measurements
 - add measurement on begin, instead of finish
 - add indicator that wheter is in time box or not
