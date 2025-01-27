@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- fix time on enter
 - zeropadding elapsed in measurement
 - slow on measurement finish somehow
 - fix scroll on measurements
