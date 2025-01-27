@@ -33,11 +33,13 @@ struct MeasurementView: View {
                 TextField("Input group...", text: $model.taskName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .task)
+                    .onSubmit(onButton)
                     .padding()
 
                 TextField("Input work...", text: $model.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .work)
+                    .onSubmit(onButton)
                     .padding()
 
                 Button("Focus Field") {
