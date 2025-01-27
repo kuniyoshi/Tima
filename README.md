@@ -83,7 +83,6 @@ in `Measurement`,
 - add indicator that wheter is in time box or not
 - fix, odd time is shown a moment on next measurement started
 - fix freezing on next day
-- begin task on enter
 - add task completion
 - 通知メッセージを設定へ
 - add task list view, it can edit each tasks
