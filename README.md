@@ -78,6 +78,8 @@ in `Measurement`,
 
 # TODO
 
+- zeropadding elapsed in measurement
+- trim `task`, and `work`
 - slow on measurement finish somehow
 - fix scroll on measurements
 - add measurement on begin, instead of finish
