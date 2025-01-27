@@ -26,8 +26,8 @@ final class Measurement: Codable {
 
     init(id: UUID = UUID(), taskName: String = "", work: String, start: Date, end: Date) {
         self.id = id
-        self.taskName = taskName
-        self.work = work
+        self.taskName = taskName.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.work = work.trimmingCharacters(in: .whitespacesAndNewlines)
         self.start = start
         self.end = end
     }

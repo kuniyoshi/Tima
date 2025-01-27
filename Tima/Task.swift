@@ -13,7 +13,7 @@ final class Task: Codable, Identifiable {
     var color: Tima.Color
 
     init(name: String, color: Tima.Color) {
-        self.name = name
+        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         self.color = color
     }
 
