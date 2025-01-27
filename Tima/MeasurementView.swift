@@ -146,7 +146,13 @@ struct MeasurementView: View {
     private func onTick() {
         if let startedAt = model.startedAt {
             let duration = Int(Date().timeIntervalSince(startedAt))
-            model.elapsedSeconds = "\(duration / 60):\(duration % 60)"
+            let minutes = duration / 60
+            let seconds = duration % 60
+            if minutes > 0 {
+                model.elapsedSeconds = String(format: "%d:%02d", minutes, seconds)
+            } else {
+                model.elapsedSeconds = "\(seconds)"
+            }
         }
     }
 
