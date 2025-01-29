@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- rename task to work, work to ?
 - fix time on enter
 - slow on measurement finish somehow
 - fix scroll on measurements
