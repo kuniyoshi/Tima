@@ -20,7 +20,6 @@ struct MeasurementView: View {
     @Query private var tasks: [Tima.Task]
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
-    @State private var timer: Timer?
     @State private var lastRemoved: Measurement?
 
     private var onPlay = PassthroughSubject<Measurement, Never>()
@@ -143,19 +142,6 @@ struct MeasurementView: View {
         }
     }
 
-    private func onTick() {
-        if let startedAt = model.startedAt {
-            let duration = Int(Date().timeIntervalSince(startedAt))
-            let minutes = duration / 60
-            let seconds = duration % 60
-            if minutes > 0 {
-                model.elapsedSeconds = String(format: "%d:%02d", minutes, seconds)
-            } else {
-                model.elapsedSeconds = "\(seconds)"
-            }
-        }
-    }
-
     private func toggleRunning() {
         if model.isRunning {
             processTransaction(transaction: .stop)
@@ -192,17 +178,8 @@ struct MeasurementView: View {
             model.clear()
         }
 
-        timer?.invalidate()
-        timer = nil
-
         if model.isRunning {
-            let newTimer = Timer(timeInterval: 0.5, repeats: true) { _ in
-                DispatchQueue.main.async {
-                    onTick()
-                }
-            }
-            RunLoop.main.add(newTimer, forMode: .common)
-            timer = newTimer
+            model.beginTick()
         }
     }
 
