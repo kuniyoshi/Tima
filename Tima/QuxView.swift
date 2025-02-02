@@ -6,7 +6,7 @@ struct QuxView: View {
 
     var body: some View {
         VStack {
-            Text(model.elapsedSeconds.description)
+            Text(model.elapsedSeconds)
                 .padding()
 
             ScrollViewReader { proxy in
@@ -23,26 +23,17 @@ struct QuxView: View {
                         }
                     }
 
-                    ForEach(model.dailyListModels, id: \.self.id) { model in
-                        MeasurementDailyListView(model: model)
+                    ForEach(model.dailyListModels, id: \.self.id) { listModel in
+                        MeasurementDailyListView(model: listModel)
                     }
                 }
-                .onChange(of: model.measurements) {
-                    if let lastId = model.measurements.last?.id {
-                        proxy.scrollTo(lastId, anchor: .top)
+                .onChange(of: model.measurements) { _, newMeasurements in
+                    if let lastMeasurement = newMeasurements.last {
+                        proxy.scrollTo(lastMeasurement.id, anchor: .top)
                     }
                 }
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-
-//            .alert(isPresented: .constant(model.alertDisplay.error != nil)) {
-//                assert(model.alertDisplay.error != nil)
-//                return Alert(
-//                    title: Text(model.alertDisplay.error?.title ?? "ERROR"),
-//                    message: Text(model.alertDisplay.error?.message ?? "Some error occurred"),
-//                    dismissButton: .default(Text("OK"))
-//                )
-//            }
         }
         .onAppear {
             model.beginTick()
@@ -52,9 +43,7 @@ struct QuxView: View {
     init(model: QuxModel) {
         _model = .init(wrappedValue: model)
     }
-
 }
-
 
 @MainActor
 class QuxModel: ObservableObject {
@@ -64,6 +53,10 @@ class QuxModel: ObservableObject {
         case resume(taskName: String, work: String)
     }
 
+    // LiveData的な仕組みとして @Query を使用する
+    @Query(sort: \Measurement.start, order: .reverse) var measurements: [Measurement]
+    @Query var tasks: [Tima.Task]
+
     @Published var isRunning: Bool = false
     @Published var taskName: String = ""
     @Published var work: String = ""
@@ -71,18 +64,13 @@ class QuxModel: ObservableObject {
     @Published var endedAt: Date?
     @Published var elapsedSeconds: String = ""
     private let modelContext: ModelContext
-    @Published var measurements: [Measurement] = []
-    var tasks: [Tima.Task] = []
     private var timer: Timer?
-    @Published var groupedMeasurements: [[Measurement]] = []
     @State var lastRemoved: Measurement?
-    @Published var dailyListModels: [MeasurementDaillyListModel] = []
 
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-        fetchData()
-        groupedMeasurements = createGroupedMeasurements(measurements)
-        dailyListModels = groupedMeasurements.map { items in
+    // measurements と tasks の変更に応じて毎日ごとのモデルを生成する
+    var dailyListModels: [MeasurementDaillyListModel] {
+        let grouped = createGroupedMeasurements(measurements)
+        return grouped.map { items in
             let pairs: [(Measurement, Tima.Task)] = items.compactMap { item in
                 if let task = tasks.first(where: { $0.name == item.taskName }) {
                     return (item, task)
@@ -101,6 +89,13 @@ class QuxModel: ObservableObject {
         }
     }
 
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+        // @Query で自動更新されるので、手動の fetchData() は不要になるわ
+    }
+
+    // これ以降の保存・削除などのメソッドは、modelContext への操作を行えば @Query が反映してくれる仕組みになっているのよ
+
     func processTransaction(transaction: Transaction) {
         switch transaction {
             case .begin:
@@ -108,8 +103,7 @@ class QuxModel: ObservableObject {
             case .stop:
                 isRunning = false
             case .resume(let taskName, let work):
-                if isRunning,
-                   let newMeasurement = newMeasurementOnResume() {
+                if isRunning, let newMeasurement = newMeasurementOnResume() {
                     saveMeasurement(newMeasurement)
                 }
                 begin(taskName: taskName, work: work)
@@ -123,8 +117,7 @@ class QuxModel: ObservableObject {
 
         assert(!isRunning || (isRunning && startedAt != nil))
 
-        if !isRunning,
-           let newMeasurement = newMeasurementOnStop() {
+        if !isRunning, let newMeasurement = newMeasurementOnStop() {
             saveMeasurement(newMeasurement)
             clear()
         }
@@ -134,7 +127,7 @@ class QuxModel: ObservableObject {
         }
     }
 
-    func onDelete(measurement: Measurement) -> Void {
+    func onDelete(measurement: Measurement) {
         do {
             delete(measurement: measurement)
             try save()
@@ -143,12 +136,11 @@ class QuxModel: ObservableObject {
                 lastRemoved = measurement
             }
         } catch {
-//            model.alertDisplay = model.alertDisplay
-//                .weakWritten(title: "Error", message: "Failed to delete measurement: \(error.localizedDescription)")
+            // エラー処理は必要に応じて実装してね
         }
     }
 
-    func restoreRemoved(_  measurement: Measurement) {
+    func restoreRemoved(_ measurement: Measurement) {
         do {
             modelContext.insert(measurement)
             try modelContext.save()
@@ -157,14 +149,9 @@ class QuxModel: ObservableObject {
                 lastRemoved = nil
             }
         } catch {
-//            model.alertDisplay = model.alertDisplay
-//                .weakWritten(
-//                    title: "Error",
-//                    message: "Failed to restore measurement: \(error.localizedDescription)"
-//                )
+            // エラー処理は必要に応じて実装してね
         }
     }
-
 
     func save() throws {
         try modelContext.save()
@@ -178,11 +165,9 @@ class QuxModel: ObservableObject {
             )
 
             modelContext.insert(measurement)
-
             try modelContext.save()
         } catch {
-//            model.alertDisplay = model.alertDisplay
-//                .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
+            // エラー処理は必要に応じて実装してね
         }
     }
 
@@ -190,32 +175,11 @@ class QuxModel: ObservableObject {
         modelContext.delete(measurement)
     }
 
-    private func fetchData() {
-        do {
-            let measurementFetchDescriptor = FetchDescriptor<Measurement>()
-            let taskFetchDescriptor = FetchDescriptor<Tima.Task>()
-
-            let measurements = try modelContext.fetch(measurementFetchDescriptor)
-            let tasks = try modelContext.fetch(taskFetchDescriptor)
-
-            self.measurements = measurements
-            self.tasks = tasks
-        } catch {
-            print("Failed to fetch data: \(error)")
-        }
-    }
-
     private func createGroupedMeasurements(_ measurements: [Measurement]) -> [[Measurement]] {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-
-        let grouped = Dictionary(
-            grouping: measurements.reversed()
-        ) { measurement in
+        // 日付ごとにグループ化する処理
+        let grouped = Dictionary(grouping: measurements) { measurement in
             Util.date(measurement.start)
         }
-
         return grouped.keys.sorted(by: >).map { key in
             grouped[key] ?? []
         }
@@ -237,8 +201,7 @@ class QuxModel: ObservableObject {
     }
 
     func newMeasurementOnStop() -> Measurement? {
-        if let startedAt,
-           let endedAt {
+        if let startedAt, let endedAt {
             return Measurement(
                 taskName: taskName,
                 work: work,
@@ -282,4 +245,3 @@ class QuxModel: ObservableObject {
         }
     }
 }
-
