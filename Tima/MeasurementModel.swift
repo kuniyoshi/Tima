@@ -11,6 +11,7 @@ class MeasurementModel: ObservableObject {
     @Published var alertDisplay = AlertDisplay(error: nil)
     @Published var elapsedSeconds: String = ""
     private var timer: Timer?
+    var spans: [(Int, Int, SwiftUI.Color)] = []
 
     func begin(taskName: String, work: String) {
         self.taskName = taskName
@@ -56,7 +57,7 @@ class MeasurementModel: ObservableObject {
         timer?.invalidate()
         timer = nil
 
-        let newTimer = Timer(timeInterval: 0.5, repeats: true) { [weak self] _ in
+        let newTimer = Timer(timeInterval: 0.01, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.tick()
             }

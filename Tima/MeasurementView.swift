@@ -58,7 +58,7 @@ struct MeasurementView: View {
                 .padding()
             }
 
-            Memory24HourHorizontalView(spans: makeSpans(measurements: measurements, tasks: tasks))
+            Memory24HourHorizontalView(spans: model.spans)
             .padding()
 
             ScrollViewReader { proxy in
@@ -75,18 +75,18 @@ struct MeasurementView: View {
                         }
                     }
 
-                    ForEach(groupedMeasurements(measurements), id: \.self) { items in
-                        MeasurementDailyListView(
-                            model: MeasurementDaillyListModel(
-                                measurements: items,
-                                onPlay: { measurement in
-                                    processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
-                                },
-                                onDelete: onDelete
-                            ),
-                            tasks: tasks
-                        )
-                    }
+//                    ForEach(groupedMeasurements(measurements), id: \.self) { items in
+//                        MeasurementDailyListView(
+//                            model: MeasurementDaillyListModel(
+//                                measurements: items,
+//                                onPlay: { measurement in
+//                                    processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
+//                                },
+//                                onDelete: onDelete
+//                            ),
+//                            tasks: tasks
+//                        )
+//                    }
                 }
                 .onChange(of: measurements) {
                     if let lastId = measurements.last?.id {
@@ -104,6 +104,10 @@ struct MeasurementView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
+        }
+        .onAppear {
+            model.spans = makeSpans(measurements: measurements, tasks: tasks)
+            toggleRunning()
         }
     }
 

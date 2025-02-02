@@ -3,6 +3,7 @@ import Combine
 
 class MeasurementDaillyListModel: ObservableObject, Identifiable {
     @Published var measurements: [Measurement]
+    let tasks: [Tima.Task]
 
     private let onPlay: PassthroughSubject<Measurement, Never>
     private let onDelete: PassthroughSubject<Measurement, Never>
@@ -10,10 +11,12 @@ class MeasurementDaillyListModel: ObservableObject, Identifiable {
 
     init(
         measurements: [Measurement],
+        tasks: [Tima.Task],
         onPlay: @escaping (Measurement) -> Void,
         onDelete: @escaping (Measurement) -> Void
     ) {
         self.measurements = measurements
+        self.tasks = tasks
         self.onPlay = PassthroughSubject()
         self.onDelete = PassthroughSubject()
         cancellables = []

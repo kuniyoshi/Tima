@@ -4,7 +4,6 @@ import Combine
 // Represents daily measuerments
 struct MeasurementDailyListView: View {
     @ObservedObject var model: MeasurementDaillyListModel
-    let tasks: [Tima.Task]
 
     var body: some View {
         if let first = model.head {
@@ -15,7 +14,7 @@ struct MeasurementDailyListView: View {
             }
         }
         ForEach(model.measurements) { measurement in
-            if let task = tasks.first(where: { $0.name == measurement.taskName }) {
+            if let task = model.tasks.first(where: { $0.name == measurement.taskName }) {
                 HStack {
                     TaskItem(task: task)
                     MeasurementItem(measurement: measurement, task: task)
@@ -65,8 +64,9 @@ struct MeasurementDailyListView: View {
                 end: Date(timeInterval: 300, since: Date())
             )
         ],
+        tasks: [taskB, taskR],
         onPlay: { _ in },
         onDelete: { _ in }
     )
-    MeasurementDailyListView(model: model, tasks: [taskB, taskR])
+    MeasurementDailyListView(model: model)
 }
