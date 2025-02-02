@@ -1,5 +1,10 @@
 import SwiftUI
 import SwiftData
+import Combine
+
+extension Notification.Name {
+    static let modelContextDidChange = Notification.Name("modelContextDidChange")
+}
 
 struct QuxView: View {
     @StateObject private var model: QuxModel
@@ -70,23 +75,56 @@ class QuxModel: ObservableObject {
     @Published var startedAt: Date?
     @Published var endedAt: Date?
     @Published var elapsedSeconds: String = ""
-    private let modelContext: ModelContext
     @Published var measurements: [Measurement] = []
-    var tasks: [Tima.Task] = []
+    @Published var tasks: [Tima.Task] = []
+
+    private let modelContext: ModelContext
     private var timer: Timer?
-    @Published var groupedMeasurements: [[Measurement]] = []
-    @State var lastRemoved: Measurement?
+    private var cancellables = Set<AnyCancellable>()
+
     @Published var dailyListModels: [MeasurementDaillyListModel] = []
+    @Published var groupedMeasurements: [[Measurement]] = []
+    @Published var lastRemoved: Measurement?
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         fetchData()
+        updateGroupedAndDailyModels()
+        setupLiveData()
+    }
+
+    private func setupLiveData() {
+        NotificationCenter.default.publisher(for: .modelContextDidChange)
+            .sink { [weak self] _ in
+                self?.fetchData()
+                self?.updateGroupedAndDailyModels()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func fetchData() {
+        do {
+            let measurementFetchDescriptor = FetchDescriptor<Measurement>()
+            let taskFetchDescriptor = FetchDescriptor<Tima.Task>()
+
+            let measurements = try modelContext.fetch(measurementFetchDescriptor)
+            let tasks = try modelContext.fetch(taskFetchDescriptor)
+
+            self.measurements = measurements
+            self.tasks = tasks
+        } catch {
+            print("Failed to fetch data: \(error)")
+        }
+    }
+
+    private func updateGroupedAndDailyModels() {
         groupedMeasurements = createGroupedMeasurements(measurements)
         dailyListModels = groupedMeasurements.map { items in
             let pairs: [(Measurement, Tima.Task)] = items.compactMap { item in
                 if let task = tasks.first(where: { $0.name == item.taskName }) {
                     return (item, task)
                 }
+                print("No taks found for: \(item)")
                 return nil
             }
             return MeasurementDaillyListModel(
@@ -99,6 +137,7 @@ class QuxModel: ObservableObject {
                 }
             )
         }
+
     }
 
     func processTransaction(transaction: Transaction) {
@@ -190,21 +229,6 @@ class QuxModel: ObservableObject {
         modelContext.delete(measurement)
     }
 
-    private func fetchData() {
-        do {
-            let measurementFetchDescriptor = FetchDescriptor<Measurement>()
-            let taskFetchDescriptor = FetchDescriptor<Tima.Task>()
-
-            let measurements = try modelContext.fetch(measurementFetchDescriptor)
-            let tasks = try modelContext.fetch(taskFetchDescriptor)
-
-            self.measurements = measurements
-            self.tasks = tasks
-        } catch {
-            print("Failed to fetch data: \(error)")
-        }
-    }
-
     private func createGroupedMeasurements(_ measurements: [Measurement]) -> [[Measurement]] {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -280,6 +304,7 @@ class QuxModel: ObservableObject {
             let duration = Date().timeIntervalSince(startedAt)
             elapsedSeconds = "\(duration)"
         }
+        NotificationCenter.default.post(name: .modelContextDidChange, object: nil)
     }
 }
 
