@@ -7,6 +7,7 @@ final class Database: ObservableObject {
     static let shared = Database()
 
     @Published private(set) var measurements: [Measurement] = []
+    @Published private(set) var groupedMeasurements: [[Measurement]] = []
     @Published private(set) var tasks: [Tima.Task] = []
 
     private var modelContext: ModelContext
@@ -22,6 +23,20 @@ final class Database: ObservableObject {
             let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
             let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
             modelContext = container.mainContext
+
+            $measurements.map { measurements in
+                let dictionary = Dictionary(grouping: measurements, by: { measurement in
+                    Calendar.current.startOfDay(for: measurement.start)
+                })
+
+                return dictionary
+                    .sorted { $0.key > $1.key }
+                    .map { $0.value.sorted { $0.start > $1.start } }
+            }
+            .sink { [unowned self] newValue in
+                self.groupedMeasurements = newValue
+            }
+            .store(in: &cancellables)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
