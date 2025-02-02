@@ -19,8 +19,8 @@ final class Database: ObservableObject {
                 Measurement.self,
                 TimeBox.self,
             ])
-            let container = try ModelContainer(for: schema)
             let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
             modelContext = container.mainContext
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
