@@ -72,7 +72,7 @@ class QuxModel: ObservableObject {
     @Published var elapsedSeconds: String = ""
     private let modelContext: ModelContext
     @Published var measurements: [Measurement] = []
-    @Published var tasks: [Tima.Task] = []
+    var tasks: [Tima.Task] = []
     private var timer: Timer?
     @Published var groupedMeasurements: [[Measurement]] = []
     @State var lastRemoved: Measurement?
@@ -83,9 +83,14 @@ class QuxModel: ObservableObject {
         fetchData()
         groupedMeasurements = createGroupedMeasurements(measurements)
         dailyListModels = groupedMeasurements.map { items in
+            let pairs: [(Measurement, Tima.Task)] = items.compactMap { item in
+                if let task = tasks.first(where: { $0.name == item.taskName }) {
+                    return (item, task)
+                }
+                return nil
+            }
             return MeasurementDaillyListModel(
-                measurements: items,
-                tasks: tasks,
+                pairs: pairs,
                 onPlay: { [weak self] measurement in
                     self?.processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
                 },

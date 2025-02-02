@@ -13,28 +13,23 @@ struct MeasurementDailyListView: View {
                 Spacer()
             }
         }
-        ForEach(model.measurements) { measurement in
-            if let task = model.tasks.first(where: { $0.name == measurement.taskName }) {
-                HStack {
-                    TaskItem(task: task)
-                    MeasurementItem(measurement: measurement, task: task)
-                    Button(action: {
-                        model.playMeasurement(measurement)
-                    }) {
-                        Image(systemName: "play.circle")
-                    }
+        ForEach(model.pairs, id: \.0) { (measurement, task) in
+            HStack {
+                TaskItem(task: task)
+                MeasurementItem(measurement: measurement, task: task)
+                Button(action: {
+                    model.playMeasurement(measurement)
+                }) {
+                    Image(systemName: "play.circle")
                 }
-                .contentShape(Rectangle())
-                .swipeActions {
-                    Button(role: .destructive) {
-                        model.removeMeasurement(measurement)
-                    } label: {
-                        Label("", systemImage: "trash")
-                    }
+            }
+            .contentShape(Rectangle())
+            .swipeActions {
+                Button(role: .destructive) {
+                    model.removeMeasurement(measurement)
+                } label: {
+                    Label("", systemImage: "trash")
                 }
-            } else {
-                Text("Task not found for \(String(describing: measurement.taskName)).")
-                    .foregroundColor(.red)
             }
         }
     }
@@ -44,27 +39,26 @@ struct MeasurementDailyListView: View {
     let taskB = Tima.Task(name: "デザインb", color: .blue)
     let taskR = Tima.Task(name: "デザインr", color: .red)
     let model = MeasurementDaillyListModel(
-        measurements: [
-            Measurement(
+        pairs: [
+            (Measurement(
                 taskName: taskB.name,
                 work: "UIスケッチ",
                 start: Date(timeInterval: 700, since: Date()),
                 end: Date(timeInterval: 1080, since: Date())
-            ),
-            Measurement(
+            ), taskB),
+            (Measurement(
                 taskName: taskB.name,
                 work: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            ),
-            Measurement(
+            ), taskB),
+            (Measurement(
                 taskName: taskR.name,
                 work: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            )
+            ), taskR)
         ],
-        tasks: [taskB, taskR],
         onPlay: { _ in },
         onDelete: { _ in }
     )

@@ -2,21 +2,18 @@ import SwiftUI
 import Combine
 
 class MeasurementDaillyListModel: ObservableObject, Identifiable {
-    @Published var measurements: [Measurement]
-    let tasks: [Tima.Task]
+    @Published var pairs: [(Measurement, Tima.Task)]
 
     private let onPlay: PassthroughSubject<Measurement, Never>
     private let onDelete: PassthroughSubject<Measurement, Never>
     private var cancellables: Set<AnyCancellable>
 
     init(
-        measurements: [Measurement],
-        tasks: [Tima.Task],
+        pairs: [(Measurement, Tima.Task)],
         onPlay: @escaping (Measurement) -> Void,
         onDelete: @escaping (Measurement) -> Void
     ) {
-        self.measurements = measurements
-        self.tasks = tasks
+        self.pairs = pairs
         self.onPlay = PassthroughSubject()
         self.onDelete = PassthroughSubject()
         cancellables = []
@@ -32,11 +29,11 @@ class MeasurementDaillyListModel: ObservableObject, Identifiable {
     }
 
     var id: Int {
-        measurements.first?.id.hashValue ?? 0
+        pairs.first?.0.id.hashValue ?? 0
     }
 
     var head: Measurement? {
-        measurements.first
+        pairs.first?.0
     }
 
     func playMeasurement(_ measurement: Measurement) {
@@ -44,7 +41,7 @@ class MeasurementDaillyListModel: ObservableObject, Identifiable {
     }
 
     func removeMeasurement(_ measurement: Measurement) {
-        self.measurements.removeAll { $0.id == measurement.id }
+        self.pairs.removeAll { $0.0.id == measurement.id }
         self.onDelete.send(measurement)
     }
 }
