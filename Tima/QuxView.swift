@@ -78,66 +78,47 @@ class QuxModel: ObservableObject {
     @Published var measurements: [Measurement] = []
     @Published var tasks: [Tima.Task] = []
 
-    private let modelContext: ModelContext
+//    private let modelContext: ModelContext
     private var timer: Timer?
     private var cancellables = Set<AnyCancellable>()
 
     @Published var dailyListModels: [MeasurementDaillyListModel] = []
-    @Published var groupedMeasurements: [[Measurement]] = []
     @Published var lastRemoved: Measurement?
 
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-        fetchData()
-        updateGroupedAndDailyModels()
-        setupLiveData()
-    }
+    private let database: Database
 
-    private func setupLiveData() {
-        NotificationCenter.default.publisher(for: .modelContextDidChange)
-            .sink { [weak self] _ in
-                self?.fetchData()
-                self?.updateGroupedAndDailyModels()
+    init(database: Database) {
+        self.database = database
+        database.$groupedMeasurements
+            .map { groupedMeasurements in
+                groupedMeasurements.compactMap { pairs in QuxModel.createModel(items: pairs, onPlay: { _ in }, onDelete: { _ in }) }
+//                return create(items: pairs)
             }
-            .store(in: &cancellables)
+            .assign(to: &$dailyListModels)
     }
 
-    private func fetchData() {
-        do {
-            let measurementFetchDescriptor = FetchDescriptor<Measurement>()
-            let taskFetchDescriptor = FetchDescriptor<Tima.Task>()
+    func lateInit() {
 
-            let measurements = try modelContext.fetch(measurementFetchDescriptor)
-            let tasks = try modelContext.fetch(taskFetchDescriptor)
-
-            self.measurements = measurements
-            self.tasks = tasks
-        } catch {
-            print("Failed to fetch data: \(error)")
-        }
     }
 
-    private func updateGroupedAndDailyModels() {
-        groupedMeasurements = createGroupedMeasurements(measurements)
-        dailyListModels = groupedMeasurements.map { items in
-            let pairs: [(Measurement, Tima.Task)] = items.compactMap { item in
-                if let task = tasks.first(where: { $0.name == item.taskName }) {
-                    return (item, task)
-                }
-                print("No taks found for: \(item)")
-                return nil
-            }
-            return MeasurementDaillyListModel(
-                pairs: pairs,
-                onPlay: { [weak self] measurement in
-                    self?.processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
-                },
-                onDelete: { [weak self] measurement in
-                    self?.onDelete(measurement: measurement)
-                }
-            )
-        }
+    static func createModel(items: [(Measurement, Tima.Task)], onPlay: @escaping (Measurement) -> Void, onDelete: @escaping (Measurement) -> Void) -> MeasurementDaillyListModel {
+        return MeasurementDaillyListModel(
+            pairs: items,
+            onPlay: onPlay,
+            onDelete: onDelete
+        )
+//        return MeasurementDaillyListModel(
+//            pairs: items,
+//            onPlay: { [unowned self] measurement in
+//                self.processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
+//            },
+//            onDelete: { [unowned self] measurement in
+//                self.onDelete(measurement: measurement)
+//            }
+//        )
+    }
 
+    private func setupBindings(onPlay: @escaping (Measurement) -> Void, onDelete: @escaping (Measurement) -> Void) {
     }
 
     func processTransaction(transaction: Transaction) {
@@ -189,8 +170,8 @@ class QuxModel: ObservableObject {
 
     func restoreRemoved(_  measurement: Measurement) {
         do {
-            modelContext.insert(measurement)
-            try modelContext.save()
+//            modelContext.insert(measurement)
+//            try modelContext.save()
 
             withAnimation {
                 lastRemoved = nil
@@ -206,19 +187,19 @@ class QuxModel: ObservableObject {
 
 
     func save() throws {
-        try modelContext.save()
+//        try modelContext.save()
     }
 
     func saveMeasurement(_ measurement: Measurement) {
         do {
-            _ = try Tima.Task.findOrCreate(
-                name: measurement.taskName,
-                in: modelContext
-            )
-
-            modelContext.insert(measurement)
-
-            try modelContext.save()
+//            _ = try Tima.Task.findOrCreate(
+//                name: measurement.taskName,
+//                in: modelContext
+//            )
+//
+//            modelContext.insert(measurement)
+//
+//            try modelContext.save()
         } catch {
 //            model.alertDisplay = model.alertDisplay
 //                .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
@@ -226,23 +207,7 @@ class QuxModel: ObservableObject {
     }
 
     func delete(measurement: Measurement) {
-        modelContext.delete(measurement)
-    }
-
-    private func createGroupedMeasurements(_ measurements: [Measurement]) -> [[Measurement]] {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-
-        let grouped = Dictionary(
-            grouping: measurements.reversed()
-        ) { measurement in
-            Util.date(measurement.start)
-        }
-
-        return grouped.keys.sorted(by: >).map { key in
-            grouped[key] ?? []
-        }
+//        modelContext.delete(measurement)
     }
 
     func begin(taskName: String, work: String) {
