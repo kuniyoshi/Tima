@@ -60,7 +60,7 @@ final class Database: ObservableObject {
         tasks.append(item)
     }
 
-    private func featchMeasurements() {
+    private func fetchMeasurements() {
         do {
             let request = FetchDescriptor<Measurement>(
                 predicate: nil,
@@ -72,7 +72,7 @@ final class Database: ObservableObject {
         }
     }
 
-    private func featchTasks() {
+    private func fetchTasks() {
         do {
             let request = FetchDescriptor<Tima.Task>()
             tasks = try modelContext.fetch(request)
