@@ -15,8 +15,6 @@ struct MeasurementView: View {
         case resume(taskName: String, work: String)
     }
 
-    @Query private var measurements: [Measurement]
-    @Query private var tasks: [Tima.Task]
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
     @State private var lastRemoved: Measurement? // TODO: move to model?
@@ -87,8 +85,8 @@ struct MeasurementView: View {
 //                        )
 //                    }
                 }
-                .onChange(of: measurements) {
-                    if let lastId = measurements.last?.id {
+                .onChange(of: model.measurements) {
+                    if let lastId = model.measurements.last?.id {
                         proxy.scrollTo(lastId, anchor: .top)
                     }
                 }

@@ -11,6 +11,7 @@ class MeasurementModel: ObservableObject {
     @Published var alertDisplay = AlertDisplay(error: nil)
     @Published var elapsedSeconds: String = ""
     @Published var spans: [(Int, Int, SwiftUI.Color)] = []
+    @Published var measurements: [Measurement] = []
     private var timer: Timer?
     private let database: Database
 
@@ -19,6 +20,9 @@ class MeasurementModel: ObservableObject {
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
             .assign(to: &$spans)
+        database.$measurements
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$measurements)
     }
 
     func begin(taskName: String, work: String) {
