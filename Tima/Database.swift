@@ -40,14 +40,8 @@ final class Database: ObservableObject {
         return list.map { measurement in
             let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
             let duration = Int(measurement.duration) / 60
-            return (minutes, duration, .black)
-    //            if let task = tasks.first(where: { $0.name == measurement.taskName }) {
-    ////                return (minutes, duration, task.color.uiColor)
-    //                return (minutes, duration, .black)
-    //            } else {
-    //                return (minutes, duration, .black)
-    //            }
-//            }
+            let color = tasks.first(where: { $0.name == measurement.taskName })?.color.uiColor ?? .black
+            return (minutes, duration, color)
         }
     }
 
