@@ -27,15 +27,6 @@ final class Database: ObservableObject {
 
     private static func mapToMeasurementSpans(from measurements: [Measurement], with tasks: [Tima.Task]) -> [(Int, Int, SwiftUI.Color)] {
         let from = Calendar.current.startOfDay(for: Date())
-        var spans: [(Int, Int, SwiftUI.Color)] = []
-        for i in 0..<measurements.count {
-            let m = measurements[i] // TODO: rename to measurement
-            if m.start >= from {
-                let minutes = Int(m.start.timeIntervalSince(from)) / 60
-                let duration = Int(m.duration) / 60
-                spans.append((minutes, duration, .black)) // TODO: use task color
-            }
-        }
         let list = measurements.filter { $0.start >= from }
         return list.map { measurement in
             let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
