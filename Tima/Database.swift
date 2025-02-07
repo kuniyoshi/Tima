@@ -53,7 +53,7 @@ final class Database: ObservableObject {
 
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var groupedMeasurements: [[(Measurement, Tima.Task)]] = []
-    @Published private(set) var measurementSpans: [(Int, Int, SwiftUI.Color)] = []
+    @Published private(set) var measurementSpans: [(Int, Int, SwiftUI.Color)] = [] // TODO: use specific structure
     @Published private(set) var tasks: [Tima.Task] = []
 
     private var modelContext: ModelContext
