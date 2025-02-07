@@ -46,9 +46,9 @@ struct TimaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            LeakView(model: LeakModel(database: Database(modelContext: sharedModelContainer.mainContext)))
+//            LeakView(model: LeakModel(database: Database(modelContext: sharedModelContainer.mainContext)))
 //            QuxView(model: QuxModel(database: Database(modelContext: sharedModelContainer.mainContext)))
-//            ContentView()
+            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
                 .alert(isPresented: $showErrorDialog) {
                     Alert(
                         title: Text("Export Error"),

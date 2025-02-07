@@ -12,6 +12,11 @@ class MeasurementModel: ObservableObject {
     @Published var elapsedSeconds: String = ""
     private var timer: Timer?
     var spans: [(Int, Int, SwiftUI.Color)] = []
+    private let database: Database
+
+    init(database: Database) {
+        self.database = database
+    }
 
     func begin(taskName: String, work: String) {
         self.taskName = taskName

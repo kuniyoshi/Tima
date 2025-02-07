@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 // Main view
 struct ContentView: View {
@@ -8,16 +9,18 @@ struct ContentView: View {
     }
 
     @State private var selection = MenuItem.measurement
-    @StateObject private var measurementModel = MeasurementModel()
+    @StateObject private var measurementModel: MeasurementModel
     @StateObject private var timeBoxModel = TimeBoxModel()
+
+    private let database: Database
 
     var body: some View {
         VStack {
             switch selection {
-            case .measurement:
-                MeasurementView(model: measurementModel)
-            case .timeBox:
-                TimeBoxView(model: timeBoxModel)
+                case .measurement:
+                    MeasurementView(model: measurementModel)
+                case .timeBox:
+                    TimeBoxView(model: timeBoxModel)
             }
         }
         .toolbar {
@@ -40,13 +43,13 @@ struct ContentView: View {
             }
             ToolbarItem {
                 switch timeBoxModel.runningState {
-                case .ready:
-                    EmptyView()
-                case .running:
-                    Image(systemName: "alarm")
-                        .padding()
-                case .finished:
-                    EmptyView()
+                    case .ready:
+                        EmptyView()
+                    case .running:
+                        Image(systemName: "alarm")
+                            .padding()
+                    case .finished:
+                        EmptyView()
                 }
             }
         }
@@ -66,8 +69,26 @@ struct ContentView: View {
             }
         }
     }
+
+    init(database: Database) {
+        self.database = database
+        _measurementModel = .init(wrappedValue: MeasurementModel(
+            database: database
+        ))
+    }
 }
 
 #Preview {
-    ContentView()
+    let schema = Schema([
+        Tima.Task.self,
+        Measurement.self,
+        TimeBox.self,
+    ])
+    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    do {
+        let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+        return ContentView(database: Database(modelContext: container.mainContext))
+    } catch {
+        fatalError("Could not create ModelContainer: \(error)")
+    }
 }

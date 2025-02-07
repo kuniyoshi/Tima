@@ -283,7 +283,8 @@ struct AlertDisplay {
             end: Date(timeIntervalSinceNow: -3600)
         )
     )
+    let database = Database(modelContext: context)
 
-    return MeasurementView(model: MeasurementModel())
+    return MeasurementView(model: MeasurementModel(database: database))
         .modelContainer(container)
 }
