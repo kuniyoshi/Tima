@@ -27,13 +27,10 @@ struct LeakView: View {
 class LeakModel: ObservableObject {
     @Published var startedAt: Date?
     @Published var elapsedSeconds: String = ""
-    @Published var measurements: [Measurement] = []
-    @Published var tasks: [Tima.Task] = []
-    private var timer: Timer?
     @Published var spans: [(Int, Int, SwiftUI.Color)] = []
 
+    private var timer: Timer?
     private let database: Database
-    private var cancellables = Set<AnyCancellable>()
 
     init(database: Database) {
         self.database = database
