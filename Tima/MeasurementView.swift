@@ -17,7 +17,6 @@ struct MeasurementView: View {
 
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
-    @State private var lastRemoved: Measurement? // TODO: move to model?
 
     private var onPlay = PassthroughSubject<Measurement, Never>()
     private var onDelete = PassthroughSubject<Measurement, Never>()
@@ -62,7 +61,7 @@ struct MeasurementView: View {
                 List {
                     HStack {
                         Spacer()
-                        if let lastRemoved {
+                        if let lastRemoved = model.lastRemoved {
                             Button(action: {
                                 restoreRemoved(lastRemoved)
                             }) {
@@ -116,7 +115,7 @@ struct MeasurementView: View {
             try model.restoreRemoved(measurement: measurement)
 
             withAnimation {
-                lastRemoved = nil
+                model.lastRemoved = nil
             }
         } catch {
             model.alertDisplay = model.alertDisplay
@@ -132,7 +131,7 @@ struct MeasurementView: View {
             try model.delete(measurement: measurement)
 
             withAnimation {
-                lastRemoved = measurement
+                model.lastRemoved = measurement
             }
         } catch {
             model.alertDisplay = model.alertDisplay

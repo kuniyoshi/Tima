@@ -12,6 +12,7 @@ class MeasurementModel: ObservableObject {
     @Published var elapsedSeconds: String = ""
     @Published var spans: [(Int, Int, SwiftUI.Color)] = []
     @Published var measurements: [Measurement] = []
+    var lastRemoved: Measurement?
     private var timer: Timer?
     private let database: Database
 
