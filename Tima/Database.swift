@@ -92,6 +92,13 @@ final class Database: ObservableObject {
             .sorted { $0.start > $1.start }
     }
 
+    func deleteMeasurement(_ measurement: Measurement) throws {
+        // keep task against addMeasurement add to tasks
+        modelContext.delete(measurement)
+        try modelContext.save()
+        measurements.removeAll { $0.id == measurement.id }
+    }
+
     private func fetchMeasurements() {
         do {
             let request = FetchDescriptor<Measurement>(

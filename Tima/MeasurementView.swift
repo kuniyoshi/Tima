@@ -133,8 +133,7 @@ struct MeasurementView: View {
 
     private func onDelete(measurement: Measurement) -> Void {
         do {
-            modelContext.delete(measurement)
-            try modelContext.save()
+            try model.delete(measurement: measurement)
 
             withAnimation {
                 lastRemoved = measurement

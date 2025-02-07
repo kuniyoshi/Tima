@@ -74,6 +74,10 @@ class MeasurementModel: ObservableObject {
         timer = newTimer
     }
 
+    func delete(measurement: Measurement) throws {
+        try database.deleteMeasurement(measurement)
+    }
+
     func save(measurement: Measurement) throws {
         try database.addMeasurement(measurement)
     }
