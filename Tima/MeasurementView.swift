@@ -106,7 +106,6 @@ struct MeasurementView: View {
             }
         }
         .onAppear {
-            model.spans = makeSpans(measurements: measurements, tasks: tasks)
             toggleRunning()
         }
     }
@@ -200,22 +199,6 @@ struct MeasurementView: View {
         } catch {
             model.alertDisplay = model.alertDisplay
                 .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
-        }
-    }
-
-    private func makeSpans(measurements: [Measurement], tasks: [Tima.Task]) -> [(Int, Int, SwiftUI.Color)] {
-        let from = Calendar.current.startOfDay(for: Date())
-        let list = measurements.filter {
-            $0.start >= from
-        }
-        return list.map { measurement in
-            let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
-            let duration = Int(measurement.duration) / 60
-            if let task = tasks.first(where: { $0.name == measurement.taskName }) {
-                return (minutes, duration, task.color.uiColor)
-            } else {
-                return (minutes, duration, .black)
-            }
         }
     }
 
