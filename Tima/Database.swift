@@ -4,6 +4,24 @@ import Foundation
 
 @MainActor
 final class Database: ObservableObject {
+    private static func mapToGroupedMeasurements(from measurements: [Measurement], with tasks: [Tima.Task]) -> [[(Measurement, Tima.Task)]] {
+        let dictionary = Dictionary(grouping: measurements, by: { measurement in
+            Calendar.current.startOfDay(for: measurement.start)
+        })
+        let pairs = dictionary.sorted { $0.key > $1.key }
+        let groups = pairs.map(\.1)
+        return groups.map { values in
+            values
+                .sorted { $0.start > $1.start }
+                .compactMap { item in
+                    if let task = tasks.first(where: { $0.name == item.taskName }) {
+                        return (item, task)
+                    }
+                    return nil
+                }
+        }
+    }
+
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var groupedMeasurements: [[(Measurement, Tima.Task)]] = []
     @Published private(set) var tasks: [Tima.Task] = []
@@ -14,13 +32,14 @@ final class Database: ObservableObject {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
 
-        $measurements.map { [unowned self] measurements in
-            mapToGroupedMeasurements(from: measurements)
-        }
-        .sink { [unowned self] newValue in
-            self.groupedMeasurements = newValue
-        }
-        .store(in: &cancellables)
+        Publishers.CombineLatest($measurements, $tasks)
+            .map { measurements, tasks in
+                Database.mapToGroupedMeasurements(from: measurements, with: tasks)
+            }
+            .sink { [unowned self] newValue in
+                self.groupedMeasurements = newValue
+            }
+            .store(in: &cancellables)
 
         load()
     }
@@ -28,7 +47,6 @@ final class Database: ObservableObject {
     func load() {
         fetchMeasurements()
         fetchTasks()
-        print("tasks: \(tasks.count)")
     }
 
     func addMeasurement(_ item: Measurement) {
@@ -39,24 +57,6 @@ final class Database: ObservableObject {
     func addTask(_ item: Tima.Task) {
         modelContext.insert(item)
         tasks.append(item)
-    }
-
-    private func mapToGroupedMeasurements(from: [Measurement]) -> [[(Measurement, Tima.Task)]] {
-        let dictionary = Dictionary(grouping: measurements, by: { measurement in
-            Calendar.current.startOfDay(for: measurement.start)
-        })
-        let pairs = dictionary.sorted { $0.key > $1.key }
-        let groups = pairs.map(\.1)
-        return groups.map { values in
-            values
-                .sorted { $0.start > $1.start }
-                .compactMap { item in
-                    if let task = self.tasks.first(where: { $0.name == item.taskName }) {
-                        return (item, task)
-                    }
-                    return nil
-                }
-        }
     }
 
     private func fetchMeasurements() {
