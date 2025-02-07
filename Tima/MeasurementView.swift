@@ -188,7 +188,7 @@ struct MeasurementView: View {
         do {
             try model.save(measurement: measurement)
         } catch {
-            model.alertDisplay = model.alertDisplay
+            model.alertDisplay = model.alertDisplay // TODO: move to model
                 .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
         }
     }
