@@ -41,7 +41,7 @@ final class Database: ObservableObject {
             }
             .store(in: &cancellables)
 
-        load()
+        load() // TODO: move out of init
     }
 
     func load() {
