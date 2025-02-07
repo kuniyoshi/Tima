@@ -188,14 +188,7 @@ struct MeasurementView: View {
 
     private func saveMeasurement(_ measurement: Measurement) {
         do {
-            _ = try Tima.Task.findOrCreate(
-                name: measurement.taskName,
-                in: modelContext
-            )
-
-            modelContext.insert(measurement)
-
-            try modelContext.save()
+            try model.save(measurement: measurement)
         } catch {
             model.alertDisplay = model.alertDisplay
                 .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")

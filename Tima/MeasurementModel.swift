@@ -74,6 +74,10 @@ class MeasurementModel: ObservableObject {
         timer = newTimer
     }
 
+    func save(measurement: Measurement) throws {
+        try database.addMeasurement(measurement)
+    }
+
     func tick() {
         if let startedAt = startedAt {
             let duration = Int(Date().timeIntervalSince(startedAt))

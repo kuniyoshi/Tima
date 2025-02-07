@@ -73,14 +73,23 @@ final class Database: ObservableObject {
         fetchTasks()
     }
 
-    func addMeasurement(_ item: Measurement) {
-        modelContext.insert(item)
-        measurements = (measurements + [item]).sorted { $0.start > $1.start }
-    }
-
     func addTask(_ item: Tima.Task) {
         modelContext.insert(item)
         tasks.append(item)
+    }
+
+    func addMeasurement(_ measurement: Measurement) throws {
+        _ = try Tima.Task.findOrCreate(
+            name: measurement.taskName,
+            in: modelContext
+        )
+
+        modelContext.insert(measurement)
+
+        try modelContext.save()
+
+        measurements = (measurements + [measurement])
+            .sorted { $0.start > $1.start }
     }
 
     private func fetchMeasurements() {
