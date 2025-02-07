@@ -1,3 +1,4 @@
+import SwiftUI
 import SwiftData
 import Combine
 import Foundation
@@ -24,8 +25,35 @@ final class Database: ObservableObject {
         }
     }
 
+    private static func mapToMeasurementSpans(from measurements: [Measurement], with tasks: [Tima.Task]) -> [(Int, Int, SwiftUI.Color)] {
+        let from = Calendar.current.startOfDay(for: Date())
+        var spans: [(Int, Int, SwiftUI.Color)] = []
+        for i in 0..<measurements.count {
+            let m = measurements[i] // TODO: rename to measurement
+            if m.start >= from {
+                let minutes = Int(m.start.timeIntervalSince(from)) / 60
+                let duration = Int(m.duration) / 60
+                spans.append((minutes, duration, .black)) // TODO: use task color
+            }
+        }
+        let list = measurements.filter { $0.start >= from }
+        return list.map { measurement in
+            let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
+            let duration = Int(measurement.duration) / 60
+            return (minutes, duration, .black)
+    //            if let task = tasks.first(where: { $0.name == measurement.taskName }) {
+    ////                return (minutes, duration, task.color.uiColor)
+    //                return (minutes, duration, .black)
+    //            } else {
+    //                return (minutes, duration, .black)
+    //            }
+//            }
+        }
+    }
+
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var groupedMeasurements: [[(Measurement, Tima.Task)]] = []
+    @Published private(set) var measurementSpans: [(Int, Int, SwiftUI.Color)] = []
     @Published private(set) var tasks: [Tima.Task] = []
 
     private var modelContext: ModelContext
@@ -40,6 +68,15 @@ final class Database: ObservableObject {
             }
             .sink { [unowned self] newValue in
                 self.groupedMeasurements = newValue
+            }
+            .store(in: &cancellables)
+
+        Publishers.CombineLatest($measurements, $tasks)
+            .map { measurements, tasks in
+                Database.mapToMeasurementSpans(from: measurements, with: tasks)
+            }
+            .sink { [unowned self] newValue in
+                self.measurementSpans = newValue
             }
             .store(in: &cancellables)
 

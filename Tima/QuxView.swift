@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 import Combine
 
-extension Notification.Name {
+extension Notification.Name { // TODO: can delete?
     static let modelContextDidChange = Notification.Name("modelContextDidChange")
 }
 

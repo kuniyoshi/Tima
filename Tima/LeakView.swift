@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 struct LeakView: View {
     @StateObject private var model: LeakModel
@@ -29,55 +30,17 @@ class LeakModel: ObservableObject {
     @Published var measurements: [Measurement] = []
     @Published var tasks: [Tima.Task] = []
     private var timer: Timer?
-    private let modelContext: ModelContext
     @Published var spans: [(Int, Int, SwiftUI.Color)] = []
 
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-        fetchData()
-        spans = makeSpans()
-    }
+    private let database: Database
+    private var cancellables = Set<AnyCancellable>()
 
-    func makeSpans() -> [(Int, Int, SwiftUI.Color)] {
-        let from = Calendar.current.startOfDay(for: Date())
-        var spans: [(Int, Int, SwiftUI.Color)] = []
-        for i in 0..<measurements.count {
-            let m = measurements[i]
-            if m.start >= from {
-                let minutes = Int(m.start.timeIntervalSince(from)) / 60
-                let duration = Int(m.duration) / 60
-                spans.append((minutes, duration, .black))
-            }
-        }
-        let list = measurements.filter {
-            $0.start >= from
-        }
-        return list.map { measurement in
-            let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
-            let duration = Int(measurement.duration) / 60
-            return (minutes, duration, .black)
-//            if let task = tasks.first(where: { $0.name == measurement.taskName }) {
-////                return (minutes, duration, task.color.uiColor)
-//                return (minutes, duration, .black)
-//            } else {
-//                return (minutes, duration, .black)
-//            }
-        }
-    }
+    init(database: Database) {
+        self.database = database
 
-    private func fetchData() {
-        do {
-            let measurementFetchDescriptor = FetchDescriptor<Measurement>()
-            let taskFetchDescriptor = FetchDescriptor<Tima.Task>()
-
-            let measurements = try modelContext.fetch(measurementFetchDescriptor)
-            let tasks = try modelContext.fetch(taskFetchDescriptor)
-
-            self.measurements = measurements
-            self.tasks = tasks
-        } catch {
-            print("Failed to fetch data: \(error)")
-        }
+        database.$measurementSpans
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$spans)
     }
 
     func beginTick() {
