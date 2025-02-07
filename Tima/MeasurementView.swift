@@ -201,22 +201,6 @@ struct MeasurementView: View {
                 .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
         }
     }
-
-    private func groupedMeasurements(_ measurements: [Measurement]) -> [[Measurement]] {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-
-        let grouped = Dictionary(
-            grouping: measurements.reversed()
-        ) { measurement in
-            Util.date(measurement.start)
-        }
-
-        return grouped.keys.sorted(by: >).map { key in
-            grouped[key] ?? []
-        }
-    }
 }
 
 struct AlertDisplay {
