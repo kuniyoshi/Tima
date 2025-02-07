@@ -2,6 +2,8 @@ import SwiftData
 import Combine
 import Foundation
 
+// Applicatoin wide database.
+// This provides all of model which stored.
 @MainActor
 final class Database: ObservableObject {
     private static func mapToGroupedMeasurements(from measurements: [Measurement], with tasks: [Tima.Task]) -> [[(Measurement, Tima.Task)]] {
