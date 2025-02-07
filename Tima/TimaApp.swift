@@ -20,6 +20,7 @@ struct TimaApp: App {
                 }
             }
         }
+        // TODO: replace to comment that leads to delete a store file
 
 //        clearPersistentStore()
         #endif
