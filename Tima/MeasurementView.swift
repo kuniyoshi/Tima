@@ -15,7 +15,6 @@ struct MeasurementView: View {
         case resume(taskName: String, work: String)
     }
 
-    @Environment(\.modelContext) private var modelContext
     @Query private var measurements: [Measurement]
     @Query private var tasks: [Tima.Task]
     @StateObject private var model: MeasurementModel
