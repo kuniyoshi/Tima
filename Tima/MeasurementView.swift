@@ -20,7 +20,7 @@ struct MeasurementView: View {
     @Query private var tasks: [Tima.Task]
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
-    @State private var lastRemoved: Measurement?
+    @State private var lastRemoved: Measurement? // TODO: move to model?
 
     private var onPlay = PassthroughSubject<Measurement, Never>()
     private var onDelete = PassthroughSubject<Measurement, Never>()
