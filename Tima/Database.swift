@@ -27,13 +27,13 @@ final class Database: ObservableObject {
 
     private static func mapToMeasurementSpans(from measurements: [Measurement], with tasks: [Tima.Task]) -> [(Int, Int, SwiftUI.Color)] {
         let from = Calendar.current.startOfDay(for: Date())
-        let list = measurements.filter { $0.start >= from }
-        return list.map { measurement in
-            let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
-            let duration = Int(measurement.duration) / 60
-            let color = tasks.first(where: { $0.name == measurement.taskName })?.color.uiColor ?? .black
-            return (minutes, duration, color)
-        }
+        return measurements.filter { $0.start >= from }
+            .map { measurement in
+                let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
+                let duration = Int(measurement.duration) / 60
+                let color = tasks.first(where: { $0.name == measurement.taskName })?.color.uiColor ?? .black
+                return (minutes, duration, color)
+            }
     }
 
     @Published private(set) var measurements: [Measurement] = []
