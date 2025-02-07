@@ -91,7 +91,8 @@ class QuxModel: ObservableObject {
         self.database = database
         database.$groupedMeasurements
             .map { groupedMeasurements in
-                groupedMeasurements.compactMap { pairs in QuxModel.createModel(items: pairs, onPlay: { _ in }, onDelete: { _ in }) }
+                let f = groupedMeasurements.compactMap { pairs in QuxModel.createModel(items: pairs, onPlay: { _ in }, onDelete: { _ in }) }
+                return f
 //                return create(items: pairs)
             }
             .assign(to: &$dailyListModels)

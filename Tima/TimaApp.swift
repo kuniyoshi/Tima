@@ -46,7 +46,7 @@ struct TimaApp: App {
     var body: some Scene {
         WindowGroup {
 //            LeakView(model: LeakModel(modelContext: sharedModelContainer.mainContext))
-            QuxView(model: QuxModel(database: Database.shared))
+            QuxView(model: QuxModel(database: Database(modelContext: sharedModelContainer.mainContext)))
 //            ContentView()
                 .alert(isPresented: $showErrorDialog) {
                     Alert(
