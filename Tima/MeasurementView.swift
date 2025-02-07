@@ -114,10 +114,9 @@ struct MeasurementView: View {
         _model = .init(wrappedValue: model)
     }
 
-    private func restoreRemoved(_  measurement: Measurement) {
+    private func restoreRemoved(_ measurement: Measurement) {
         do {
-            modelContext.insert(measurement)
-            try modelContext.save()
+            try model.restoreRemoved(measurement: measurement)
 
             withAnimation {
                 lastRemoved = nil

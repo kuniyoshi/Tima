@@ -78,6 +78,10 @@ class MeasurementModel: ObservableObject {
         try database.deleteMeasurement(measurement)
     }
 
+    func restoreRemoved(measurement: Measurement) throws {
+        try database.addMeasurement(measurement)
+    }
+
     func save(measurement: Measurement) throws {
         try database.addMeasurement(measurement)
     }
