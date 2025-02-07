@@ -10,12 +10,15 @@ class MeasurementModel: ObservableObject {
     @Published var endedAt: Date?
     @Published var alertDisplay = AlertDisplay(error: nil)
     @Published var elapsedSeconds: String = ""
+    @Published var spans: [(Int, Int, SwiftUI.Color)] = []
     private var timer: Timer?
-    var spans: [(Int, Int, SwiftUI.Color)] = []
     private let database: Database
 
     init(database: Database) {
         self.database = database
+        database.$measurementSpans
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$spans)
     }
 
     func begin(taskName: String, work: String) {
