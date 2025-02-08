@@ -3,7 +3,7 @@ import SwiftUI
 // Measurement model for editor
 @MainActor
 class MeasurementModel: ObservableObject {
-    enum Transaction {
+    private enum Transaction {
         case begin
         case stop
         case resume(taskName: String, work: String)
@@ -95,39 +95,6 @@ class MeasurementModel: ObservableObject {
         }
     }
 
-    func processTransaction(transaction: MeasurementModel.Transaction) {
-        switch transaction {
-            case .begin:
-                isRunning = true
-            case .stop:
-                isRunning = false
-            case .resume(let taskName, let work):
-                if isRunning,
-                   let newMeasurement = newMeasurementOnResume() {
-                    save(measurement: newMeasurement)
-                }
-                begin(taskName: taskName, work: work)
-        }
-
-        if isRunning {
-            startedAt = Date()
-        } else {
-            endedAt = Date()
-        }
-
-        assert(!isRunning || (isRunning && startedAt != nil))
-
-        if !isRunning,
-           let newMeasurement = newMeasurementOnStop() {
-            save(measurement: newMeasurement)
-            clear()
-        }
-
-        if isRunning {
-            beginTick()
-        }
-    }
-
     func restoreRemoved(measurement: Measurement) {
         do {
             try database.addMeasurement(measurement)
@@ -168,6 +135,39 @@ class MeasurementModel: ObservableObject {
             processTransaction(transaction: .stop)
         } else {
             processTransaction(transaction: .begin)
+        }
+    }
+
+    private func processTransaction(transaction: Transaction) {
+        switch transaction {
+            case .begin:
+                isRunning = true
+            case .stop:
+                isRunning = false
+            case .resume(let taskName, let work):
+                if isRunning,
+                   let newMeasurement = newMeasurementOnResume() {
+                    save(measurement: newMeasurement)
+                }
+                begin(taskName: taskName, work: work)
+        }
+
+        if isRunning {
+            startedAt = Date()
+        } else {
+            endedAt = Date()
+        }
+
+        assert(!isRunning || (isRunning && startedAt != nil))
+
+        if !isRunning,
+           let newMeasurement = newMeasurementOnStop() {
+            save(measurement: newMeasurement)
+            clear()
+        }
+
+        if isRunning {
+            beginTick()
         }
     }
 }
