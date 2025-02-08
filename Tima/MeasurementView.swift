@@ -118,42 +118,9 @@ struct MeasurementView: View {
 
     private func toggleRunning() {
         if model.isRunning {
-            processTransaction(transaction: .stop)
+            model.processTransaction(transaction: .stop)
         } else {
-            processTransaction(transaction: .begin)
-        }
-    }
-
-    private func processTransaction(transaction: MeasurementModel.Transaction) {
-        switch transaction {
-            case .begin:
-                model.isRunning = true
-            case .stop:
-                model.isRunning = false
-            case .resume(let taskName, let work):
-                if model.isRunning,
-                   let newMeasurement = model.newMeasurementOnResume() {
-                    model.save(measurement: newMeasurement)
-                }
-                model.begin(taskName: taskName, work: work)
-        }
-
-        if model.isRunning {
-            model.startedAt = Date()
-        } else {
-            model.endedAt = Date()
-        }
-
-        assert(!model.isRunning || (model.isRunning && model.startedAt != nil))
-
-        if !model.isRunning,
-           let newMeasurement = model.newMeasurementOnStop() {
-            model.save(measurement: newMeasurement)
-            model.clear()
-        }
-
-        if model.isRunning {
-            model.beginTick()
+            model.processTransaction(transaction: .begin)
         }
     }
 }
