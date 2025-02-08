@@ -86,9 +86,6 @@ struct MeasurementView: View {
                 )
             }
         }
-        .onAppear {
-            model.toggleRunning()
-        }
     }
 
     init(model: MeasurementModel) {
