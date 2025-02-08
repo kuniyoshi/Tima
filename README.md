@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- MeasurementItem should dispatch event that indicates model has changed
 - rename task to work, work to ?
 - fix time on enter
 - slow on measurement finish somehow
