@@ -162,4 +162,12 @@ class MeasurementModel: ObservableObject {
             }
         }
     }
+
+    func toggleRunning() {
+        if isRunning {
+            processTransaction(transaction: .stop)
+        } else {
+            processTransaction(transaction: .begin)
+        }
+    }
 }

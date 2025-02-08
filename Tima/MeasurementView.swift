@@ -117,11 +117,7 @@ struct MeasurementView: View {
     }
 
     private func toggleRunning() {
-        if model.isRunning {
-            model.processTransaction(transaction: .stop)
-        } else {
-            model.processTransaction(transaction: .begin)
-        }
+        model.toggleRunning()
     }
 }
 
