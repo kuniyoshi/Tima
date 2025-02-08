@@ -3,6 +3,12 @@ import SwiftUI
 // Measurement model for editor
 @MainActor
 class MeasurementModel: ObservableObject {
+    enum Transaction {
+        case begin
+        case stop
+        case resume(taskName: String, work: String)
+    }
+
     @Published var taskName: String = ""
     @Published var work: String = ""
     @Published var isRunning: Bool = false

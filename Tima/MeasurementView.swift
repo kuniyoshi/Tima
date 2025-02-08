@@ -9,12 +9,6 @@ struct MeasurementView: View {
         case work
     }
 
-    private enum Transaction {
-        case begin
-        case stop
-        case resume(taskName: String, work: String)
-    }
-
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
 
@@ -130,7 +124,7 @@ struct MeasurementView: View {
         }
     }
 
-    private func processTransaction(transaction: Transaction) {
+    private func processTransaction(transaction: MeasurementModel.Transaction) {
         switch transaction {
             case .begin:
                 model.isRunning = true
