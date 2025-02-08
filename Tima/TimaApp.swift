@@ -5,26 +5,7 @@ import SwiftData
 @main
 struct TimaApp: App {
     var sharedModelContainer: ModelContainer = {
-        #if DEBUG
-        // モデルコンテナに破壊的な変更が入ったときに削除するためのコード
-        func clearPersistentStore() {
-            let fileManager = FileManager.default
-            if let persistentStoreURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-                let storeURL = persistentStoreURL.appendingPathComponent("default.store")
-                do {
-                    if fileManager.fileExists(atPath: storeURL.path) {
-                        try fileManager.removeItem(at: storeURL)
-                    }
-                } catch {
-                    print("Could not clear persistent store: \(error)")
-                }
-            }
-        }
-        // TODO: replace to comment that leads to delete a store file
-
-//        clearPersistentStore()
-        #endif
-
+        // delete `~/Library/Containers/jp.pura.Tima/Data/Library/Application\ Support/default.store` on destructive change on model
         let schema = Schema([
                                 Tima.Task.self,
                                 Measurement.self,
