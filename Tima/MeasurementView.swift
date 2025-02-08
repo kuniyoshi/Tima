@@ -22,13 +22,13 @@ struct MeasurementView: View {
                 TextField("Input group...", text: $model.taskName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .task)
-                    .onSubmit(toggleRunning)
+                    .onSubmit(model.toggleRunning)
                     .padding()
 
                 TextField("Input work...", text: $model.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .work)
-                    .onSubmit(toggleRunning)
+                    .onSubmit(model.toggleRunning)
                     .padding()
 
                 Button("Focus Field") {
@@ -41,7 +41,7 @@ struct MeasurementView: View {
                     .font(.headline.monospaced())
                     .padding()
 
-                Button(action: toggleRunning) {
+                Button(action: model.toggleRunning) {
                     Image(systemName: model.isRunning ? "stop.circle" : "play.circle")
                         .font(.title)
                 }
@@ -96,7 +96,7 @@ struct MeasurementView: View {
             }
         }
         .onAppear {
-            toggleRunning()
+            model.toggleRunning()
         }
     }
 
@@ -114,10 +114,6 @@ struct MeasurementView: View {
         withAnimation {
             model.delete(measurement: measurement)
         }
-    }
-
-    private func toggleRunning() {
-        model.toggleRunning()
     }
 }
 
