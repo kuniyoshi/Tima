@@ -156,7 +156,7 @@ struct MeasurementView: View {
             case .resume(let taskName, let work):
                 if model.isRunning,
                    let newMeasurement = model.newMeasurementOnResume() {
-                    saveMeasurement(newMeasurement)
+                    model.save(measurement: newMeasurement)
                 }
                 model.begin(taskName: taskName, work: work)
         }
@@ -171,17 +171,13 @@ struct MeasurementView: View {
 
         if !model.isRunning,
            let newMeasurement = model.newMeasurementOnStop() {
-            saveMeasurement(newMeasurement)
+            model.save(measurement: newMeasurement)
             model.clear()
         }
 
         if model.isRunning {
             model.beginTick()
         }
-    }
-
-    private func saveMeasurement(_ measurement: Measurement) {
-        model.save(measurement: measurement)
     }
 }
 
