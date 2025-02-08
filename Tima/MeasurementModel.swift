@@ -34,8 +34,16 @@ class MeasurementModel: ObservableObject {
             .assign(to: &$measurements)
         database.$groupedMeasurements
             .map { groupedMeasurements in
-                // TODO: wirte onPlay, onDelete
-                groupedMeasurements.compactMap { pairs in QuxModel.createModel(items: pairs, onPlay: { _ in }, onDelete: { _ in }) }
+                groupedMeasurements.compactMap { pairs in
+                    QuxModel.createModel(
+                        items: pairs,
+                        onPlay: { [weak self] measurement in
+                            self?.processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
+                        },
+                        onDelete: { [weak self] measurement in
+                            self?.delete(measurement: measurement)
+                        })
+                }
             }
             .assign(to: &$dailyListModels)
     }
