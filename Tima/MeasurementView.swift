@@ -65,18 +65,9 @@ struct MeasurementView: View {
                         }
                     }
 
-                    //                    ForEach(groupedMeasurements(measurements), id: \.self) { items in
-                    //                        MeasurementDailyListView(
-                    //                            model: MeasurementDaillyListModel(
-                    //                                measurements: items,
-                    //                                onPlay: { measurement in
-                    //                                    processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
-                    //                                },
-                    //                                onDelete: onDelete
-                    //                            ),
-                    //                            tasks: tasks
-                    //                        )
-                    //                    }
+                    ForEach(model.dailyListModels, id: \.self.id) { model in
+                        MeasurementDailyListView(model: model)
+                    }
                 }
                 .onChange(of: model.measurements) {
                     if let lastId = model.measurements.last?.id {

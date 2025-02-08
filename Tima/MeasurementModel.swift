@@ -18,18 +18,26 @@ class MeasurementModel: ObservableObject {
     @Published var elapsedSeconds: String = ""
     @Published var spans: [(Int, Int, SwiftUI.Color)] = []
     @Published var measurements: [Measurement] = []
+    @Published var dailyListModels: [MeasurementDaillyListModel] = []
     var lastRemoved: Measurement?
     private var timer: Timer?
     private let database: Database
 
     init(database: Database) {
         self.database = database
+
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
             .assign(to: &$spans)
         database.$measurements
             .receive(on: DispatchQueue.main)
             .assign(to: &$measurements)
+        database.$groupedMeasurements
+            .map { groupedMeasurements in
+                // TODO: wirte onPlay, onDelete
+                groupedMeasurements.compactMap { pairs in QuxModel.createModel(items: pairs, onPlay: { _ in }, onDelete: { _ in }) }
+            }
+            .assign(to: &$dailyListModels)
     }
 
     func begin(taskName: String, work: String) {
