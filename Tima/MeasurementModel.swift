@@ -89,8 +89,17 @@ class MeasurementModel: ObservableObject {
         }
     }
 
-    func restoreRemoved(measurement: Measurement) throws {
-        try database.addMeasurement(measurement)
+    func restoreRemoved(measurement: Measurement) {
+        do {
+            try database.addMeasurement(measurement)
+            lastRemoved = nil
+        } catch {
+            alertDisplay = alertDisplay
+                .weakWritten(
+                    title: "Error",
+                    message: "Failed to restore measurement: \(error.localizedDescription)"
+                )
+        }
     }
 
     func save(measurement: Measurement) {

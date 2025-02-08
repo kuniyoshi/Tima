@@ -111,18 +111,8 @@ struct MeasurementView: View {
     }
 
     private func restoreRemoved(_ measurement: Measurement) {
-        do {
-            try model.restoreRemoved(measurement: measurement)
-
-            withAnimation {
-                model.lastRemoved = nil
-            }
-        } catch {
-            model.alertDisplay = model.alertDisplay
-                .weakWritten(
-                    title: "Error",
-                    message: "Failed to restore measurement: \(error.localizedDescription)"
-                )
+        withAnimation {
+            model.restoreRemoved(measurement: measurement)
         }
     }
 
