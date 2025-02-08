@@ -49,7 +49,7 @@ struct MeasurementView: View {
             }
 
             Memory24HourHorizontalView(spans: model.spans)
-            .padding()
+                .padding()
 
             ScrollViewReader { proxy in
                 List {
@@ -65,18 +65,18 @@ struct MeasurementView: View {
                         }
                     }
 
-//                    ForEach(groupedMeasurements(measurements), id: \.self) { items in
-//                        MeasurementDailyListView(
-//                            model: MeasurementDaillyListModel(
-//                                measurements: items,
-//                                onPlay: { measurement in
-//                                    processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
-//                                },
-//                                onDelete: onDelete
-//                            ),
-//                            tasks: tasks
-//                        )
-//                    }
+                    //                    ForEach(groupedMeasurements(measurements), id: \.self) { items in
+                    //                        MeasurementDailyListView(
+                    //                            model: MeasurementDaillyListModel(
+                    //                                measurements: items,
+                    //                                onPlay: { measurement in
+                    //                                    processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
+                    //                                },
+                    //                                onDelete: onDelete
+                    //                            ),
+                    //                            tasks: tasks
+                    //                        )
+                    //                    }
                 }
                 .onChange(of: model.measurements) {
                     if let lastId = model.measurements.last?.id {
