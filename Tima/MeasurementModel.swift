@@ -87,8 +87,13 @@ class MeasurementModel: ObservableObject {
         try database.addMeasurement(measurement)
     }
 
-    func save(measurement: Measurement) throws {
-        try database.addMeasurement(measurement)
+    func save(measurement: Measurement) {
+        do {
+            try database.addMeasurement(measurement)
+        } catch {
+            alertDisplay = alertDisplay
+                .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
+        }
     }
 
     func tick() {

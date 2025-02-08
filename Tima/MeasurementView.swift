@@ -181,12 +181,7 @@ struct MeasurementView: View {
     }
 
     private func saveMeasurement(_ measurement: Measurement) {
-        do {
-            try model.save(measurement: measurement)
-        } catch {
-            model.alertDisplay = model.alertDisplay // TODO: move to model
-                .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
-        }
+        model.save(measurement: measurement)
     }
 }
 
