@@ -127,15 +127,8 @@ struct MeasurementView: View {
     }
 
     private func onDelete(measurement: Measurement) -> Void {
-        do {
-            try model.delete(measurement: measurement)
-
-            withAnimation {
-                model.lastRemoved = measurement
-            }
-        } catch {
-            model.alertDisplay = model.alertDisplay
-                .weakWritten(title: "Error", message: "Failed to delete measurement: \(error.localizedDescription)")
+        withAnimation {
+            model.delete(measurement: measurement)
         }
     }
 

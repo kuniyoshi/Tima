@@ -79,8 +79,14 @@ class MeasurementModel: ObservableObject {
         timer = newTimer
     }
 
-    func delete(measurement: Measurement) throws {
-        try database.deleteMeasurement(measurement)
+    func delete(measurement: Measurement) {
+        do {
+            try database.deleteMeasurement(measurement)
+            lastRemoved = measurement
+        } catch {
+            alertDisplay = alertDisplay
+                .weakWritten(title: "Error", message: "Failed to delete measurement: \(error.localizedDescription)")
+        }
     }
 
     func restoreRemoved(measurement: Measurement) throws {
