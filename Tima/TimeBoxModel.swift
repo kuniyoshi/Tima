@@ -168,7 +168,26 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    func tickWhileFinished() {
+    private func canPlaySe() -> Bool {
+        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
+    }
+
+    private func getSoundVolume() -> Float {
+        if (UserDefaults.standard
+            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
+            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
+        } else {
+            return SettingsDefaults.TimeBox.soundVolume
+        }
+    }
+
+    private func isElapsingEnough(beganAt: Date) -> Bool {
+        let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
+
+        return Date().timeIntervalSince(beganAt) >= adjustedDuration
+    }
+
+    private func tickWhileFinished() {
         assert(endAt != nil)
 
         guard let endAt else {
@@ -191,7 +210,7 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    func tickWhileRunning() {
+    private func tickWhileRunning() {
         assert(beganAt != nil)
 
         guard let beganAt else {
@@ -212,24 +231,5 @@ class TimeBoxModel: ObservableObject {
                 queryType: .Auto
             )
         }
-    }
-
-    private func canPlaySe() -> Bool {
-        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
-    }
-
-    private func getSoundVolume() -> Float {
-        if (UserDefaults.standard
-            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
-            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
-        } else {
-            return SettingsDefaults.TimeBox.soundVolume
-        }
-    }
-
-    private func isElapsingEnough(beganAt: Date) -> Bool {
-        let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
-
-        return Date().timeIntervalSince(beganAt) >= adjustedDuration
     }
 }
