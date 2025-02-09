@@ -55,7 +55,7 @@ class TimeBoxModel: ObservableObject {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }
 
-    func endRestNotification() -> UNMutableNotificationContent {
+    private var endRestNotification: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = "Time to Focus"
         content.body = "Break is over.  It's time to focus and get back to work!"
@@ -63,7 +63,7 @@ class TimeBoxModel: ObservableObject {
         return content
     }
 
-    func endWorkNotification() -> UNMutableNotificationContent {
+    private var endWorkNotification: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = "Time's up!"
         content.body = "TimeBox finished!  Good work!"
@@ -105,7 +105,7 @@ class TimeBoxModel: ObservableObject {
                                 fileName: Constants.timeBoxRestEndSound.rawValue,
                                 fileType: "mp3"
                             )
-                            notificationPublisher.send(endRestNotification())
+                            notificationPublisher.send(endRestNotification)
                         case .running:
                             assert(false, "Should not be running automatically")
                         case .finished:
@@ -113,7 +113,7 @@ class TimeBoxModel: ObservableObject {
                                 fileName: Constants.timeBoxEndSound.rawValue,
                                 fileType: "mp3"
                             )
-                            notificationPublisher.send(endWorkNotification())
+                            notificationPublisher.send(endWorkNotification)
                     }
                 case .Button:
                     switch transition.state {
