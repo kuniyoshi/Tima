@@ -39,15 +39,6 @@ class TimeBoxModel: ObservableObject {
         self.database = database
     }
 
-    func getSoundVolume() -> Float {
-        if (UserDefaults.standard
-            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
-            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
-        } else {
-            return SettingsDefaults.TimeBox.soundVolume
-        }
-    }
-
     func playSe(fileName: String, fileType: String = "wav") {
         if (!UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)) {
             return
@@ -66,6 +57,15 @@ class TimeBoxModel: ObservableObject {
             audioPlayer?.play()
         } catch {
             print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
+        }
+    }
+
+    private func getSoundVolume() -> Float {
+        if (UserDefaults.standard
+            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
+            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
+        } else {
+            return SettingsDefaults.TimeBox.soundVolume
         }
     }
 }
