@@ -285,12 +285,7 @@ struct TimeBoxView: View {
     }
 
     func getSoundVolume() -> Float {
-        if (UserDefaults.standard
-            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
-            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
-        } else {
-            return SettingsDefaults.TimeBox.soundVolume
-        }
+        model.getSoundVolume()
     }
 }
 
