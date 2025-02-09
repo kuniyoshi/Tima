@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 import UserNotifications
 import AVFoundation
+import Combine
 
 // TimeBox main view
 struct TimeBoxView: View {
@@ -9,6 +10,7 @@ struct TimeBoxView: View {
     @Query private var timeBoxes: [TimeBox]
     @StateObject private var model: TimeBoxModel
     @State private var timer: Timer?
+    @State private var cancellable: Set<AnyCancellable> = []
 
     var body: some View {
         VStack {
@@ -50,6 +52,12 @@ struct TimeBoxView: View {
                 }
             }
             await requestNotificationPermission()
+        }
+        .onAppear {
+            model.notificationPublisher.sink { content in
+                notify(content: content)
+            }
+            .store(in: &cancellable)
         }
     }
 

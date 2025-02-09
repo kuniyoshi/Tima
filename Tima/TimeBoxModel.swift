@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 import UserNotifications
+import Combine
 
 // TimeBox model
 class TimeBoxModel: ObservableObject {
@@ -35,6 +36,7 @@ class TimeBoxModel: ObservableObject {
     @Published var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
     // TODO: ^ move to view?
     @Published var transition: Transition?
+    let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
     private let database: Database
 
     init(database: Database) {
