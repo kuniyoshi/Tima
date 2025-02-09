@@ -35,8 +35,8 @@ class TimeBoxModel: ObservableObject {
     @Published var remainingTime: String = "00:00"
     @Published var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
     // TODO: ^ move to view?
-    @Published var transition: Transition?
     let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
+    private var transition: Transition?
     private let database: Database
 
     init(database: Database) {
@@ -69,6 +69,13 @@ class TimeBoxModel: ObservableObject {
         content.body = "TimeBox finished!  Good work!"
         content.sound = nil
         return content
+    }
+
+    func makeTransition() {
+        transition = .init(
+            state: runningState.progressed(),
+            queryType: .Button
+        )
     }
 
     func playSe(fileName: String, fileType: String = "wav") {

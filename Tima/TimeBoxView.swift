@@ -99,10 +99,7 @@ struct TimeBoxView: View {
     }
 
     private func onButton() {
-        model.transition = .init(
-            state: model.runningState.progressed(),
-            queryType: .Button
-        )
+        model.makeTransition()
     }
 
     private func notify(content: UNMutableNotificationContent) {
