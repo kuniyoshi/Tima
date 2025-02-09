@@ -42,7 +42,7 @@ struct TimeBoxView: View {
             TimeBoxListView(makeCounts(timeBoxes))
         }
         .task {
-            await TickManager.shared.setTimer(interval: 0.5) {
+            await TickManager.shared.setTimer(interval: 0.01) {
                 SwiftUI.Task {
                     await MainActor.run {
                         onTick()
@@ -309,6 +309,8 @@ struct TimeBoxView: View {
     context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, workMinutes: 25))
     context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, workMinutes: 25))
 
-    return TimeBoxView(model: TimeBoxModel())
+    let database = Database(modelContext: context)
+
+    return TimeBoxView(model: TimeBoxModel(database: database))
         .modelContainer(container)
 }

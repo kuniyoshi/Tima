@@ -10,7 +10,7 @@ struct ContentView: View {
 
     @State private var selection = MenuItem.measurement
     @StateObject private var measurementModel: MeasurementModel
-    @StateObject private var timeBoxModel = TimeBoxModel()
+    @StateObject private var timeBoxModel:TimeBoxModel
 
     private let database: Database
 
@@ -72,9 +72,8 @@ struct ContentView: View {
 
     init(database: Database) {
         self.database = database
-        _measurementModel = .init(wrappedValue: MeasurementModel(
-            database: database
-        ))
+        _measurementModel = .init(wrappedValue: MeasurementModel(database: database))
+        _timeBoxModel = .init(wrappedValue: TimeBoxModel(database: database))
     }
 }
 

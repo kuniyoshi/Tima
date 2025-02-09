@@ -33,4 +33,9 @@ class TimeBoxModel: ObservableObject {
     @Published var remainingTime: String = "00:00"
     @Published var audioPlayer: AVAudioPlayer? // TODO: 通知にでならせないのかどうか
     @Published var transition: Transition?
+    private let database: Database
+
+    init(database: Database) {
+        self.database = database
+    }
 }
