@@ -118,7 +118,7 @@ struct TimeBoxView: View {
                             fileName: Constants.timeBoxEndSound.rawValue,
                             fileType: "mp3"
                         )
-                    notify(content: endWorkNotification())
+                        notify(content: model.endWorkNotification())
                 }
             case .Button:
                 switch transition.state {
@@ -221,14 +221,6 @@ struct TimeBoxView: View {
         let content = UNMutableNotificationContent()
         content.title = "Time to Focus"
         content.body = "Break is over.  It's time to focus and get back to work!"
-        content.sound = nil
-        return content
-    }
-
-    private func endWorkNotification() -> UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-        content.title = "Time's up!"
-        content.body = "TimeBox finished!  Good work!"
         content.sound = nil
         return content
     }

@@ -1,5 +1,6 @@
 import SwiftUI
 import AVFoundation
+import UserNotifications
 
 // TimeBox model
 class TimeBoxModel: ObservableObject {
@@ -46,6 +47,14 @@ class TimeBoxModel: ObservableObject {
 
     private var durationMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+    }
+
+    func endWorkNotification() -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = "Time's up!"
+        content.body = "TimeBox finished!  Good work!"
+        content.sound = nil
+        return content
     }
 
     @MainActor
