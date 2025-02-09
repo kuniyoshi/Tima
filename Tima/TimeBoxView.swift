@@ -264,24 +264,7 @@ struct TimeBoxView: View {
     }
 
     func playSe(fileName: String, fileType: String = "wav") {
-        if (!UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)) {
-            return
-        }
-
-        // TODO: 通知のサウンドをカスタムする?
-
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
-            print("Could not find \(fileName).\(fileType)")
-            return
-        }
-
-        do {
-            model.audioPlayer = try AVAudioPlayer(contentsOf: url)
-            model.audioPlayer?.volume = model.getSoundVolume()
-            model.audioPlayer?.play()
-        } catch {
-            print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
-        }
+        model.playSe(fileName: fileName, fileType: fileType)
     }
 }
 

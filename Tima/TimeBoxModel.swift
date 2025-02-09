@@ -47,4 +47,25 @@ class TimeBoxModel: ObservableObject {
             return SettingsDefaults.TimeBox.soundVolume
         }
     }
+
+    func playSe(fileName: String, fileType: String = "wav") {
+        if (!UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)) {
+            return
+        }
+
+        // TODO: 通知のサウンドをカスタムする?
+
+        guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
+            print("Could not find \(fileName).\(fileType)")
+            return
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.volume = getSoundVolume()
+            audioPlayer?.play()
+        } catch {
+            print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
+        }
+    }
 }
