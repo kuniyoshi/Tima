@@ -106,11 +106,7 @@ class TimeBoxModel: ObservableObject {
 
         let now = Date()
         let elapsedTime = now.timeIntervalSince(beganAt)
-        let remain = max(
-            UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
-                * 60 - Int(elapsedTime),
-            0
-        )
+        let remain = max(durationMinutes * 60 - Int(elapsedTime), 0)
         let minutes = Int(remain) / 60
         let seconds = Int(remain) % 60
 
