@@ -106,7 +106,7 @@ struct TimeBoxView: View {
             case .Auto:
                 switch transition.state {
                 case .ready:
-                        playSe(
+                        model.playSe(
                             fileName: Constants.timeBoxRestEndSound.rawValue,
                             fileType: "mp3"
                         )
@@ -114,7 +114,7 @@ struct TimeBoxView: View {
                 case .running:
                     assert(false, "Should not be running automatically")
                 case .finished:
-                        playSe(
+                        model.playSe(
                             fileName: Constants.timeBoxEndSound.rawValue,
                             fileType: "mp3"
                         )
@@ -125,7 +125,7 @@ struct TimeBoxView: View {
                 case .ready:
                     break
                 case .running:
-                        playSe(
+                        model.playSe(
                             fileName: Constants.timeBoxBeginSound.rawValue,
                             fileType: "mp3"
                         )
@@ -261,10 +261,6 @@ struct TimeBoxView: View {
         let timeBoxData = TimeBox(start: beganAt, workMinutes: durationMinutes)
 
         modelContext.insert(timeBoxData)
-    }
-
-    func playSe(fileName: String, fileType: String = "wav") {
-        model.playSe(fileName: fileName, fileType: fileType)
     }
 }
 
