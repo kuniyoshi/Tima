@@ -39,9 +39,12 @@ class TimeBoxModel: ObservableObject {
         self.database = database
     }
 
+    private var durationMinutes: Int {
+        UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+    }
+
     @MainActor
     func insert(beganAt: Date) {
-        let durationMinutes = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
         let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
 
         if (Date().timeIntervalSince(beganAt) < adjustedDuration) {
