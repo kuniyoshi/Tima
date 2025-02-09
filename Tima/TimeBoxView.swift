@@ -277,15 +277,11 @@ struct TimeBoxView: View {
 
         do {
             model.audioPlayer = try AVAudioPlayer(contentsOf: url)
-            model.audioPlayer?.volume = getSoundVolume()
+            model.audioPlayer?.volume = model.getSoundVolume()
             model.audioPlayer?.play()
         } catch {
             print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
         }
-    }
-
-    func getSoundVolume() -> Float {
-        model.getSoundVolume()
     }
 }
 
