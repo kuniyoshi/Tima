@@ -9,7 +9,6 @@ struct TimeBoxView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var timeBoxes: [TimeBox]
     @StateObject private var model: TimeBoxModel
-    @State private var timer: Timer?
     @State private var cancellable: Set<AnyCancellable> = []
 
     var body: some View {
@@ -146,7 +145,6 @@ struct TimeBoxView: View {
             case .ready:
                 model.beganAt = nil
                 model.endAt = nil
-                timer = nil
             case .running:
                 model.beganAt = Date()
             case .finished:
