@@ -144,7 +144,7 @@ struct TimeBoxView: View {
             case .finished:
                 model.endAt = Date()
                 if let beganAt = model.beganAt {
-                    pushTimeBoxData(beganAt)
+                    model.insert(beganAt: beganAt)
                 } else {
                     print("No beganAt found")
                 }
@@ -248,10 +248,6 @@ struct TimeBoxView: View {
                 print("Could not add notification: \(error.localizedDescription)")
             }
         }
-    }
-
-    func pushTimeBoxData(_ beganAt: Date) {
-        model.insert(beganAt: beganAt)
     }
 }
 
