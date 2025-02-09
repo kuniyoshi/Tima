@@ -159,34 +159,7 @@ struct TimeBoxView: View {
         case .running:
                 model.tickWhileRunning()
         case .finished:
-            tickWhileFinished()
-        }
-    }
-
-    private func tickWhileFinished() {
-        assert(model.endAt != nil)
-
-        guard let endAt = model.endAt else {
-            return
-        }
-
-        let now = Date()
-        let elapsedTime = now.timeIntervalSince(endAt)
-        let remain = max(
-            UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
-                * 60 - Int(elapsedTime),
-            0
-        )
-        let minutes = Int(remain) / 60
-        let seconds = Int(remain) % 60
-
-        model.remainingTime = String(format: "%02d:%02d", minutes, seconds)
-
-        if remain == 0 {
-            model.transition = .init(
-                state: model.runningState.progressed(),
-                queryType: .Auto
-            )
+                model.tickWhileFinished()
         }
     }
 
