@@ -71,17 +71,6 @@ class TimeBoxModel: ObservableObject {
         return content
     }
 
-    @MainActor
-    func insert(beganAt: Date) {
-        if isElapsingEnough(beganAt: beganAt) {
-            return
-        }
-
-        let timeBox = TimeBox(start: beganAt, workMinutes: durationMinutes)
-
-        database.addTimeBox(timeBox)
-    }
-
     func playSe(fileName: String, fileType: String = "wav") {
         if !canPlaySe() {
             return
@@ -179,6 +168,17 @@ class TimeBoxModel: ObservableObject {
         } else {
             return SettingsDefaults.TimeBox.soundVolume
         }
+    }
+
+    @MainActor
+    private func insert(beganAt: Date) {
+        if isElapsingEnough(beganAt: beganAt) {
+            return
+        }
+
+        let timeBox = TimeBox(start: beganAt, workMinutes: durationMinutes)
+
+        database.addTimeBox(timeBox)
     }
 
     private func isElapsingEnough(beganAt: Date) -> Bool {
