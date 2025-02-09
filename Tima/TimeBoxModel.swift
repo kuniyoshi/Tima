@@ -29,6 +29,7 @@ class TimeBoxModel: ObservableObject {
         var queryType: QueryType
     }
 
+    @Published private(set) var spans: [(Int, Int)] = []
     @Published var systemImageName: String = RunningState.ready.rawValue
     @Published var beganAt: Date?
     @Published var endAt: Date?
@@ -44,8 +45,20 @@ class TimeBoxModel: ObservableObject {
     }
     private let database: Database
 
+    @MainActor
     init(database: Database) {
         self.database = database
+        database.$timeBoxes.map { timeBoxes in
+            let from = Calendar.current.startOfDay(for: Date())
+            let list = timeBoxes.filter {
+                $0.start >= from
+            }
+            return list.map { timeBox in
+                let minutes = Int(timeBox.start.timeIntervalSince(from)) / 60
+                return (minutes, timeBox.workMinutes)
+            }
+        }
+        .assign(to: &$spans)
     }
 
     var isBannerNotification: Bool {

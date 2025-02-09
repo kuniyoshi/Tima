@@ -34,7 +34,7 @@ struct TimeBoxView: View {
             HStack {
                 Spacer()
 
-                TimeBoxCountView(spans: makeSpans(timeBoxes))
+                TimeBoxCountView(spans: model.spans)
                     .padding()
 
                 Spacer()
@@ -71,17 +71,6 @@ struct TimeBoxView: View {
         let keys = map.keys.sorted(by: >)
         return keys.map { key in
             (Util.date(key), map[key]?.count ?? 00)
-        }
-    }
-
-    private func makeSpans(_ timeBoxes: [TimeBox]) -> [(Int, Int)] {
-        let from = Calendar.current.startOfDay(for: Date())
-        let list = timeBoxes.filter {
-            $0.start >= from
-        }
-        return list.map { timeBox in
-            let minutes = Int(timeBox.start.timeIntervalSince(from)) / 60
-            return (minutes, timeBox.workMinutes)
         }
     }
 
