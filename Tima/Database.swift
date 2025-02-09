@@ -40,6 +40,7 @@ final class Database: ObservableObject {
     @Published private(set) var groupedMeasurements: [[(Measurement, Tima.Task)]] = []
     @Published private(set) var measurementSpans: [(Int, Int, SwiftUI.Color)] = [] // TODO: use specific structure
     @Published private(set) var tasks: [Tima.Task] = []
+    @Published private(set) var timeBoxes: [TimeBox] = []
 
     private var modelContext: ModelContext
     private var cancellables = Set<AnyCancellable>()
@@ -90,6 +91,17 @@ final class Database: ObservableObject {
 
         measurements = (measurements + [measurement])
             .sorted { $0.start > $1.start }
+    }
+
+    func addTimeBox(_ timeBox: TimeBox) {
+        do {
+            modelContext.insert(timeBox)
+            try modelContext.save()
+
+            timeBoxes = (timeBoxes + [timeBox])
+        } catch {
+            print("Could not save time box: \(error)")
+        }
     }
 
     func deleteMeasurement(_ measurement: Measurement) throws {
