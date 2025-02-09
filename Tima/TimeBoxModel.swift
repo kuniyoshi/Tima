@@ -40,6 +40,10 @@ class TimeBoxModel: ObservableObject {
         self.database = database
     }
 
+    var isBannerNotification: Bool {
+        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)
+    }
+
     private var durationMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }

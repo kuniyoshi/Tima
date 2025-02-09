@@ -234,7 +234,7 @@ struct TimeBoxView: View {
     }
 
     private func notify(content: UNMutableNotificationContent) {
-        if (!UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)) {
+        if !model.isBannerNotification {
             return
         }
 
