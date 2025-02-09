@@ -14,7 +14,7 @@ struct TimeBoxView: View {
     var body: some View {
         VStack {
             Button(action: onButton) {
-                Image(systemName: model.runningState.rawValue)
+                Image(systemName: model.systemImageName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
@@ -25,7 +25,7 @@ struct TimeBoxView: View {
             .keyboardShortcut(" ", modifiers: [])
 
             HStack {
-                if model.runningState != .ready {
+                if model.isRemainingTimeViable {
                     Text("Remain")
                     Text(model.remainingTime).monospacedDigit()
                 }

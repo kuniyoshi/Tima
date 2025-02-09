@@ -42,14 +42,11 @@ struct ContentView: View {
                 }
             }
             ToolbarItem {
-                switch timeBoxModel.runningState {
-                    case .ready:
-                        EmptyView()
-                    case .running:
-                        Image(systemName: "alarm")
-                            .padding()
-                    case .finished:
-                        EmptyView()
+                if timeBoxModel.isStateRunning {
+                    Image(systemName: "alarm")
+                        .padding()
+                } else {
+                    EmptyView()
                 }
             }
         }

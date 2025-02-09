@@ -5,7 +5,7 @@ import Combine
 
 // TimeBox model
 class TimeBoxModel: ObservableObject {
-    enum RunningState: String {
+    private enum RunningState: String {
         case ready = "hourglass.bottomhalf.filled"
         case running = "hourglass"
         case finished = "hourglass.tophalf.filled"
@@ -29,7 +29,7 @@ class TimeBoxModel: ObservableObject {
         var queryType: QueryType
     }
 
-    @Published var runningState = RunningState.ready
+    @Published var systemImageName: String = RunningState.ready.rawValue
     @Published var beganAt: Date?
     @Published var endAt: Date?
     @Published var remainingTime: String = "00:00"
@@ -37,6 +37,11 @@ class TimeBoxModel: ObservableObject {
     // TODO: ^ move to view?
     let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
     private var transition: Transition?
+    private var runningState = RunningState.ready {
+        didSet {
+            systemImageName = runningState.rawValue
+        }
+    }
     private let database: Database
 
     init(database: Database) {
@@ -45,6 +50,21 @@ class TimeBoxModel: ObservableObject {
 
     var isBannerNotification: Bool {
         UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)
+    }
+
+    var isRemainingTimeViable: Bool {
+        switch runningState {
+            case .ready:
+                false
+            case .running:
+                true
+            case .finished:
+                true
+        }
+    }
+
+    var isStateRunning: Bool {
+        runningState == .running
     }
 
     private var breakMinutes: Int {
