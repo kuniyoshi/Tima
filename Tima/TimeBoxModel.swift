@@ -45,6 +45,10 @@ class TimeBoxModel: ObservableObject {
         UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)
     }
 
+    private var breakMinutes: Int {
+        UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
+    }
+
     private var durationMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }
@@ -106,11 +110,7 @@ class TimeBoxModel: ObservableObject {
 
         let now = Date()
         let elapsedTime = now.timeIntervalSince(endAt)
-        let remain = max(
-            UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
-                * 60 - Int(elapsedTime),
-            0
-        )
+        let remain = max(breakMinutes * 60 - Int(elapsedTime), 0)
         let minutes = Int(remain) / 60
         let seconds = Int(remain) % 60
 
