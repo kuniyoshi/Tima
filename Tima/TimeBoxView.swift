@@ -43,7 +43,7 @@ struct TimeBoxView: View {
             TimeBoxListView(makeCounts(timeBoxes))
         }
         .task {
-            await TickManager.shared.setTimer(interval: 0.01) {
+            await TickManager.shared.setTimer(interval: 0.01) { // TODO: rollback debug mode
                 SwiftUI.Task {
                     await MainActor.run {
                         model.tick()
