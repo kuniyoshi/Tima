@@ -40,7 +40,7 @@ struct TimeBoxView: View {
                 Spacer()
             }
 
-            TimeBoxListView(makeCounts(timeBoxes))
+            TimeBoxListView(model.counts)
         }
         .task {
             await TickManager.shared.setTimer(interval: 0.01) { // TODO: rollback debug mode
@@ -62,16 +62,6 @@ struct TimeBoxView: View {
 
     init(model: TimeBoxModel) {
         _model = .init(wrappedValue: model)
-    }
-
-    private func makeCounts(_ timeBoxes: [TimeBox]) -> [(String, Int)] {
-        let map = Dictionary(grouping: timeBoxes) { timeBox in
-            Calendar.current.startOfDay(for: timeBox.start)
-        }
-        let keys = map.keys.sorted(by: >)
-        return keys.map { key in
-            (Util.date(key), map[key]?.count ?? 00)
-        }
     }
 
     private func requestNotificationPermission() async {

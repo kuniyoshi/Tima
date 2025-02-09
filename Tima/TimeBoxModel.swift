@@ -30,6 +30,7 @@ class TimeBoxModel: ObservableObject {
     }
 
     @Published private(set) var spans: [(Int, Int)] = []
+    @Published private(set) var counts: [(String, Int)] = []
     @Published var systemImageName: String = RunningState.ready.rawValue
     @Published var beganAt: Date?
     @Published var endAt: Date?
@@ -59,6 +60,16 @@ class TimeBoxModel: ObservableObject {
             }
         }
         .assign(to: &$spans)
+        database.$timeBoxes.map { timeBoxes in
+            let map = Dictionary(grouping: timeBoxes) { timeBox in
+                Calendar.current.startOfDay(for: timeBox.start)
+            }
+            let keys = map.keys.sorted(by: >)
+            return keys.map { key in
+                (Util.date(key), map[key]?.count ?? 00)
+            }
+        }
+        .assign(to: &$counts)
     }
 
     var isBannerNotification: Bool {
