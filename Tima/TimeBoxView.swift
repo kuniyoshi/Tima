@@ -110,7 +110,7 @@ struct TimeBoxView: View {
                             fileName: Constants.timeBoxRestEndSound.rawValue,
                             fileType: "mp3"
                         )
-                    notify(content: endRestNotification())
+                        notify(content: model.endRestNotification())
                 case .running:
                     assert(false, "Should not be running automatically")
                 case .finished:
@@ -215,14 +215,6 @@ struct TimeBoxView: View {
                 queryType: .Auto
             )
         }
-    }
-
-    private func endRestNotification() -> UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-        content.title = "Time to Focus"
-        content.body = "Break is over.  It's time to focus and get back to work!"
-        content.sound = nil
-        return content
     }
 
     private func notify(content: UNMutableNotificationContent) {

@@ -49,6 +49,14 @@ class TimeBoxModel: ObservableObject {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }
 
+    func endRestNotification() -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = "Time to Focus"
+        content.body = "Break is over.  It's time to focus and get back to work!"
+        content.sound = nil
+        return content
+    }
+
     func endWorkNotification() -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = "Time's up!"
