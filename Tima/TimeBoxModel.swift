@@ -39,6 +39,20 @@ class TimeBoxModel: ObservableObject {
         self.database = database
     }
 
+    @MainActor
+    func insert(beganAt: Date) {
+        let durationMinutes = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+        let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
+
+        if (Date().timeIntervalSince(beganAt) < adjustedDuration) {
+            return
+        }
+
+        let timeBox = TimeBox(start: beganAt, workMinutes: durationMinutes)
+
+        database.addTimeBox(timeBox)
+    }
+
     func playSe(fileName: String, fileType: String = "wav") {
         if !canPlaySe() {
             return

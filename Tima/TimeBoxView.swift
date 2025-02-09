@@ -251,16 +251,7 @@ struct TimeBoxView: View {
     }
 
     func pushTimeBoxData(_ beganAt: Date) {
-        let durationMinutes = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
-        let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
-
-        if (Date().timeIntervalSince(beganAt) < adjustedDuration) {
-            return
-        }
-
-        let timeBoxData = TimeBox(start: beganAt, workMinutes: durationMinutes)
-
-        modelContext.insert(timeBoxData)
+        model.insert(beganAt: beganAt)
     }
 }
 
