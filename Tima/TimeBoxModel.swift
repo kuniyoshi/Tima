@@ -45,9 +45,7 @@ class TimeBoxModel: ObservableObject {
 
     @MainActor
     func insert(beganAt: Date) {
-        let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
-
-        if (Date().timeIntervalSince(beganAt) < adjustedDuration) {
+        if isElapsingEnough(beganAt: beganAt) {
             return
         }
 
@@ -88,5 +86,11 @@ class TimeBoxModel: ObservableObject {
         } else {
             return SettingsDefaults.TimeBox.soundVolume
         }
+    }
+
+    private func isElapsingEnough(beganAt: Date) -> Bool {
+        let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
+
+        return Date().timeIntervalSince(beganAt) >= adjustedDuration
     }
 }
