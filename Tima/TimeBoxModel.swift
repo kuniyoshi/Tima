@@ -40,7 +40,7 @@ class TimeBoxModel: ObservableObject {
     }
 
     func playSe(fileName: String, fileType: String = "wav") {
-        if (!UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)) {
+        if !canPlaySe() {
             return
         }
 
@@ -58,6 +58,10 @@ class TimeBoxModel: ObservableObject {
         } catch {
             print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
         }
+    }
+
+    private func canPlaySe() -> Bool {
+        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
     }
 
     private func getSoundVolume() -> Float {
