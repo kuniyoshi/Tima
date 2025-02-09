@@ -32,6 +32,7 @@ class TimeBoxModel: ObservableObject {
     @Published var endAt: Date?
     @Published var remainingTime: String = "00:00"
     @Published var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
+    // TODO: ^ move to view?
     @Published var transition: Transition?
     private let database: Database
 
