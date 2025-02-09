@@ -6,8 +6,6 @@ import Combine
 
 // TimeBox main view
 struct TimeBoxView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var timeBoxes: [TimeBox]
     @StateObject private var model: TimeBoxModel
     @State private var cancellable: Set<AnyCancellable> = []
 
