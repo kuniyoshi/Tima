@@ -19,12 +19,12 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    enum QueryType {
+    private enum QueryType {
         case Auto
         case Button
     }
 
-    struct Transition {
+    private struct Transition {
         var state: RunningState
         var queryType: QueryType
     }
