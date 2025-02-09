@@ -97,6 +97,33 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
+    func tickWhileRunning() {
+        assert(beganAt != nil)
+
+        guard let beganAt else {
+            return
+        }
+
+        let now = Date()
+        let elapsedTime = now.timeIntervalSince(beganAt)
+        let remain = max(
+            UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+                * 60 - Int(elapsedTime),
+            0
+        )
+        let minutes = Int(remain) / 60
+        let seconds = Int(remain) % 60
+
+        remainingTime = String(format: "%02d:%02d", minutes, seconds)
+
+        if remain == 0 {
+            transition = .init(
+                state: runningState.progressed(),
+                queryType: .Auto
+            )
+        }
+    }
+
     private func canPlaySe() -> Bool {
         UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
     }
