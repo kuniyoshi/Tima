@@ -12,9 +12,9 @@ class TimeBoxModel: ObservableObject {
 
         func progressed() -> RunningState {
             switch self {
-            case .ready: return .running
-            case .running: return .finished
-            case .finished: return .ready
+                case .ready: return .running
+                case .running: return .finished
+                case .finished: return .ready
             }
         }
     }
@@ -100,6 +100,71 @@ class TimeBoxModel: ObservableObject {
             audioPlayer?.play()
         } catch {
             print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
+        }
+    }
+
+    @MainActor
+    func tick() {
+        if let transition {
+            runningState = transition.state
+
+            switch transition.queryType {
+                case .Auto:
+                    switch transition.state {
+                        case .ready:
+                            playSe(
+                                fileName: Constants.timeBoxRestEndSound.rawValue,
+                                fileType: "mp3"
+                            )
+                            notificationPublisher.send(endRestNotification())
+                        case .running:
+                            assert(false, "Should not be running automatically")
+                        case .finished:
+                            playSe(
+                                fileName: Constants.timeBoxEndSound.rawValue,
+                                fileType: "mp3"
+                            )
+                            notificationPublisher.send(endWorkNotification())
+                    }
+                case .Button:
+                    switch transition.state {
+                        case .ready:
+                            break
+                        case .running:
+                            playSe(
+                                fileName: Constants.timeBoxBeginSound.rawValue,
+                                fileType: "mp3"
+                            )
+                        case .finished:
+                            break
+                    }
+            }
+
+            switch transition.state {
+                case .ready:
+                    beganAt = nil
+                    endAt = nil
+                case .running:
+                    beganAt = Date()
+                case .finished:
+                    endAt = Date()
+                    if let beganAt {
+                        insert(beganAt: beganAt)
+                    } else {
+                        print("No beganAt found")
+                    }
+            }
+
+            self.transition = nil
+        }
+
+        switch runningState {
+            case .ready:
+                break
+            case .running:
+                tickWhileRunning()
+            case .finished:
+                tickWhileFinished()
         }
     }
 

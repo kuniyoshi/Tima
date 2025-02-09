@@ -46,7 +46,7 @@ struct TimeBoxView: View {
             await TickManager.shared.setTimer(interval: 0.01) {
                 SwiftUI.Task {
                     await MainActor.run {
-                        onTick()
+                        model.tick()
                     }
                 }
             }
@@ -103,70 +103,6 @@ struct TimeBoxView: View {
             state: model.runningState.progressed(),
             queryType: .Button
         )
-    }
-
-    private func onTick() {
-        if let transition = model.transition {
-            model.runningState = transition.state
-
-            switch transition.queryType {
-            case .Auto:
-                switch transition.state {
-                case .ready:
-                        model.playSe(
-                            fileName: Constants.timeBoxRestEndSound.rawValue,
-                            fileType: "mp3"
-                        )
-                        notify(content: model.endRestNotification())
-                case .running:
-                    assert(false, "Should not be running automatically")
-                case .finished:
-                        model.playSe(
-                            fileName: Constants.timeBoxEndSound.rawValue,
-                            fileType: "mp3"
-                        )
-                        notify(content: model.endWorkNotification())
-                }
-            case .Button:
-                switch transition.state {
-                case .ready:
-                    break
-                case .running:
-                        model.playSe(
-                            fileName: Constants.timeBoxBeginSound.rawValue,
-                            fileType: "mp3"
-                        )
-                case .finished:
-                    break
-                }
-            }
-
-            switch transition.state {
-            case .ready:
-                model.beganAt = nil
-                model.endAt = nil
-            case .running:
-                model.beganAt = Date()
-            case .finished:
-                model.endAt = Date()
-                if let beganAt = model.beganAt {
-                    model.insert(beganAt: beganAt)
-                } else {
-                    print("No beganAt found")
-                }
-            }
-
-            self.model.transition = nil
-        }
-
-        switch model.runningState {
-        case .ready:
-            break
-        case .running:
-                model.tickWhileRunning()
-        case .finished:
-                model.tickWhileFinished()
-        }
     }
 
     private func notify(content: UNMutableNotificationContent) {
