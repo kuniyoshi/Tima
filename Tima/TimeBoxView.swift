@@ -13,7 +13,7 @@ struct TimeBoxView: View {
 
     var body: some View {
         VStack {
-            Button(action: onButton) {
+            Button(action: model.makeTransition) {
                 Image(systemName: model.systemImageName)
                     .resizable()
                     .scaledToFit()
@@ -96,10 +96,6 @@ struct TimeBoxView: View {
         } catch {
             print("Could not request notification permission: \(error.localizedDescription)")
         }
-    }
-
-    private func onButton() {
-        model.makeTransition()
     }
 
     private func notify(content: UNMutableNotificationContent) {
