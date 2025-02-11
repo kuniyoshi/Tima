@@ -41,13 +41,6 @@ struct TimeBoxView: View {
             TimeBoxListView(model.counts)
         }
         .task {
-            await TickManager.shared.setTimer(interval: 0.01) { // TODO: rollback debug mode
-                SwiftUI.Task {
-                    await MainActor.run {
-                        model.tick()
-                    }
-                }
-            }
             await requestNotificationPermission()
         }
         .onAppear {
@@ -55,6 +48,8 @@ struct TimeBoxView: View {
                 notify(content: content)
             }
             .store(in: &cancellable)
+            model.makeTransition()
+            model.beginTick()
         }
     }
 

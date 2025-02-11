@@ -4,6 +4,7 @@ import UserNotifications
 import Combine
 
 // TimeBox model
+@MainActor
 class TimeBoxModel: ObservableObject {
     private enum RunningState: String {
         case ready = "hourglass.bottomhalf.filled"
@@ -45,8 +46,8 @@ class TimeBoxModel: ObservableObject {
         }
     }
     private let database: Database
+    private var timer: Timer?
 
-    @MainActor
     init(database: Database) {
         self.database = database
         database.$timeBoxes.map { timeBoxes in
@@ -115,6 +116,18 @@ class TimeBoxModel: ObservableObject {
         return content
     }
 
+    func beginTick() {
+        timer?.invalidate()
+
+        let newTimer = Timer(timeInterval: 0.01, repeats: true) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.tick()
+            }
+        }
+        RunLoop.main.add(newTimer, forMode: .common)
+        timer = newTimer
+    }
+
     func makeTransition() {
         transition = .init(
             state: runningState.progressed(),
@@ -143,7 +156,6 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    @MainActor
     func tick() {
         if let transition {
             runningState = transition.state
@@ -221,7 +233,6 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    @MainActor
     private func insert(beganAt: Date) {
         if isElapsingEnough(beganAt: beganAt) {
             return
