@@ -48,8 +48,6 @@ struct TimeBoxView: View {
                 notify(content: content)
             }
             .store(in: &cancellable)
-            model.makeTransition()
-            model.beginTick()
         }
     }
 
