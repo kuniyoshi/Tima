@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- ContentView's Picker leads to memory leak
 - submit on enter while editing time
 - don't toggle on measurement field.  if playing, focus out, if not, then play
 - MeasurementItem should dispatch event that indicates model has changed
