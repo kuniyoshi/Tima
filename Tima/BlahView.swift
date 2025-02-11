@@ -74,15 +74,15 @@ class BlahModel: ObservableObject {
     @Published var endAt: Date?
     @Published var remainingTime: String = "00:00"
     @Published var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
+    let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
+    private var transition: Transition?
     private var runningState = RunningState.ready {
         didSet {
             systemImageName = runningState.rawValue
         }
     }
-    let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
-    private var transition: Transition?
-    private var timer: Timer?
     private let database: Database
+    private var timer: Timer?
 
     init(database: Database) {
         self.database = database
@@ -90,6 +90,29 @@ class BlahModel: ObservableObject {
 
     var isBannerNotification: Bool {
         UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)
+    }
+
+    var isRemainingTimeViable: Bool {
+        switch runningState {
+            case .ready:
+                false
+            case .running:
+                true
+            case .finished:
+                true
+        }
+    }
+
+    var isStateRunning: Bool {
+        runningState == .running
+    }
+
+    private var breakMinutes: Int {
+        UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
+    }
+
+    private var durationMinutes: Int {
+        UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }
 
     private var endRestNotification: UNMutableNotificationContent {
@@ -106,10 +129,6 @@ class BlahModel: ObservableObject {
         content.body = "TimeBox finished!  Good work!"
         content.sound = nil
         return content
-    }
-
-    private var durationMinutes: Int {
-        UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }
 
     func beginTick() {
@@ -205,6 +224,15 @@ class BlahModel: ObservableObject {
 
             self.transition = nil
         }
+
+        switch runningState {
+            case .ready:
+                break
+            case .running:
+                tickWhileRunning()
+            case .finished:
+                tickWhileFinished()
+        }
     }
 
     private func canPlaySe() -> Bool {
@@ -234,6 +262,52 @@ class BlahModel: ObservableObject {
         let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
 
         return Date().timeIntervalSince(beganAt) >= adjustedDuration
+    }
+
+    private func tickWhileFinished() {
+        assert(endAt != nil)
+
+        guard let endAt else {
+            return
+        }
+
+        let now = Date()
+        let elapsedTime = now.timeIntervalSince(endAt)
+        let remain = max(breakMinutes * 60 - Int(elapsedTime), 0)
+        let minutes = Int(remain) / 60
+        let seconds = Int(remain) % 60
+
+        remainingTime = String(format: "%02d:%02d", minutes, seconds)
+
+        if remain == 0 {
+            transition = .init(
+                state: runningState.progressed(),
+                queryType: .Auto
+            )
+        }
+    }
+
+    private func tickWhileRunning() {
+        assert(beganAt != nil)
+
+        guard let beganAt else {
+            return
+        }
+
+        let now = Date()
+        let elapsedTime = now.timeIntervalSince(beganAt)
+        let remain = max(durationMinutes * 60 - Int(elapsedTime), 0)
+        let minutes = Int(remain) / 60
+        let seconds = Int(remain) % 60
+
+        remainingTime = String(format: "%02d:%02d", minutes, seconds)
+
+        if remain == 0 {
+            transition = .init(
+                state: runningState.progressed(),
+                queryType: .Auto
+            )
+        }
     }
 }
 
