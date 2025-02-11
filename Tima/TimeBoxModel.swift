@@ -32,11 +32,11 @@ class TimeBoxModel: ObservableObject {
 
     @Published private(set) var spans: [(Int, Int)] = []
     @Published private(set) var counts: [(String, Int)] = []
-    @Published var systemImageName: String = RunningState.ready.rawValue
-    @Published var beganAt: Date?
-    @Published var endAt: Date?
-    @Published var remainingTime: String = "00:00"
-    @Published var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
+    @Published private(set) var systemImageName: String = RunningState.ready.rawValue
+    @Published private(set) var beganAt: Date?
+    @Published private(set) var endAt: Date?
+    @Published private(set) var remainingTime: String = "00:00"
+    @Published private(set) var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
     // TODO: ^ move to view?
     let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
     private var transition: Transition?
