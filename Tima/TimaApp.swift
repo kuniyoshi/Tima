@@ -30,12 +30,7 @@ struct TimaApp: App {
 //            LeakView(model: LeakModel(database: Database(modelContext: sharedModelContainer.mainContext)))
 //            QuxView(model: QuxModel(database: Database(modelContext: sharedModelContainer.mainContext)))
 //            BlahView(model: BlahModel(database: Database(modelContext: sharedModelContainer.mainContext)))
-            TimeBoxView(
-                model: TimeBoxModel(
-                    database: Database(modelContext: sharedModelContainer.mainContext)
-                )
-            )
-//            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
+            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
                 .alert(isPresented: $showErrorDialog) {
                     Alert(
                         title: Text("Export Error"),
