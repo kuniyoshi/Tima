@@ -94,6 +94,10 @@ class TimeBoxModel: ObservableObject {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
     }
 
+    private var canPlaySe: Bool {
+        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
+    }
+
     private var durationMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }
@@ -112,6 +116,15 @@ class TimeBoxModel: ObservableObject {
         content.body = "TimeBox finished!  Good work!"
         content.sound = nil
         return content
+    }
+
+    private var soundVolume: Float {
+        if (UserDefaults.standard
+            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
+            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
+        } else {
+            return SettingsDefaults.TimeBox.soundVolume
+        }
     }
 
     func beginTick() {
@@ -197,19 +210,6 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    private func canPlaySe() -> Bool {
-        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
-    }
-
-    private func getSoundVolume() -> Float {
-        if (UserDefaults.standard
-            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
-            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
-        } else {
-            return SettingsDefaults.TimeBox.soundVolume
-        }
-    }
-
     private func insert(beganAt: Date) {
         if isElapsingEnough(beganAt: beganAt) {
             return
@@ -227,7 +227,7 @@ class TimeBoxModel: ObservableObject {
     }
 
     private func playSe(fileName: String, fileType: String = "wav") {
-        if !canPlaySe() {
+        if !canPlaySe {
             return
         }
 
@@ -240,7 +240,7 @@ class TimeBoxModel: ObservableObject {
 
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.volume = getSoundVolume()
+            audioPlayer?.volume = soundVolume
             audioPlayer?.play()
         } catch {
             print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
