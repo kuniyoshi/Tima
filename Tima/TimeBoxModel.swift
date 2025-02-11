@@ -32,6 +32,7 @@ class TimeBoxModel: ObservableObject {
 
     @Published private(set) var spans: [(Int, Int)] = []
     @Published private(set) var counts: [(String, Int)] = []
+    @Published private(set) var isStateRunning: Bool = false
     @Published private(set) var systemImageName: String = RunningState.ready.rawValue
     @Published private(set) var beganAt: Date?
     @Published private(set) var endAt: Date?
@@ -89,8 +90,6 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    @Published var isStateRunning: Bool = false
-
     private var breakMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
     }
@@ -132,27 +131,6 @@ class TimeBoxModel: ObservableObject {
             state: runningState.progressed(),
             queryType: .Button
         )
-    }
-
-    func playSe(fileName: String, fileType: String = "wav") {
-        if !canPlaySe() {
-            return
-        }
-
-        // TODO: 通知のサウンドをカスタムする?
-
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
-            print("Could not find \(fileName).\(fileType)")
-            return
-        }
-
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.volume = getSoundVolume()
-            audioPlayer?.play()
-        } catch {
-            print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
-        }
     }
 
     func tick() {
@@ -246,6 +224,27 @@ class TimeBoxModel: ObservableObject {
         let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
 
         return Date().timeIntervalSince(beganAt) >= adjustedDuration
+    }
+
+    private func playSe(fileName: String, fileType: String = "wav") {
+        if !canPlaySe() {
+            return
+        }
+
+        // TODO: 通知のサウンドをカスタムする?
+
+        guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
+            print("Could not find \(fileName).\(fileType)")
+            return
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.volume = getSoundVolume()
+            audioPlayer?.play()
+        } catch {
+            print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
+        }
     }
 
     private func tickWhileFinished() {
