@@ -43,6 +43,7 @@ class TimeBoxModel: ObservableObject {
     private var runningState = RunningState.ready {
         didSet {
             systemImageName = runningState.rawValue
+            isStateRunning = runningState == .running
         }
     }
     private let database: Database
@@ -88,9 +89,7 @@ class TimeBoxModel: ObservableObject {
         }
     }
 
-    var isStateRunning: Bool {
-        runningState == .running
-    }
+    @Published var isStateRunning: Bool = false
 
     private var breakMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
