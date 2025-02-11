@@ -67,10 +67,13 @@ class BlahModel: ObservableObject {
         var queryType: QueryType
     }
 
+    @Published private(set) var spans: [(Int, Int)] = []
+    @Published private(set) var counts: [(String, Int)] = []
     @Published var systemImageName: String = RunningState.ready.rawValue
-    @Published var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
     @Published var beganAt: Date?
     @Published var endAt: Date?
+    @Published var remainingTime: String = "00:00"
+    @Published var audioPlayer: AVAudioPlayer? // TODO: 通知のオプションでならせないのかどうか
     private var runningState = RunningState.ready {
         didSet {
             systemImageName = runningState.rawValue
