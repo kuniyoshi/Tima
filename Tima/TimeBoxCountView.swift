@@ -2,7 +2,7 @@ import SwiftUI
 
 // Shows TimeBox counts to time bar
 struct TimeBoxCountView: View {
-    let spans: [(Int, Int)] // TODO: 共通化する?
+    private let spans: [(Int, Int)] // TODO: 共通化する?
 
     var body: some View {
         VStack {
@@ -23,6 +23,10 @@ struct TimeBoxCountView: View {
             .frame(height: 40)
             .padding(.horizontal)
         }
+    }
+
+    init(spans: [(Int, Int)]) {
+        self.spans = spans
     }
 }
 
