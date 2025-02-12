@@ -72,6 +72,7 @@ final class Database: ObservableObject {
     func load() {
         fetchMeasurements()
         fetchTasks()
+        fetchTimeBoxes()
     }
 
     func addTask(_ item: Tima.Task) {
@@ -129,6 +130,15 @@ final class Database: ObservableObject {
             tasks = try modelContext.fetch(request)
         } catch {
             print("Failed to fetch tasks: \(error)")
+        }
+    }
+
+    private func fetchTimeBoxes() {
+        do {
+            let request = FetchDescriptor<TimeBox>()
+            timeBoxes = try modelContext.fetch(request)
+        } catch {
+            print("Failed to fetch time boxes: \(error)")
         }
     }
 }
