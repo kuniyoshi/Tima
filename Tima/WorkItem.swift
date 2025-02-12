@@ -1,8 +1,8 @@
 import SwiftUI
 import SwiftData
 
-// Task view
-struct TaskItem: View {
+// Work view
+struct WorkItem: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var works: [Work]
 
@@ -71,6 +71,6 @@ struct TaskItem: View {
 
     let initial = Work(name: "デザイン", color: .red)
 
-    return TaskItem(work: initial)
+    return WorkItem(work: initial)
         .modelContainer(container)
 }

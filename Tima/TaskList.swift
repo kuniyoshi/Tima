@@ -9,7 +9,7 @@ struct TaskList: View {
     var body: some View {
         VStack {
             ForEach(works) { work in
-                TaskItem(work: work)
+                WorkItem(work: work)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
