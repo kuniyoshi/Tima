@@ -211,7 +211,7 @@ class TimeBoxModel: ObservableObject {
     }
 
     private func insert(beganAt: Date) {
-        if isElapsingEnough(beganAt: beganAt) {
+        if !isElapsingEnough(beganAt: beganAt) {
             return
         }
 
