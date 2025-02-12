@@ -35,14 +35,15 @@ class MeasurementModel: ObservableObject {
         database.$groupedMeasurements
             .map { groupedMeasurements in
                 groupedMeasurements.compactMap { pairs in
-                    QuxModel.createModel(
-                        items: pairs,
+                    MeasurementDaillyListModel(
+                        pairs: pairs,
                         onPlay: { [weak self] measurement in
                             self?.processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
                         },
                         onDelete: { [weak self] measurement in
                             self?.delete(measurement: measurement)
-                        })
+                        }
+                    )
                 }
             }
             .assign(to: &$dailyListModels)
