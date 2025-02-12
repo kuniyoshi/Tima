@@ -78,6 +78,8 @@ in `Measurement`,
 
 # TODO
 
+- TimeBoxView has no view
+- CPU usage is high
 - ContentView's Picker leads to memory leak
 - submit on enter while editing time
 - don't toggle on measurement field.  if playing, focus out, if not, then play
