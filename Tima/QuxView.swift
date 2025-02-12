@@ -76,7 +76,7 @@ class QuxModel: ObservableObject {
     @Published var endedAt: Date?
     @Published var elapsedSeconds: String = ""
     @Published var measurements: [Measurement] = []
-    @Published var tasks: [Tima.Task] = []
+    @Published var tasks: [Work] = []
 
 //    private let modelContext: ModelContext
     private var timer: Timer?
@@ -102,7 +102,7 @@ class QuxModel: ObservableObject {
 
     }
 
-    static func createModel(items: [(Measurement, Tima.Task)], onPlay: @escaping (Measurement) -> Void, onDelete: @escaping (Measurement) -> Void) -> MeasurementDaillyListModel {
+    static func createModel(items: [(Measurement, Work)], onPlay: @escaping (Measurement) -> Void, onDelete: @escaping (Measurement) -> Void) -> MeasurementDaillyListModel {
         return MeasurementDaillyListModel(
             pairs: items,
             onPlay: onPlay,

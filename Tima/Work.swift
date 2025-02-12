@@ -3,7 +3,7 @@ import SwiftData
 
 // Model class of task that represents name, and image color
 @Model
-final class Task: Codable, Identifiable {
+final class Work: Codable, Identifiable {
     private enum CodingKeys: String, CodingKey {
         case name
         case color

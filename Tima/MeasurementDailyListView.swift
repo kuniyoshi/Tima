@@ -15,7 +15,7 @@ struct MeasurementDailyListView: View {
         }
         ForEach(model.pairs, id: \.0) { (measurement, task) in
             HStack {
-                TaskItem(task: task)
+                TaskItem(work: task)
                 MeasurementItem(measurement: measurement, task: task)
                 Button(action: {
                     model.playMeasurement(measurement)
@@ -36,28 +36,28 @@ struct MeasurementDailyListView: View {
 }
 
 #Preview {
-    let taskB = Tima.Task(name: "デザインb", color: .blue)
-    let taskR = Tima.Task(name: "デザインr", color: .red)
+    let workB = Work(name: "デザインb", color: .blue)
+    let workR = Work(name: "デザインr", color: .red)
     let model = MeasurementDaillyListModel(
         pairs: [
             (Measurement(
-                taskName: taskB.name,
+                taskName: workB.name,
                 work: "UIスケッチ",
                 start: Date(timeInterval: 700, since: Date()),
                 end: Date(timeInterval: 1080, since: Date())
-            ), taskB),
+            ), workB),
             (Measurement(
-                taskName: taskB.name,
+                taskName: workB.name,
                 work: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            ), taskB),
+            ), workB),
             (Measurement(
-                taskName: taskR.name,
+                taskName: workR.name,
                 work: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            ), taskR)
+            ), workR)
         ],
         onPlay: { _ in },
         onDelete: { _ in }

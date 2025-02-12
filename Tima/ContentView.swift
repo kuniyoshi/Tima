@@ -76,7 +76,7 @@ struct ContentView: View {
 
 #Preview {
     let schema = Schema([
-        Tima.Task.self,
+        Work.self,
         Measurement.self,
         TimeBox.self,
     ])

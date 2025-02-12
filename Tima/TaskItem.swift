@@ -4,9 +4,9 @@ import SwiftData
 // Task view
 struct TaskItem: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var tasks: [Tima.Task]
+    @Query private var works: [Work]
 
-    @State private var task: Tima.Task
+    @State private var work: Work
     @State private var name: String = ""
     @State private var isNameEditing = false
     @FocusState private var isNameFocused: Bool
@@ -15,11 +15,11 @@ struct TaskItem: View {
         VStack {
             HStack {
                 Image(systemName: "circle.fill")
-                    .foregroundColor(task.color.uiColor)
+                    .foregroundColor(work.color.uiColor)
                     .onTapGesture {
                         // TODO: isColorEditing
                     }
-                Text(task.name)
+                Text(work.name)
                     .font(.headline)
                     .onTapGesture {
                         isNameEditing = true
@@ -29,15 +29,15 @@ struct TaskItem: View {
                 ScrollViewReader { reader in
                     ScrollView(.vertical, showsIndicators: true) {
                         VStack {
-                            ForEach(tasks) { task in
-                                Text(task.name)
-                                    .id(task.id)
+                            ForEach(works) { work in
+                                Text(work.name)
+                                    .id(work.id)
                                     .font(.headline)
-                                    .background(task == self.task ? SwiftUI.Color.secondary.opacity(0.3) : SwiftUI.Color.clear)
+                                    .background(work == self.work ? SwiftUI.Color.secondary.opacity(0.3) : SwiftUI.Color.clear)
                                     .padding(2)
                                     .onTapGesture {
-                                        self.task = task
-                                        name = task.name
+                                        self.work = work
+                                        name = work.name
                                         isNameEditing = false
                                     }
                             }
@@ -45,32 +45,32 @@ struct TaskItem: View {
                     }
                     .padding()
                     .onAppear {
-                        reader.scrollTo(task.id, anchor: .center)
+                        reader.scrollTo(work.id, anchor: .center)
                     }
                 }
             }
         }
     }
 
-    init(task: Tima.Task) {
-        self.task = task
-        self._name = State(initialValue: task.name)
+    init(work: Work) {
+        self.work = work
+        self._name = State(initialValue: work.name)
     }
 }
 
 #Preview {
     let container = try! ModelContainer(
-        for: Tima.Task.self,
+        for: Work.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
 
-    context.insert(Tima.Task(name: "blue", color: .blue))
-    context.insert(Tima.Task(name: "red", color: .red))
-    context.insert(Tima.Task(name: "green", color: .green))
+    context.insert(Work(name: "blue", color: .blue))
+    context.insert(Work(name: "red", color: .red))
+    context.insert(Work(name: "green", color: .green))
 
-    let initial = Tima.Task(name: "デザイン", color: .red)
+    let initial = Work(name: "デザイン", color: .red)
 
-    return TaskItem(task: initial)
+    return TaskItem(work: initial)
         .modelContainer(container)
 }

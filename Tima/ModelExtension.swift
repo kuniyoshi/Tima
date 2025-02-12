@@ -12,9 +12,9 @@ extension ModelContext {
     }
 }
 
-extension Tima.Task {
-    static func findOrCreate(name: String, in context: ModelContext) throws -> Tima.Task {
-        let request = FetchDescriptor<Tima.Task>(
+extension Work {
+    static func findOrCreate(name: String, in context: ModelContext) throws -> Work {
+        let request = FetchDescriptor<Work>(
             predicate: #Predicate {
                 $0.name == name
             }
@@ -26,7 +26,7 @@ extension Tima.Task {
         if let existing = results.first {
             return existing
         } else {
-            let newTask = Tima.Task(name: name, color: .random)
+            let newTask = Work(name: name, color: .random)
             context.insert(newTask)
             return newTask
         }

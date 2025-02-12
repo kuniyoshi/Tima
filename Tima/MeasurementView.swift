@@ -127,18 +127,18 @@ struct AlertDisplay {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Schema([Tima.Task.self, Measurement.self]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(for: Schema([Work.self, Measurement.self]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
-    let taskA = Tima.Task(name: "task", color: .blue)
-    let taskB = Tima.Task(name: "task2", color: .red)
+    let workA = Work(name: "task", color: .blue)
+    let workB = Work(name: "task2", color: .red)
 
-    context.insert(taskA)
-    context.insert(taskB)
+    context.insert(workA)
+    context.insert(workB)
 
     context.insert(
         Measurement(
-            taskName: taskA.name,
+            taskName: workA.name,
             work: "work",
             start: Date(timeIntervalSinceNow: TimeInterval(-3600)),
             end: Date()
@@ -146,7 +146,7 @@ struct AlertDisplay {
     )
     context.insert(
         Measurement(
-            taskName: taskB.name,
+            taskName: workB.name,
             work: "work",
             start: Date(timeIntervalSinceNow: -7200),
             end: Date(timeIntervalSinceNow: -3600)

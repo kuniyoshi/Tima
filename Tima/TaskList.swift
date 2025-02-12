@@ -4,12 +4,12 @@ import SwiftData
 // List view for task
 struct TaskList: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var tasks: [Tima.Task]
+    @Query private var works: [Work]
 
     var body: some View {
         VStack {
-            ForEach(tasks) { task in
-                TaskItem(task: task)
+            ForEach(works) { work in
+                TaskItem(work: work)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
@@ -17,12 +17,12 @@ struct TaskList: View {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Tima.Task.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(for: Work.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
-    context.insert(Tima.Task(name: "blue", color: .blue))
-    context.insert(Tima.Task(name: "red", color: .red))
-    context.insert(Tima.Task(name: "green", color: .green))
+    context.insert(Work(name: "blue", color: .blue))
+    context.insert(Work(name: "red", color: .red))
+    context.insert(Work(name: "green", color: .green))
 
     return TaskList()
         .modelContext(context)

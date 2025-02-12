@@ -5,7 +5,7 @@ struct MeasurementItem: View {
     @Environment(\.modelContext) private var context
     private var measurement: Measurement
 
-    private var task: Tima.Task
+    private var task: Work // TODO: rename
     @State private var work: String
     @State private var startDate: Date
     @State private var endDate: Date
@@ -20,7 +20,7 @@ struct MeasurementItem: View {
     @FocusState private var isStartDateFocused: Bool
     @FocusState private var isEndDateFocused: Bool
 
-    init(measurement: Measurement, task: Tima.Task) {
+    init(measurement: Measurement, task: Work) {
         self.measurement = measurement
         self.task = task
         self._work = State(initialValue: measurement.work)
@@ -123,14 +123,14 @@ struct MeasurementItem: View {
 }
 
 #Preview {
-    let task = Tima.Task(name: "デザイン", color: .blue)
+    let work = Work(name: "デザイン", color: .blue)
     MeasurementItem(
         measurement: Measurement(
-            taskName: task.name,
+            taskName: work.name,
             work: "UIスケッチ",
             start: Date(),
             end: Date(timeInterval: 180, since: Date())
         ),
-        task: task
+        task: work
     )
 }
