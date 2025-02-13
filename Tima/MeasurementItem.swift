@@ -23,7 +23,7 @@ struct MeasurementItem: View {
     init(measurement: Measurement, task: Work) {
         self.measurement = measurement
         self.task = task
-        self._work = State(initialValue: measurement.work)
+        self._work = State(initialValue: measurement.detail)
         self._startDate = State(initialValue: measurement.start)
         self._endDate = State(initialValue: measurement.end)
     }
@@ -39,11 +39,11 @@ struct MeasurementItem: View {
                 .onSubmit {
                     isWorkEditing = false
                     context.update {
-                        measurement.work = work // TODO: need trim by robust way
+                        measurement.detail = work // TODO: need trim by robust way
                     }
                 }
             } else {
-                Text(measurement.work)
+                Text(measurement.detail)
                 .onTapGesture {
                     isWorkEditing = true
                 }
@@ -127,7 +127,7 @@ struct MeasurementItem: View {
     MeasurementItem(
         measurement: Measurement(
             taskName: work.name,
-            work: "UIスケッチ",
+            detail: "UIスケッチ",
             start: Date(),
             end: Date(timeInterval: 180, since: Date())
         ),

@@ -139,7 +139,7 @@ struct AlertDisplay {
     context.insert(
         Measurement(
             taskName: workA.name,
-            work: "work",
+            detail: "work",
             start: Date(timeIntervalSinceNow: TimeInterval(-3600)),
             end: Date()
         )
@@ -147,7 +147,7 @@ struct AlertDisplay {
     context.insert(
         Measurement(
             taskName: workB.name,
-            work: "work",
+            detail: "work",
             start: Date(timeIntervalSinceNow: -7200),
             end: Date(timeIntervalSinceNow: -3600)
         )

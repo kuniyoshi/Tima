@@ -38,7 +38,7 @@ class MeasurementModel: ObservableObject {
                     MeasurementDaillyListModel(
                         pairs: pairs,
                         onPlay: { [weak self] measurement in
-                            self?.processTransaction(transaction: .resume(taskName: measurement.taskName, work: measurement.work))
+                            self?.processTransaction(transaction: .resume(taskName: measurement.work, work: measurement.detail))
                         },
                         onDelete: { [weak self] measurement in
                             self?.delete(measurement: measurement)
@@ -69,7 +69,7 @@ class MeasurementModel: ObservableObject {
            let endedAt {
             return Measurement(
                 taskName: taskName,
-                work: work,
+                detail: work,
                 start: startedAt,
                 end: endedAt
             )
@@ -81,7 +81,7 @@ class MeasurementModel: ObservableObject {
         if let startedAt {
             return Measurement(
                 taskName: taskName,
-                work: work,
+                detail: work,
                 start: startedAt,
                 end: Date()
             )

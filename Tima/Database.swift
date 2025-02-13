@@ -17,7 +17,7 @@ final class Database: ObservableObject {
             values
                 .sorted { $0.start > $1.start }
                 .compactMap { item in
-                    if let work = works.first(where: { $0.name == item.taskName }) {
+                    if let work = works.first(where: { $0.name == item.work }) {
                         return (item, work)
                     }
                     return nil
@@ -31,7 +31,7 @@ final class Database: ObservableObject {
             .map { measurement in
                 let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
                 let duration = Int(measurement.duration) / 60
-                let color = works.first(where: { $0.name == measurement.taskName })?.color.uiColor ?? .black
+                let color = works.first(where: { $0.name == measurement.work })?.color.uiColor ?? .black
                 return (minutes, duration, color)
             }
     }
@@ -82,7 +82,7 @@ final class Database: ObservableObject {
 
     func addMeasurement(_ measurement: Measurement) throws {
         _ = try Work.findOrCreate(
-            name: measurement.taskName,
+            name: measurement.work,
             in: modelContext
         )
 

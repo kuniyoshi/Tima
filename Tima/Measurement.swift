@@ -8,15 +8,15 @@ import AppKit
 final class Measurement: Codable {
     private enum CodingKeys: String, CodingKey {
         case id
-        case taskName
         case work
+        case detail
         case start
         case end
     }
 
     var id: UUID
-    var taskName: String
     var work: String
+    var detail: String
     var start: Date
     var end: Date
 
@@ -24,10 +24,10 @@ final class Measurement: Codable {
         end.timeIntervalSince(start)
     }
 
-    init(id: UUID = UUID(), taskName: String = "", work: String, start: Date, end: Date) {
+    init(id: UUID = UUID(), work: String = "", detail: String, start: Date, end: Date) {
         self.id = id
-        self.taskName = taskName.trimmingCharacters(in: .whitespacesAndNewlines)
         self.work = work.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.detail = detail.trimmingCharacters(in: .whitespacesAndNewlines)
         self.start = start
         self.end = end
     }
@@ -35,8 +35,8 @@ final class Measurement: Codable {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
-        taskName = try container.decode(String.self, forKey: .taskName)
         work = try container.decode(String.self, forKey: .work)
+        detail = try container.decode(String.self, forKey: .detail)
 
         let startString = try container.decode(String.self, forKey: .start)
         let endString = try container.decode(String.self, forKey: .end)
@@ -57,8 +57,8 @@ final class Measurement: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
-        try container.encode(taskName, forKey: .taskName)
         try container.encode(work, forKey: .work)
+        try container.encode(detail, forKey: .detail)
         try container.encode(
             Util.iso8601DateFormatter.string(from: start),
             forKey: .start
