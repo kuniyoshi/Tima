@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- add a timming that removes notificatoin
 - TimeBoxView has no view
 - CPU usage is high
 - ContentView's Picker leads to memory leak
