@@ -126,7 +126,7 @@ struct MeasurementItem: View {
     let work = Work(name: "デザイン", color: .blue)
     MeasurementItem(
         measurement: Measurement(
-            taskName: work.name,
+            work: work.name,
             detail: "UIスケッチ",
             start: Date(),
             end: Date(timeInterval: 180, since: Date())

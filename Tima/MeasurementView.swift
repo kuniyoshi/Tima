@@ -19,13 +19,13 @@ struct MeasurementView: View {
     var body: some View {
         VStack {
             HStack {
-                TextField("Input group...", text: $model.taskName)
+                TextField("Input group...", text: $model.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .task)
                     .onSubmit(model.toggleRunning)
                     .padding()
 
-                TextField("Input work...", text: $model.work)
+                TextField("Input work...", text: $model.detail)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .work)
                     .onSubmit(model.toggleRunning)
@@ -138,7 +138,7 @@ struct AlertDisplay {
 
     context.insert(
         Measurement(
-            taskName: workA.name,
+            work: workA.name,
             detail: "work",
             start: Date(timeIntervalSinceNow: TimeInterval(-3600)),
             end: Date()
@@ -146,7 +146,7 @@ struct AlertDisplay {
     )
     context.insert(
         Measurement(
-            taskName: workB.name,
+            work: workB.name,
             detail: "work",
             start: Date(timeIntervalSinceNow: -7200),
             end: Date(timeIntervalSinceNow: -3600)

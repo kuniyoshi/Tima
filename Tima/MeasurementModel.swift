@@ -9,8 +9,8 @@ class MeasurementModel: ObservableObject {
         case resume(taskName: String, work: String)
     }
 
-    @Published var taskName: String = ""
     @Published var work: String = ""
+    @Published var detail: String = ""
     @Published var isRunning: Bool = false
     @Published var startedAt: Date?
     @Published var endedAt: Date?
@@ -50,8 +50,8 @@ class MeasurementModel: ObservableObject {
     }
 
     func begin(taskName: String, work: String) {
-        self.taskName = taskName
-        self.work = work
+        self.work = taskName
+        self.detail = work
         isRunning = true
         startedAt = Date()
         endedAt = nil
@@ -59,8 +59,8 @@ class MeasurementModel: ObservableObject {
     }
 
     func clear() {
-        taskName = ""
         work = ""
+        detail = ""
         elapsedSeconds = ""
     }
 
@@ -68,8 +68,8 @@ class MeasurementModel: ObservableObject {
         if let startedAt,
            let endedAt {
             return Measurement(
-                taskName: taskName,
-                detail: work,
+                work: work,
+                detail: detail,
                 start: startedAt,
                 end: endedAt
             )
@@ -80,8 +80,8 @@ class MeasurementModel: ObservableObject {
     func newMeasurementOnResume() -> Measurement? {
         if let startedAt {
             return Measurement(
-                taskName: taskName,
-                detail: work,
+                work: work,
+                detail: detail,
                 start: startedAt,
                 end: Date()
             )
