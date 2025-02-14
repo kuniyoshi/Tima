@@ -85,7 +85,6 @@ in `Measurement`,
 - submit on enter while editing time
 - don't toggle on measurement field.  if playing, focus out, if not, then play
 - MeasurementItem should dispatch event that indicates model has changed
-- rename task to work, work to ?
 - fix time on enter
 - slow on measurement finish somehow
 - fix scroll on measurements
