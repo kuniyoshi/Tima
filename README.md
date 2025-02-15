@@ -78,7 +78,7 @@ in `Measurement`,
 
 # TODO
 
-- use logger to show error, instead of `print`
+- use logger to show error, instead of `print` <- Are the app users interesting in errors?
 - ContentView's Picker leads to memory leak
 - submit on enter while editing time
 - don't toggle on measurement field.  if playing, focus out, if not, then play
