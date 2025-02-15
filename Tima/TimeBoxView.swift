@@ -75,7 +75,11 @@ struct TimeBoxView: View {
         }
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(identifier: "timeBoxNotification", content: content, trigger: trigger)
+        let request = UNNotificationRequest(
+            identifier: "timeBoxNotification",
+            content: content,
+            trigger: trigger
+        )
 
         Task {
             do {
