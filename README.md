@@ -79,7 +79,6 @@ in `Measurement`,
 # TODO
 
 - add a timming that removes notificatoin
-- TimeBoxView has no view
 - ContentView's Picker leads to memory leak
 - submit on enter while editing time
 - don't toggle on measurement field.  if playing, focus out, if not, then play
