@@ -56,19 +56,6 @@ struct TimeBoxView: View {
         _model = .init(wrappedValue: model)
     }
 
-    private func requestNotificationPermission() async {
-        let center = UNUserNotificationCenter.current()
-        do {
-            if try await center.requestAuthorization(options: [.alert, .sound]) {
-                print("Notification granted")
-            } else {
-                print("Notification denied")
-            }
-        } catch {
-            print("Could not request notification permission: \(error.localizedDescription)")
-        }
-    }
-
     private func notify(content: UNMutableNotificationContent) {
         if !model.isBannerNotification {
             return
@@ -87,6 +74,19 @@ struct TimeBoxView: View {
             } catch {
                 print("Could not add notification: \(error.localizedDescription)")
             }
+        }
+    }
+
+    private func requestNotificationPermission() async {
+        let center = UNUserNotificationCenter.current()
+        do {
+            if try await center.requestAuthorization(options: [.alert, .sound]) {
+                print("Notification granted")
+            } else {
+                print("Notification denied")
+            }
+        } catch {
+            print("Could not request notification permission: \(error.localizedDescription)")
         }
     }
 }
