@@ -79,28 +79,29 @@ in `Measurement`,
 # TODO
 
 - publish when edit a measurement
-- add a safety when the users fogot stopping time box
-- use logger to show error, instead of `print` <- Are the app users interesting in errors?
-- ContentView's Picker leads to memory leak
 - submit on enter while editing time
-- don't toggle on measurement field.  if playing, focus out, if not, then play
 - MeasurementItem should dispatch event that indicates model has changed
 - fix time on enter
-- slow on measurement finish somehow
-- fix scroll on measurements
-- add measurement on begin, instead of finish
-- add indicator that wheter is in time box or not
+- don't toggle on measurement field.  if playing, focus out, if not, then play
 - fix, odd time is shown a moment on next measurement started
-- fix freezing on next day
+- add measurement on begin, instead of finish
+- add a safety when the users fogot stopping time box
 - add task completion
 - 通知メッセージを設定へ
 - add task list view, it can edit each tasks
-- TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
-- Measurement で日付が編集できない <- 時間はできる
+- add indicator that wheter is in time box or not
 - インポート機能をつける
+- Measurement で日付が編集できない <- 時間はできる
 - empty can be edit in measurement view
-- rename from genre to group
-- show graph
+- TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - add a bit animation while time box
+- fix scroll on measurements
 - add a bit animation while measurement
+- show graph
+- ContentView's Picker leads to memory leak
 - github action
+- use logger to show error, instead of `print` <- Are the app users interesting in errors?
+- slow on measurement finish somehow
+- fix freezing on next day
+- rename from genre to group
+
