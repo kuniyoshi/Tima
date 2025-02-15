@@ -103,17 +103,26 @@ class TimeBoxModel: ObservableObject {
     }
 
     private var endRestNotification: UNMutableNotificationContent {
+        let title = UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.restEndTitle.rawValue)
+        ?? SettingsDefaults.TimeBox.restEndTitle
+        let body = UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.restEndMessage.rawValue)
+        ?? SettingsDefaults.TimeBox.restEndMessage
         let content = UNMutableNotificationContent()
-        content.title = "Time to Focus"
-        content.body = "Break is over.  It's time to focus and get back to work!"
+        content.title = title
+        content.body = body
         content.sound = nil
         return content
     }
 
     private var endWorkNotification: UNMutableNotificationContent {
+        let title = UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.workEndTitle.rawValue)
+        ?? SettingsDefaults.TimeBox.workEndTitle
+        let body = UserDefaults.standard.string(
+            forKey: SettingsKeys.TimeBox.workEndMessage.rawValue
+        ) ?? SettingsDefaults.TimeBox.workEndMessage
         let content = UNMutableNotificationContent()
-        content.title = "Time's up!"
-        content.body = "TimeBox finished!  Good work!"
+        content.title = title
+        content.body = body
         content.sound = nil
         return content
     }
