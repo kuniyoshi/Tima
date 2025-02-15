@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- add a safety when the users fogot stopping time box
 - use logger to show error, instead of `print` <- Are the app users interesting in errors?
 - ContentView's Picker leads to memory leak
 - submit on enter while editing time
