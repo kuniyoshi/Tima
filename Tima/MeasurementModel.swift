@@ -93,7 +93,7 @@ class MeasurementModel: ObservableObject {
         timer?.invalidate()
         timer = nil
 
-        let newTimer = Timer(timeInterval: 0.01, repeats: true) { [weak self] _ in
+        let newTimer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.tick()
             }
