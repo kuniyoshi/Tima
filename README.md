@@ -101,7 +101,4 @@ in `Measurement`,
 - ContentView's Picker leads to memory leak
 - github action
 - use logger to show error, instead of `print` <- Are the app users interesting in errors?
-- slow on measurement finish somehow
-- fix freezing on next day
-- rename from genre to group
 
