@@ -6,12 +6,14 @@ import Combine
 
 // TimeBox main view
 struct TimeBoxView: View {
+    private static let notificationID = "Tima.timeBoxNotification"
+
     @StateObject private var model: TimeBoxModel
     @State private var cancellable: Set<AnyCancellable> = []
 
     var body: some View {
         VStack {
-            Button(action: model.makeTransition) {
+            Button(action: onButton) {
                 Image(systemName: model.systemImageName)
                     .resizable()
                     .scaledToFit()
@@ -56,6 +58,12 @@ struct TimeBoxView: View {
         _model = .init(wrappedValue: model)
     }
 
+    private func onButton() {
+        model.makeTransition()
+        let center = UNUserNotificationCenter.current()
+        center.removeDeliveredNotifications(withIdentifiers: [Self.notificationID])
+    }
+
     private func notify(content: UNMutableNotificationContent) {
         if !model.isBannerNotification {
             return
@@ -63,7 +71,7 @@ struct TimeBoxView: View {
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
-            identifier: "timeBoxNotification",
+            identifier: Self.notificationID,
             content: content,
             trigger: trigger
         )
