@@ -79,7 +79,6 @@ in `Measurement`,
 # TODO
 
 - use logger to show error, instead of `print`
-- add a timming that removes notificatoin
 - ContentView's Picker leads to memory leak
 - submit on enter while editing time
 - don't toggle on measurement field.  if playing, focus out, if not, then play
