@@ -1,7 +1,7 @@
 import SwiftUI
 
 // Shows Measurement, and it can edit
-struct MeasurementItem: View {
+struct MeasurementItemView: View {
     @Environment(\.modelContext) private var context
     private var measurement: Measurement
 
@@ -122,7 +122,7 @@ struct MeasurementItem: View {
 
 #Preview {
     let work = Work(name: "デザイン", color: .blue)
-    MeasurementItem(
+    MeasurementItemView(
         measurement: Measurement(
             work: work.name,
             detail: "UIスケッチ",
