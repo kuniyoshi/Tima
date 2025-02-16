@@ -79,7 +79,6 @@ in `Measurement`,
 # TODO
 
 - publish when finish a first measurement at the day
-- MeasurementItem should dispatch event that indicates model has changed
 - fix time on enter
 - don't toggle on measurement field.  if playing, focus out, if not, then play
 - fix, odd time is shown a moment on next measurement started
