@@ -55,22 +55,20 @@ struct MeasurementItem: View {
             HStack {
                 if isStartDateEditing {
                     DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
-                    .labelsHidden()
-                    .focused($isStartDateFocused)
-                    .onChange(of: isStartDateFocused) { _, newValue in
-                        if !newValue {
-                            isStartDateEditing = false
-                            context.update {
-                                measurement.start = startDate
+                        .labelsHidden()
+                        .focused($isStartDateFocused)
+                        .submitLabel(.done)
+                        .onChange(of: isStartDateFocused) { _, newValue in
+                            if !newValue {
+                                isStartDateEditing = false
+                                context.update {
+                                    measurement.start = startDate
+                                }
                             }
                         }
-                    }
-                    .onAppear {
-                        isStartDateFocused = true
-                    }
-                    .onSubmit {
-                        isStartDateEditing = false
-                    }
+                        .onAppear {
+                            isStartDateFocused = true
+                        }
                 } else {
                     Text(measurement.start, format: Date.FormatStyle(time: .shortened))
                         .foregroundColor(.primary.opacity(0.6))
