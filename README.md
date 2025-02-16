@@ -79,7 +79,6 @@ in `Measurement`,
 # TODO
 
 - publish when finish a first measurement at the day
-- submit on enter while editing time
 - MeasurementItem should dispatch event that indicates model has changed
 - fix time on enter
 - don't toggle on measurement field.  if playing, focus out, if not, then play
@@ -92,6 +91,7 @@ in `Measurement`,
 - インポート機能をつける
 - Measurement で日付が編集できない <- 時間はできる
 - empty can be edit in measurement view
+- submit on enter while editing time
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - add a bit animation while time box
 - fix scroll on measurements
