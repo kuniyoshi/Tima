@@ -2,7 +2,6 @@ import SwiftUI
 
 // Shows Measurement, and it can edit
 struct MeasurementItemView: View {
-    private var task: Work // TODO: rename
     @State private var work: String
     @State private var startDate: Date
     @State private var endDate: Date
@@ -19,9 +18,8 @@ struct MeasurementItemView: View {
 
     @StateObject private var model: MeasurementItemModel
 
-    init(model: MeasurementItemModel, task: Work) {
+    init(model: MeasurementItemModel) {
         _model = .init(wrappedValue: model)
-        self.task = task
         self._work = State(initialValue: model.measurement.detail)
         self._startDate = State(initialValue: model.measurement.start)
         self._endDate = State(initialValue: model.measurement.end)
@@ -122,8 +120,5 @@ struct MeasurementItemView: View {
         end: Date(timeInterval: 180, since: Date())
     )
 
-    MeasurementItemView(
-        model: MeasurementItemModel(measurement: measurement),
-        task: work
-    )
+    MeasurementItemView(model: MeasurementItemModel(measurement: measurement))
 }
