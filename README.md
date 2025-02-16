@@ -79,7 +79,6 @@ in `Measurement`,
 # TODO
 
 - publish when finish a first measurement at the day
-- fix time on enter
 - don't toggle on measurement field.  if playing, focus out, if not, then play
 - fix, odd time is shown a moment on next measurement started
 - add measurement on begin, instead of finish
@@ -91,6 +90,7 @@ in `Measurement`,
 - Measurement で日付が編集できない <- 時間はできる
 - empty can be edit in measurement view
 - submit on enter while editing time
+- fix time on enter
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - add a bit animation while time box
 - fix scroll on measurements
