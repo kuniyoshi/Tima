@@ -37,11 +37,11 @@ class MeasurementModel: ObservableObject {
                 groupedMeasurements.compactMap { pairs in
                     MeasurementDaillyListModel(
                         pairs: pairs,
-                        onPlay: { [weak self] measurement in
-                            self?.processTransaction(transaction: .resume(taskName: measurement.work, work: measurement.detail))
+                        onPlay: { [unowned self] measurement in
+                            self.processTransaction(transaction: .resume(taskName: measurement.work, work: measurement.detail))
                         },
-                        onDelete: { [weak self] measurement in
-                            self?.delete(measurement: measurement)
+                        onDelete: { [unowned self] measurement in
+                            self.delete(measurement: measurement)
                         }
                     )
                 }
