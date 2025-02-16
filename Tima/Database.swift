@@ -112,6 +112,20 @@ final class Database: ObservableObject {
         measurements.removeAll { $0.id == measurement.id }
     }
 
+    func updateMeasurement(_ measurement: Measurement) throws {
+        guard let index = measurements.firstIndex(where: { $0.id == measurement.id} ) else {
+            throw NSError(
+                domain: "Database error",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "Measurement not found"]
+            )
+        }
+
+        try modelContext.save()
+        measurements[index] = measurement
+        measurements.sort { $0.start > $1.start }
+    }
+
     private func fetchMeasurements() {
         do {
             let request = FetchDescriptor<Measurement>(

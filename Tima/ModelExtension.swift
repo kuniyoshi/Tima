@@ -1,17 +1,6 @@
 import SwiftData
 import SwiftUI
 
-extension ModelContext {
-    func update(_ update: () -> Void) {
-        do {
-            update()
-            try self.save()
-        } catch {
-            print("Failed to save context: \(error)")
-        }
-    }
-}
-
 extension Work {
     static func findOrCreate(name: String, in context: ModelContext) throws -> Work {
         let request = FetchDescriptor<Work>(

@@ -3,27 +3,25 @@ import SwiftUI
 // Updates measurement by view's query
 class MeasurementItemModel: ObservableObject {
     @Published private(set) var measurement: Measurement
-    @Environment(\.modelContext) private var context
+    private let onUpdate: (Measurement) -> Void
 
-    init(measurement: Measurement) {
+    init(_ measurement: Measurement, onUpdate: @escaping (Measurement) -> Void) {
         _measurement = .init(wrappedValue: measurement)
+        self.onUpdate = onUpdate
     }
 
     func updateDetail(_ detail: String) {
-        context.update {
-            measurement.detail = detail // TODO: need trim by robust way
-        }
+        measurement.detail = detail
+        self.onUpdate(measurement)
     }
 
     func updateEndDate(_ endDate: Date) {
-        context.update {
-            measurement.end = endDate
-        }
+        measurement.end = endDate
+        self.onUpdate(measurement)
     }
 
     func updateStartDate(_ startDate: Date) {
-        context.update {
-            measurement.start = startDate
-        }
+        measurement.start = startDate
+        self.onUpdate(measurement)
     }
 }

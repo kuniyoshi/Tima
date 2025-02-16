@@ -37,7 +37,13 @@ class MeasurementModel: ObservableObject {
                 groupedMeasurements.compactMap { pairs in
                     MeasurementDaillyListModel(
                         pairs: pairs.map { (measurement, work) in
-                            (MeasurementItemModel(measurement: measurement), work)
+                            (MeasurementItemModel(measurement, onUpdate: { measurement in
+                                do {
+                                    try database.updateMeasurement(measurement)
+                                } catch {
+                                    print("Could not update measurement: \(error)")
+                                }
+                            }), work)
                         },
                         onPlay: { [unowned self] measurement in
                             self.processTransaction(transaction: .resume(taskName: measurement.work, work: measurement.detail))

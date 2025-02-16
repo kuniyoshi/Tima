@@ -118,5 +118,5 @@ struct MeasurementItemView: View {
         end: Date(timeInterval: 180, since: Date())
     )
 
-    MeasurementItemView(MeasurementItemModel(measurement: measurement))
+    MeasurementItemView(MeasurementItemModel(measurement, onUpdate: { _ in }))
 }

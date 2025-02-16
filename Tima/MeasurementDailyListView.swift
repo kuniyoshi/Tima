@@ -40,24 +40,24 @@ struct MeasurementDailyListView: View {
     let workR = Work(name: "デザインr", color: .red)
     let model = MeasurementDaillyListModel(
         pairs: [
-            (MeasurementItemModel(measurement: Measurement(
+            (MeasurementItemModel(Measurement(
                 work: workB.name,
                 detail: "UIスケッチ",
                 start: Date(timeInterval: 700, since: Date()),
                 end: Date(timeInterval: 1080, since: Date())
-            )), workB),
-            (MeasurementItemModel(measurement: Measurement(
+            ), onUpdate: { _ in }), workB),
+            (MeasurementItemModel(Measurement(
                 work: workB.name,
                 detail: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            )), workB),
-            (MeasurementItemModel(measurement: Measurement(
+            ), onUpdate: { _ in }), workB),
+            (MeasurementItemModel(Measurement(
                 work: workR.name,
                 detail: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            )), workR)
+            ), onUpdate: { _ in }), workR)
         ],
         onPlay: { _ in },
         onDelete: { _ in }
