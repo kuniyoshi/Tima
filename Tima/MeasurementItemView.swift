@@ -20,7 +20,10 @@ struct MeasurementItemView: View {
     @FocusState private var isStartDateFocused: Bool
     @FocusState private var isEndDateFocused: Bool
 
-    init(measurement: Measurement, task: Work) {
+    @StateObject private var model: MeasurementItemModel
+
+    init(model: MeasurementItemModel, measurement: Measurement, task: Work) {
+        _model = .init(wrappedValue: model)
         self.measurement = measurement
         self.task = task
         self._work = State(initialValue: measurement.detail)
@@ -122,13 +125,16 @@ struct MeasurementItemView: View {
 
 #Preview {
     let work = Work(name: "デザイン", color: .blue)
+    let measurement = Measurement(
+        work: work.name,
+        detail: "UIスケッチ",
+        start: Date(),
+        end: Date(timeInterval: 180, since: Date())
+    )
+
     MeasurementItemView(
-        measurement: Measurement(
-            work: work.name,
-            detail: "UIスケッチ",
-            start: Date(),
-            end: Date(timeInterval: 180, since: Date())
-        ),
+        model: MeasurementItemModel(measurement: measurement),
+        measurement: measurement,
         task: work
     )
 }
