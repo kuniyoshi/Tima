@@ -52,6 +52,7 @@ struct SettingsView: View {
     }()
     @State private var audioPlayer: AVAudioPlayer?
     @State private var nextSound: SampleSe = .begin
+    @State private var model: SettingsModel
 
     var body: some View {
         Form {
@@ -146,9 +147,28 @@ struct SettingsView: View {
                         }
                     }
                 }
+
+                Section(header: Text("Message").font(.headline)) {
+                    Section(header: Text("On worked").font(.subheadline)) {
+                        VStack {
+                            TextField("Title", text: $model.onWorkedTitle)
+                            TextField("Message", text: $model.onWorkedMessage)
+                        }
+                    }
+                    Section(header: Text("On rested").font(.subheadline)) {
+                        VStack {
+                            TextField("Title", text: $model.onRestedTitle)
+                            TextField("Message", text: $model.onRestedMessage)
+                        }
+                    }
+                }
             }
         }
         .padding()
+    }
+
+    init(model: SettingsModel) {
+        _model = .init(wrappedValue: model)
     }
 
     private func setWorkMinutes(_ minutes: String) {
@@ -171,5 +191,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(model: .init())
 }

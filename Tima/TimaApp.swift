@@ -51,7 +51,7 @@ struct TimaApp: App {
         }
 
         Settings {
-            SettingsView()
+            SettingsView(model: .init())
         }
     }
 
