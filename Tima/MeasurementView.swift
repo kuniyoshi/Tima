@@ -5,8 +5,8 @@ import Combine
 // Main view of measurement
 struct MeasurementView: View {
     private enum Field {
-        case task
         case work
+        case detail
     }
 
     @StateObject private var model: MeasurementModel
@@ -21,18 +21,18 @@ struct MeasurementView: View {
             HStack {
                 TextField("Input group...", text: $model.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .focused($focusedField, equals: .task)
+                    .focused($focusedField, equals: .work)
                     .onSubmit(model.toggleRunning)
                     .padding()
 
                 TextField("Input work...", text: $model.detail)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .focused($focusedField, equals: .work)
+                    .focused($focusedField, equals: .detail)
                     .onSubmit(model.toggleRunning)
                     .padding()
 
                 Button("Focus Field") {
-                    focusedField = .task
+                    focusedField = .work
                 }
                 .keyboardShortcut("I", modifiers: [.command])
                 .hidden()
