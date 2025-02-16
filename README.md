@@ -79,7 +79,6 @@ in `Measurement`,
 # TODO
 
 - publish when finish a first measurement at the day
-- publish when edit a measurement
 - submit on enter while editing time
 - MeasurementItem should dispatch event that indicates model has changed
 - fix time on enter
