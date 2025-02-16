@@ -16,7 +16,7 @@ struct MeasurementItemView: View {
 
     @StateObject private var model: MeasurementItemModel
 
-    init(model: MeasurementItemModel) {
+    init(_ model: MeasurementItemModel) {
         _model = .init(wrappedValue: model)
         self._work = State(initialValue: model.measurement.detail)
         self._startDate = State(initialValue: model.measurement.start)
@@ -118,5 +118,5 @@ struct MeasurementItemView: View {
         end: Date(timeInterval: 180, since: Date())
     )
 
-    MeasurementItemView(model: MeasurementItemModel(measurement: measurement))
+    MeasurementItemView(MeasurementItemModel(measurement: measurement))
 }

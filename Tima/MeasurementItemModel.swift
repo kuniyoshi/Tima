@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Updates measurement by view's query
 class MeasurementItemModel: ObservableObject {
     @Published private(set) var measurement: Measurement
     @Environment(\.modelContext) private var context

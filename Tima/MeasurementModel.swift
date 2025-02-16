@@ -36,7 +36,9 @@ class MeasurementModel: ObservableObject {
             .map { groupedMeasurements in
                 groupedMeasurements.compactMap { pairs in
                     MeasurementDaillyListModel(
-                        pairs: pairs,
+                        pairs: pairs.map { (measurement, work) in
+                            (MeasurementItemModel(measurement: measurement), work)
+                        },
                         onPlay: { [unowned self] measurement in
                             self.processTransaction(transaction: .resume(taskName: measurement.work, work: measurement.detail))
                         },

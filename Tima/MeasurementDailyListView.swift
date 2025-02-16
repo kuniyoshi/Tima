@@ -13,12 +13,12 @@ struct MeasurementDailyListView: View {
                 Spacer()
             }
         }
-        ForEach(model.pairs, id: \.0) { (measurement, task) in
+        ForEach(model.pairs, id: \.0.measurement) { (itemModel, task) in
             HStack {
                 WorkItem(work: task)
-                MeasurementItemView(model: MeasurementItemModel(measurement: measurement))
+                MeasurementItemView(itemModel)
                 Button(action: {
-                    model.playMeasurement(measurement)
+                    model.playMeasurement(itemModel.measurement)
                 }) {
                     Image(systemName: "play.circle")
                 }
@@ -26,7 +26,7 @@ struct MeasurementDailyListView: View {
             .contentShape(Rectangle())
             .swipeActions {
                 Button(role: .destructive) {
-                    model.removeMeasurement(measurement)
+                    model.removeMeasurement(itemModel.measurement)
                 } label: {
                     Label("", systemImage: "trash")
                 }
@@ -40,24 +40,24 @@ struct MeasurementDailyListView: View {
     let workR = Work(name: "デザインr", color: .red)
     let model = MeasurementDaillyListModel(
         pairs: [
-            (Measurement(
+            (MeasurementItemModel(measurement: Measurement(
                 work: workB.name,
                 detail: "UIスケッチ",
                 start: Date(timeInterval: 700, since: Date()),
                 end: Date(timeInterval: 1080, since: Date())
-            ), workB),
-            (Measurement(
+            )), workB),
+            (MeasurementItemModel(measurement: Measurement(
                 work: workB.name,
                 detail: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            ), workB),
-            (Measurement(
+            )), workB),
+            (MeasurementItemModel(measurement: Measurement(
                 work: workR.name,
                 detail: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            ), workR)
+            )), workR)
         ],
         onPlay: { _ in },
         onDelete: { _ in }
