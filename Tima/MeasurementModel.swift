@@ -11,15 +11,15 @@ class MeasurementModel: ObservableObject {
 
     @Published var work: String = ""
     @Published var detail: String = ""
-    @Published var isRunning: Bool = false
-    @Published var startedAt: Date?
-    @Published var endedAt: Date?
-    @Published var alertDisplay = AlertDisplay(error: nil)
-    @Published var elapsedSeconds: String = ""
-    @Published var spans: [(Int, Int, SwiftUI.Color)] = []
-    @Published var measurements: [Measurement] = []
-    @Published var dailyListModels: [MeasurementDaillyListModel] = []
-    var lastRemoved: Measurement?
+    @Published private(set) var isRunning: Bool = false
+    @Published private(set) var startedAt: Date?
+    @Published private(set) var endedAt: Date?
+    @Published private(set) var alertDisplay = AlertDisplay(error: nil)
+    @Published private(set) var elapsedSeconds: String = ""
+    @Published private(set) var spans: [(Int, Int, SwiftUI.Color)] = []
+    @Published private(set) var measurements: [Measurement] = []
+    @Published private(set) var dailyListModels: [MeasurementDaillyListModel] = []
+    private(set) var lastRemoved: Measurement?
     private var timer: Timer?
     private let database: Database
 
