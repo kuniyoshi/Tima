@@ -50,7 +50,7 @@ final class Database: ObservableObject {
 
         Publishers.CombineLatest($measurements, $works)
             .map { measurements, works in
-                Database.mapToGroupedMeasurements(from: measurements, with: works)
+                Self.mapToGroupedMeasurements(from: measurements, with: works)
             }
             .sink { [unowned self] newValue in
                 self.groupedMeasurements = newValue
@@ -59,7 +59,7 @@ final class Database: ObservableObject {
 
         Publishers.CombineLatest($measurements, $works)
             .map { measurements, works in
-                Database.mapToMeasurementSpans(from: measurements, with: works)
+                Self.mapToMeasurementSpans(from: measurements, with: works)
             }
             .sink { [unowned self] newValue in
                 self.measurementSpans = newValue
