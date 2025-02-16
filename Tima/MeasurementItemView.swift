@@ -2,9 +2,6 @@ import SwiftUI
 
 // Shows Measurement, and it can edit
 struct MeasurementItemView: View {
-    @Environment(\.modelContext) private var context
-    private var measurement: Measurement
-
     private var task: Work // TODO: rename
     @State private var work: String
     @State private var startDate: Date
@@ -22,13 +19,12 @@ struct MeasurementItemView: View {
 
     @StateObject private var model: MeasurementItemModel
 
-    init(model: MeasurementItemModel, measurement: Measurement, task: Work) {
+    init(model: MeasurementItemModel, task: Work) {
         _model = .init(wrappedValue: model)
-        self.measurement = measurement
         self.task = task
-        self._work = State(initialValue: measurement.detail)
-        self._startDate = State(initialValue: measurement.start)
-        self._endDate = State(initialValue: measurement.end)
+        self._work = State(initialValue: model.measurement.detail)
+        self._startDate = State(initialValue: model.measurement.start)
+        self._endDate = State(initialValue: model.measurement.end)
     }
 
     var body: some View {
@@ -41,12 +37,10 @@ struct MeasurementItemView: View {
                 }
                 .onSubmit {
                     isWorkEditing = false
-                    context.update {
-                        measurement.detail = work // TODO: need trim by robust way
-                    }
+                    model.updateDetail(work)
                 }
             } else {
-                Text(measurement.detail)
+                Text(model.measurement.detail)
                 .onTapGesture {
                     isWorkEditing = true
                 }
@@ -64,16 +58,14 @@ struct MeasurementItemView: View {
                         .onChange(of: isStartDateFocused) { _, newValue in
                             if !newValue {
                                 isStartDateEditing = false
-                                context.update {
-                                    measurement.start = startDate
-                                }
+                                model.updateStartDate(startDate)
                             }
                         }
                         .onAppear {
                             isStartDateFocused = true
                         }
                 } else {
-                    Text(measurement.start, format: Date.FormatStyle(time: .shortened))
+                    Text(model.measurement.start, format: Date.FormatStyle(time: .shortened))
                         .foregroundColor(.primary.opacity(0.6))
                         .onTapGesture {
                             isStartDateEditing = true
@@ -92,9 +84,7 @@ struct MeasurementItemView: View {
                     .onChange(of: isEndDateFocused) { _, newValue in
                         if !newValue {
                             isEndDateEditing = false
-                            context.update {
-                                measurement.end = endDate
-                            }
+                            model.updateEndDate(endDate)
                         }
                     }
                     .onAppear {
@@ -104,13 +94,13 @@ struct MeasurementItemView: View {
                         isEndDateEditing = false
                     }
                 } else {
-                    Text(measurement.end, format: Date.FormatStyle(time: .shortened))
+                    Text(model.measurement.end, format: Date.FormatStyle(time: .shortened))
                         .foregroundColor(.primary.opacity(0.6))
                         .onTapGesture {
                             isEndDateEditing = true
                         }
                 }
-                Text(String(Util.humanReadableDuration(measurement.duration)))
+                Text(String(Util.humanReadableDuration(model.measurement.duration)))
             }
         }
         .padding(8)
@@ -134,7 +124,6 @@ struct MeasurementItemView: View {
 
     MeasurementItemView(
         model: MeasurementItemModel(measurement: measurement),
-        measurement: measurement,
         task: work
     )
 }
