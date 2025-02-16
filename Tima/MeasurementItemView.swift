@@ -6,12 +6,10 @@ struct MeasurementItemView: View {
     @State private var startDate: Date
     @State private var endDate: Date
 
-    @State private var isTaskEditing = false
     @State private var isWorkEditing = false
     @State private var isStartDateEditing = false
     @State private var isEndDateEditing = false
 
-    @FocusState private var isTaskFocused: Bool
     @FocusState private var isWorkFocused: Bool
     @FocusState private var isStartDateFocused: Bool
     @FocusState private var isEndDateFocused: Bool
