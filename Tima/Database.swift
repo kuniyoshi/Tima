@@ -81,10 +81,7 @@ final class Database: ObservableObject {
     }
 
     func addMeasurement(_ measurement: Measurement) throws {
-        _ = try Work.findOrCreate(
-            name: measurement.work,
-            in: modelContext
-        )
+        _ = try findOrCreateWork(name: measurement.work)
 
         modelContext.insert(measurement)
 
@@ -153,6 +150,25 @@ final class Database: ObservableObject {
             timeBoxes = try modelContext.fetch(request)
         } catch {
             print("Failed to fetch time boxes: \(error)")
+        }
+    }
+
+    private func findOrCreateWork(name: String) throws -> Work {
+        let request = FetchDescriptor<Work>(
+            predicate: #Predicate {
+                $0.name == name
+            }
+        )
+
+        let results = try modelContext.fetch(request)
+        assert(results.count <= 1)
+
+        if let existing = results.first {
+            return existing
+        } else {
+            let newTask = Work(name: name, color: .random) // TODO: rename to work
+            modelContext.insert(newTask)
+            return newTask
         }
     }
 }
