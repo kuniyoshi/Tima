@@ -1,4 +1,6 @@
+import AppKit
 import SwiftUI
+import Combine
 
 // Measurement model for editor
 @MainActor
@@ -22,6 +24,7 @@ class MeasurementModel: ObservableObject {
     private(set) var lastRemoved: Measurement?
     private var timer: Timer?
     private let database: Database
+    private var cancellables: Set<AnyCancellable> = []
 
     init(database: Database) {
         self.database = database
@@ -55,6 +58,13 @@ class MeasurementModel: ObservableObject {
                 }
             }
             .assign(to: &$dailyListModels)
+
+        let center = NSWorkspace.shared.notificationCenter
+        center.publisher(for: NSWorkspace.willSleepNotification)
+            .sink { [weak self] _ in
+                self?.onSleep()
+            }
+            .store(in: &cancellables)
     }
 
     func begin(taskName: String, work: String) {
@@ -70,6 +80,10 @@ class MeasurementModel: ObservableObject {
         work = ""
         detail = ""
         elapsedSeconds = ""
+    }
+
+    func dismissAlert() {
+        alertDisplay = alertDisplay.cleared()
     }
 
     func newMeasurementOnStop() -> Measurement? {
@@ -161,6 +175,12 @@ class MeasurementModel: ObservableObject {
         } else {
             processTransaction(transaction: .begin)
         }
+    }
+
+    private func onSleep() {
+        guard isRunning else { return }
+        processTransaction(transaction: .stop)
+        alertDisplay = alertDisplay.weakWritten(title: "Auto stop", message: "You may fogot stop measurement.")
     }
 
     private func processTransaction(transaction: Transaction) {

@@ -11,6 +11,7 @@ struct MeasurementView: View {
 
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
+    @State private var showAlert: Bool = false
 
     private var onPlay = PassthroughSubject<Measurement, Never>()
     private var onDelete = PassthroughSubject<Measurement, Never>()
@@ -77,13 +78,23 @@ struct MeasurementView: View {
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
 
-            .alert(isPresented: .constant(model.alertDisplay.error != nil)) {
-                assert(model.alertDisplay.error != nil)
-                return Alert(
-                    title: Text(model.alertDisplay.error?.title ?? "ERROR"),
-                    message: Text(model.alertDisplay.error?.message ?? "Some error occurred"),
-                    dismissButton: .default(Text("OK"))
-                )
+            .sheet(isPresented: $showAlert) {
+                VStack {
+                    Text(model.alertDisplay.error?.title ?? "ERROR")
+                        .font(.headline)
+                    Text(model.alertDisplay.error?.message ?? "Some error occurred")
+                        .font(.caption)
+                    Spacer()
+                    Button(action: {
+                        model.dismissAlert()
+                    }) {
+                        Image(systemName: "xmark")
+                    }
+                }
+                .padding()
+            }
+            .onChange(of: model.alertDisplay) { _, newValue in
+                showAlert = newValue.error != nil
             }
         }
     }
@@ -105,8 +116,8 @@ struct MeasurementView: View {
     }
 }
 
-struct AlertDisplay {
-    struct Error {
+struct AlertDisplay: Equatable {
+    struct Error: Equatable {
         var title: String
         var message: String
     }
