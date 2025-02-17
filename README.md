@@ -83,7 +83,6 @@ in `Measurement`,
 - don't toggle on measurement field.  if playing, focus out, if not, then play
 - fix, odd time is shown a moment on next measurement started
 - add measurement on begin, instead of finish
-- add a safety when the users fogot stopping time box
 - add task completion
 - add task list view, it can edit each tasks
 - add indicator that wheter is in time box or not
