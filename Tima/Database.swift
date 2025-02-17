@@ -166,9 +166,9 @@ final class Database: ObservableObject {
         if let existing = results.first {
             return existing
         } else {
-            let newTask = Work(name: name, color: .random) // TODO: rename to work
-            modelContext.insert(newTask)
-            return newTask
+            let newWork = Work(name: name, color: .random)
+            modelContext.insert(newWork)
+            return newWork
         }
     }
 }
