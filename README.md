@@ -81,7 +81,6 @@ in `Measurement`,
 - change from alert to sheet
 - publish when finish a first measurement at the day
 - don't toggle on measurement field.  if playing, focus out, if not, then play
-- fix, odd time is shown a moment on next measurement started
 - add measurement on begin, instead of finish
 - add task completion
 - add task list view, it can edit each tasks
