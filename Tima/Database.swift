@@ -168,6 +168,7 @@ final class Database: ObservableObject {
         } else {
             let newWork = Work(name: name, color: .random)
             modelContext.insert(newWork)
+            works = (works + [newWork])
             return newWork
         }
     }
