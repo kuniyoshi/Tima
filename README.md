@@ -79,7 +79,6 @@ in `Measurement`,
 # TODO
 
 - change from alert to sheet
-- publish when finish a first measurement at the day
 - don't toggle on measurement field.  if playing, focus out, if not, then play
 - add measurement on begin, instead of finish
 - add task completion
