@@ -80,15 +80,15 @@ in `Measurement`,
 
 - change from alert to sheet
 - don't toggle on measurement field.  if playing, focus out, if not, then play
-- add measurement on begin, instead of finish
-- add task completion
-- add task list view, it can edit each tasks
+- add measurement on begin, instead of finish <- add `start` editor to current
+- add work completion
+- add work list view, it can edit each works
 - add indicator that wheter is in time box or not
 - インポート機能をつける
 - Measurement で日付が編集できない <- 時間はできる
 - empty can be edit in measurement view
 - submit on enter while editing time
-- fix time on enter
+- fix editing time on enter
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - add a bit animation while time box
 - fix scroll on measurements
