@@ -122,6 +122,8 @@ class MeasurementModel: ObservableObject {
         }
         RunLoop.main.add(newTimer, forMode: .common)
         timer = newTimer
+
+        elapsedSeconds = ""
     }
 
     func delete(measurement: Measurement) {
