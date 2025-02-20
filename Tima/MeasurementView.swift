@@ -65,7 +65,7 @@ struct MeasurementView: View {
                         .onSubmit {
                             isStartEditing = false
                         }
-                        // TODO: disable
+                        // TODO: disable, on stop
                     } else {
                         Text(start, format: Date.FormatStyle(time: .shortened))
                             .onTapGesture {
