@@ -12,6 +12,9 @@ struct MeasurementView: View {
     @StateObject private var model: MeasurementModel
     @FocusState private var focusedField: Field?
     @State private var showAlert: Bool = false
+    @State private var isStartEditing: Bool = false
+    @FocusState private var isStartFocused: Bool
+    @State private var startDate: Date?
 
     private var onPlay = PassthroughSubject<Measurement, Never>()
     private var onDelete = PassthroughSubject<Measurement, Never>()
@@ -37,6 +40,39 @@ struct MeasurementView: View {
                 }
                 .keyboardShortcut("I", modifiers: [.command])
                 .hidden()
+
+                if let start = model.startedAt {
+                    if isStartEditing {
+                        DatePicker(
+                            "",
+                            selection: Binding( // TODO: model?
+                                get: { start },
+                                set: { newValue in model.startedAt = newValue }
+                            ),
+                            displayedComponents: .hourAndMinute
+                        )
+                        .labelsHidden()
+                        .focused($isStartFocused)
+                        .onChange(of: isStartFocused) { _, newValue in
+                            if !newValue {
+                                isStartEditing = false
+//                                model.updateStartDate(model.startedAt)
+                            }
+                        }
+                        .onAppear {
+                            isStartFocused = true
+                        }
+                        .onSubmit {
+                            isStartEditing = false
+                        }
+                        // TODO: disable
+                    } else {
+                        Text(start, format: Date.FormatStyle(time: .shortened))
+                            .onTapGesture {
+                                isStartEditing = true
+                            }
+                    }
+                }
 
                 Text(model.isRunning ? model.elapsedSeconds : "")
                     .font(.headline.monospaced())

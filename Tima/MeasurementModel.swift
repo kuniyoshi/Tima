@@ -14,7 +14,7 @@ class MeasurementModel: ObservableObject {
     @Published var work: String = ""
     @Published var detail: String = ""
     @Published private(set) var isRunning: Bool = false
-    @Published private(set) var startedAt: Date?
+    @Published var startedAt: Date?
     @Published private(set) var endedAt: Date?
     @Published private(set) var alertDisplay = AlertDisplay(error: nil)
     @Published private(set) var elapsedSeconds: String = ""
