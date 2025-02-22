@@ -80,7 +80,6 @@ in `Measurement`,
 
 - change from alert to sheet
 - don't toggle on measurement field.  if playing, focus out, if not, then play
-- add measurement on begin, instead of finish <- add `start` editor to current
 - add work completion
 - add work list view, it can edit each works
 - add indicator that wheter is in time box or not
