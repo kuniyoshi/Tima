@@ -77,6 +77,8 @@ class MeasurementModel: ObservableObject {
     }
 
     func clear() {
+        startedAt = nil
+        endedAt = nil
         work = ""
         detail = ""
         elapsedSeconds = ""
