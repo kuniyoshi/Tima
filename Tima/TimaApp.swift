@@ -27,14 +27,15 @@ struct TimaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
-                .alert(isPresented: $showErrorDialog) {
-                    Alert(
-                        title: Text("Export Error"),
-                        message: Text(errorMessage),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
+            CompletionView()
+//            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
+//                .alert(isPresented: $showErrorDialog) {
+//                    Alert(
+//                        title: Text("Export Error"),
+//                        message: Text(errorMessage),
+//                        dismissButton: .default(Text("OK"))
+//                    )
+//                }
         }
         .modelContainer(sharedModelContainer)
         .windowStyle(HiddenTitleBarWindowStyle())
