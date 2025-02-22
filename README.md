@@ -78,6 +78,7 @@ in `Measurement`,
 
 # TODO
 
+- rename work to work color or other
 - change from alert to sheet
 - don't toggle on measurement field.  if playing, focus out, if not, then play
 - add work completion
