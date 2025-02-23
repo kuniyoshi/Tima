@@ -1,103 +1,175 @@
 import SwiftUI
+import AppKit
 
-class KeyView: NSView {
-    var onKeyDown: ((NSEvent) -> Void)?
+//class CompletionTextField: NSTextField {
+//    var onArrowKey: ((NSEvent) -> Void)?
+//
+//    override func keyDown(with event: NSEvent) {
+//        if event.keyCode == 126 || event.keyCode == 125 {
+//            onArrowKey?(event)
+//        } else {
+//            super.keyDown(with: event)
+//        }
+//    }
+//}
 
-    override var acceptsFirstResponder: Bool { true }
+struct CompletionTextFieldRepresentable: NSViewRepresentable {
+    typealias NSViewType = NSTextField
 
-    override func keyDown(with event: NSEvent) {
-        onKeyDown?(event)
+    @Binding private var text: String
+    private let placeholder: String
+    //    var onArrowKey: ((NSEvent) -> Void)?
+
+    init(_ placeholder: String, text: Binding<String>) {
+        self.placeholder = placeholder
+        self._text = text
     }
-}
 
-struct KeyEventHandlingView: NSViewRepresentable {
-    var onKeyDown: ((NSEvent) -> Void)?
-    
-    func makeNSView(context: Context) -> KeyView {
-        let view = KeyView()
-        view.onKeyDown = onKeyDown
-        DispatchQueue.main.async {
-            view.window?.makeFirstResponder(view)
+    func makeNSView(context: Context) -> NSTextField {
+        let textField = NSTextField(frame: NSRect.zero)
+        textField.delegate = context.coordinator
+//        textField.onArrowKey = onArrowKey
+        textField.stringValue = text
+        textField.placeholderString = placeholder
+        return textField
+    }
+
+    func updateNSView(_ nsView: NSTextField, context: Context) {
+        nsView.stringValue = text
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, NSTextFieldDelegate {
+        var parent: CompletionTextFieldRepresentable
+
+        init(_ parent: CompletionTextFieldRepresentable) {
+            self.parent = parent
         }
-        return view
-    }
-    
-    func updateNSView(_ nsView: KeyView, context: Context) {}
-}
 
-struct ListItem: View {
-    @State var text: String
-    @State var isSelected: Bool
-    private var onTap: () -> Void
-
-    var body: some View {
-        Text(text)
-            .foregroundColor(isSelected ? .accentColor : .secondary)
-            .background(isSelected ? SwiftUI.Color.secondary.opacity(0.2) : SwiftUI.Color.clear)
-            .onTapGesture {
-                onTap()
+        func controlTextDidChange(_ obj: Notification) {
+            if let textField = obj.object as? NSTextField {
+                parent.text = textField.stringValue
             }
-    }
-
-    init(isSelected: Bool, text: String, onTap: @escaping () -> Void) {
-        self.isSelected = isSelected
-        self.text = text
-        self.onTap = onTap
+        }
     }
 }
+
+//class KeyView: NSView {
+//    var onKeyDown: ((NSEvent) -> Void)?
+//
+//    override var acceptsFirstResponder: Bool { true }
+//
+//    override func keyDown(with event: NSEvent) {
+//        onKeyDown?(event)
+//    }
+//}
+//
+//struct KeyEventHandlingView: NSViewRepresentable {
+//    var onKeyDown: ((NSEvent) -> Void)?
+//    
+//    func makeNSView(context: Context) -> KeyView {
+//        let view = KeyView()
+//        view.onKeyDown = onKeyDown
+//        DispatchQueue.main.async {
+//            view.window?.makeFirstResponder(view)
+//        }
+//        return view
+//    }
+//    
+//    func updateNSView(_ nsView: KeyView, context: Context) {}
+//}
+
+//struct ListItem: View {
+//    @State var text: String
+//    @State var isSelected: Bool
+//    private var onTap: () -> Void
+//
+//    var body: some View {
+//        Text(text)
+//            .foregroundColor(isSelected ? .accentColor : .secondary)
+//            .background(isSelected ? SwiftUI.Color.secondary.opacity(0.2) : SwiftUI.Color.clear)
+//            .onTapGesture {
+//                onTap()
+//            }
+//    }
+//
+//    init(isSelected: Bool, text: String, onTap: @escaping () -> Void) {
+//        self.isSelected = isSelected
+//        self.text = text
+//        self.onTap = onTap
+//    }
+//}
 
 struct CompletionView: View {
     @State var text: String = ""
-    @State private var showPopover: Bool = false
-    var suggestions: [String] = ["asdf", "fdsa", "abcd"]
-    @State var selectedIndex: Int = 0
-
-    private var filteredSuggestions: [String] {
-        Array(suggestions.filter { $0.hasPrefix(text) })
-    }
+//    @State private var showPopover: Bool = false
+//    var suggestions: [String] = ["asdf", "fdsa", "abcd"]
+//    @State var selectedIndex: Int = 0
+//
+//    private var filteredSuggestions: [String] {
+//        Array(suggestions.filter { $0.hasPrefix(text) })
+//    }
 
     var body: some View {
         VStack {
-            TextField("Enter text...", text: $text)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+            CompletionTextFieldRepresentable("search...", text: $text)
                 .padding()
-                .onChange(of: text) { _, newValue in
-                    showPopover = !newValue.isEmpty
-                }
-                .popover(isPresented: $showPopover, arrowEdge: .bottom) {
-                    VStack(alignment: .leading) {
-                        List {
-                            ForEach(Array(filteredSuggestions.enumerated()), id: \.element) { index, suggestion in
-                                ListItem(
-                                    isSelected: index == selectedIndex,
-                                    text: suggestion,
-                                    onTap: {
-                                        text = suggestion
-                                        showPopover = false
-                                    }
-                                )
-                            }
-                            .padding()
-                        }
-                    }
-                }
-                .onSubmit {
-                    showPopover = false
-                }
-                .background(
-                    KeyEventHandlingView { event in
-                        if event.keyCode == 126 {
-                            if !filteredSuggestions.isEmpty {
-                                selectedIndex = min(selectedIndex + 1, filteredSuggestions.count - 1)
-                            }
-                        } else if event.keyCode == 125 {
-                            if !filteredSuggestions.isEmpty {
-                                selectedIndex = max(selectedIndex - 1, 0)
-                            }
-                        }
-                    }
-                )
+//                if event.keyCode == 126 {
+//                    if !filteredSuggestions.isEmpty {
+//                        selectedIndex = min(selectedIndex + 1, filteredSuggestions.count - 1)
+//                    }
+//                } else if event.keyCode == 125 {
+//                    if !filteredSuggestions.isEmpty {
+//                        selectedIndex = max(selectedIndex - 1, 0)
+//                    }
+//                }
+//            }
+////            TextField("Enter text...", text: $text)
+////                .textFieldStyle(RoundedBorderTextFieldStyle())
+////                .padding()
+//                .onChange(of: text) { _, newValue in
+//                    showPopover = !newValue.isEmpty
+//                }
+//                .popover(isPresented: $showPopover, arrowEdge: .bottom) {
+//                    VStack(alignment: .leading) {
+//                        List {
+//                            ForEach(Array(filteredSuggestions.enumerated()), id: \.element) { index, suggestion in
+//                                ListItem(
+//                                    isSelected: index == selectedIndex,
+//                                    text: suggestion,
+//                                    onTap: {
+//                                        text = suggestion
+//                                        showPopover = false
+//                                    }
+//                                )
+//                            }
+//                            .padding()
+//                        }
+//                    }
+//                }
+//                .onSubmit {
+//                    showPopover = false
+//                }
+////                .background(
+////                    KeyEventHandlingView { event in
+////                        if event.keyCode == 126 {
+////                            if !filteredSuggestions.isEmpty {
+////                                selectedIndex = min(selectedIndex + 1, filteredSuggestions.count - 1)
+////                            }
+////                        } else if event.keyCode == 125 {
+////                            if !filteredSuggestions.isEmpty {
+////                                selectedIndex = max(selectedIndex - 1, 0)
+////                            }
+////                        }
+////                    }
+////                )
         }
     }
 }
 
+#Preview {
+    CompletionView()
+}
