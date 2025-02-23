@@ -51,10 +51,30 @@ struct RepresentableView: View {
 
     var body: some View {
         VStack {
-            NSTextFieldView("World", text: $text)
-                .padding()
-            TextField("World", text: $text)
-                .padding()
+            Form {
+
+                NSTextFieldView("World", text: $text)
+                    .padding()
+                TextField("World", text: $text)
+                    .padding()
+                Button("cancel") {
+                    print("cancel")
+                }
+                .hidden()
+                .keyboardShortcut(.escape, modifiers: [])
+                Button("OK") {
+                    print("submit")
+                }
+                .hidden()
+                .onSubmit {
+                    print("submit")
+                }
+                Button("a") {
+                    print("down arrow")
+                }
+                .hidden()
+                .keyboardShortcut(.downArrow, modifiers: [])
+            }
         }
     }
 }
