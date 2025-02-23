@@ -50,14 +50,50 @@ struct CompletionView: View {
                                     showPopover = false
                                 }
                             )
+                            .padding()
                         }
-                        .padding()
                     }
                 }
+                .id(selectedIndex)
             }
             .onSubmit {
                 showPopover = false
             }
+
+            Button("HIDDEN for shortcut") {
+                if showPopover {
+                    text = filteredSuggestions[selectedIndex]
+                }
+                showPopover = false
+            }
+            .hidden()
+            .keyboardShortcut(.return, modifiers: [])
+
+            Button("HIDDEN for shortcut") {
+                showPopover = false
+            }
+            .hidden()
+            .keyboardShortcut(.escape, modifiers: [])
+
+            Button("HIDDEN for shortcut") {
+                print("### selectedIndex: \(selectedIndex)")
+                if showPopover {
+                    selectedIndex = min(selectedIndex + 1, filteredSuggestions.count - 1)
+                }
+                print("--- selectedIndex: \(selectedIndex)")
+            }
+            .hidden()
+            .keyboardShortcut(.downArrow, modifiers: [])
+
+            Button("HIDDEN for shortcut") {
+                print("### selectedIndex: \(selectedIndex)")
+                if showPopover {
+                    selectedIndex = max(selectedIndex - 1, 0)
+                }
+                print("--- selectedIndex: \(selectedIndex)")
+            }
+            .hidden()
+            .keyboardShortcut(.upArrow, modifiers: [])
         }
     }
 }
