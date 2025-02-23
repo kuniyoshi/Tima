@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-struct ListItem: View {
+struct ListItem: View { // TODO: move to a file
     @State var text: String
     @State var isSelected: Bool
     private var onTap: () -> Void
@@ -50,7 +50,7 @@ struct CompletionView: View {
                                     showPopover = false
                                 }
                             )
-                            .padding()
+                            .padding(.horizontal)
                         }
                     }
                 }
@@ -58,6 +58,10 @@ struct CompletionView: View {
             }
             .onSubmit {
                 showPopover = false
+            }
+
+            Button("OFF") {
+                NSApplication.shared.keyWindow?.makeFirstResponder(nil)
             }
 
             Button("HIDDEN for shortcut") {
