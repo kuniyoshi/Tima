@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-struct NSTextFieldView: NSViewRepresentable {
+struct NSTextFieldView: NSViewRepresentable { // TODO: delete
     typealias NSViewType = NSTextField
 
     @Binding private var text: String
