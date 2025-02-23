@@ -26,10 +26,10 @@ struct CompletionView: View {
     @State var text: String = ""
     @State private var showPopover: Bool = false
     @State var selectedIndex: Int = 0
-    private var suggestions: [String] = ["asdf", "fdsa", "abcd"]
+    private var works: [String] = ["asdf", "fdsa", "abcd"]
 
     private var filteredSuggestions: [String] {
-        Array(suggestions.filter { $0.hasPrefix(text) })
+        Array(works.filter { $0.hasPrefix(text) })
     }
 
     var body: some View {
@@ -80,21 +80,17 @@ struct CompletionView: View {
             .keyboardShortcut(.escape, modifiers: [])
 
             Button("HIDDEN for shortcut") {
-                print("### selectedIndex: \(selectedIndex)")
                 if showPopover {
                     selectedIndex = min(selectedIndex + 1, filteredSuggestions.count - 1)
                 }
-                print("--- selectedIndex: \(selectedIndex)")
             }
             .hidden()
             .keyboardShortcut(.downArrow, modifiers: [])
 
             Button("HIDDEN for shortcut") {
-                print("### selectedIndex: \(selectedIndex)")
                 if showPopover {
                     selectedIndex = max(selectedIndex - 1, 0)
                 }
-                print("--- selectedIndex: \(selectedIndex)")
             }
             .hidden()
             .keyboardShortcut(.upArrow, modifiers: [])
