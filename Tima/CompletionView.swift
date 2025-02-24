@@ -2,6 +2,22 @@ import Combine
 import SwiftUI
 import AppKit
 
+extension String {
+    func fuzzyMatch(_ query: String) -> Bool {
+        guard !query.isEmpty else { return true }
+        var index = query.startIndex
+        for char in self {
+            if char == query[index] {
+                index = query.index(after: index)
+                if index == query.endIndex {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+}
+
 struct ListItem: View { // TODO: move to a file
     @State var text: String
     @State var isSelected: Bool
@@ -52,7 +68,7 @@ class CompletionModel: ObservableObject {
         assert(Set(works).count == works.count)
         self.works = works
         Publishers.CombineLatest($text, $selectedIndex).map { text, selectedIndex in
-            Array(self.works.filter { $0.hasPrefix(text) })
+            Array(self.works.filter { $0.fuzzyMatch(text) })
                 .enumerated()
                 .map { index, work in Suggestion(work, index == selectedIndex) }
         }
