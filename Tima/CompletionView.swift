@@ -79,15 +79,22 @@ struct CompletionView: View {
     @ObservedObject private var model: CompletionModel
 
     var body: some View {
-        VStack {
-            TextField("work...", text: $text)
-                .focused($isFocused)
-                .onChange(of: text) { _, newValue in
-                    model.text = newValue
-                    showPopover = model.hasSuggestion
-                }
-                .popover(isPresented: $showPopover, arrowEdge: .bottom) {
-                    VStack(alignment: .leading) {
+        ZStack(alignment: .topLeading) {
+            VStack {
+                TextField("work...", text: $text)
+                    .focused($isFocused)
+                    .onChange(of: text) { _, newValue in
+                        model.text = newValue
+                        showPopover = model.hasSuggestion
+                    }
+                    .onSubmit {
+                        showPopover = false
+                    }
+            }
+
+            if showPopover {
+                GeometryReader { geometry in
+                    VStack(alignment: .leading, spacing: 0) {
                         List {
                             ForEach(model.suggestions, id: \.self) { suggestion in
                                 ListItem(
@@ -103,10 +110,13 @@ struct CompletionView: View {
                         }
                         .id(model.selectedIndex)
                     }
+                    .frame(width: 300, height: 200)
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
+                    .padding(.top, 5)
+                    .position(x: geometry.size.width / 2, y: 120)
                 }
-                .onSubmit {
-                    showPopover = false
-                }
+            }
 
             Button("HIDDEN for shortcut") {
                 if showPopover {
