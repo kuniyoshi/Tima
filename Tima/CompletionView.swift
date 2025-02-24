@@ -74,7 +74,7 @@ class CompletionModel: ObservableObject {
 
 struct CompletionView: View {
     @State private var text: String = ""
-    @State private var showPopover: Bool = false
+    @State private var showSuggestion: Bool = false
     @FocusState private var isFocused: Bool
     @ObservedObject private var model: CompletionModel
 
@@ -85,14 +85,14 @@ struct CompletionView: View {
                     .focused($isFocused)
                     .onChange(of: text) { _, newValue in
                         model.text = newValue
-                        showPopover = model.hasSuggestion
+                        showSuggestion = model.hasSuggestion
                     }
                     .onSubmit {
-                        showPopover = false
+                        showSuggestion = false
                     }
             }
 
-            if showPopover {
+            if showSuggestion {
                 GeometryReader { geometry in
                     VStack(alignment: .leading, spacing: 0) {
                         List {
@@ -102,7 +102,7 @@ struct CompletionView: View {
                                     text: suggestion.text,
                                     onTap: {
                                         text = suggestion.text
-                                        showPopover = false
+                                        showSuggestion = false
                                     }
                                 )
                                 .padding(.horizontal)
@@ -119,16 +119,16 @@ struct CompletionView: View {
             }
 
             Button("HIDDEN for shortcut") {
-                if showPopover {
+                if showSuggestion {
                     text = model.selectoin
                 }
-                showPopover = false
+                showSuggestion = false
             }
             .hidden()
             .keyboardShortcut(.return, modifiers: [])
 
             Button("HIDDEN for shortcut") {
-                showPopover = false
+                showSuggestion = false
                 if isFocused {
                     NSApplication.shared.keyWindow?.makeFirstResponder(nil)
                 }
@@ -137,7 +137,7 @@ struct CompletionView: View {
             .keyboardShortcut(.escape, modifiers: [])
 
             Button("HIDDEN for shortcut") {
-                if showPopover {
+                if showSuggestion {
                     model.incrementSelection()
                 }
             }
@@ -145,7 +145,7 @@ struct CompletionView: View {
             .keyboardShortcut(.downArrow, modifiers: [])
 
             Button("HIDDEN for shortcut") {
-                if showPopover {
+                if showSuggestion {
                     model.decrementSelection()
                 }
             }
