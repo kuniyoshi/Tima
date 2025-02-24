@@ -41,7 +41,7 @@ class CompletionModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     var hasSuggestion: Bool {
-        !text.isEmpty && suggestions.count > 0
+        !text.isEmpty && suggestions.count > 0 && !(suggestions.count == 1 && text == suggestions[0].text)
     }
 
     var selectoin: String {
