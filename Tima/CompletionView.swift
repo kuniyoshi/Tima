@@ -75,11 +75,13 @@ class CompletionModel: ObservableObject {
 struct CompletionView: View {
     @State private var text: String = ""
     @State private var showPopover: Bool = false
+    @FocusState private var isFocused: Bool
     @ObservedObject private var model: CompletionModel
 
     var body: some View {
         VStack {
             TextField("work...", text: $text)
+                .focused($isFocused)
                 .onChange(of: text) { _, newValue in
                     model.text = newValue
                     showPopover = model.hasSuggestion
@@ -106,10 +108,6 @@ struct CompletionView: View {
                     showPopover = false
                 }
 
-            Button("OFF") {
-                NSApplication.shared.keyWindow?.makeFirstResponder(nil)
-            }
-
             Button("HIDDEN for shortcut") {
                 if showPopover {
                     text = model.selectoin
@@ -121,6 +119,9 @@ struct CompletionView: View {
 
             Button("HIDDEN for shortcut") {
                 showPopover = false
+                if isFocused {
+                    NSApplication.shared.keyWindow?.makeFirstResponder(nil)
+                }
             }
             .hidden()
             .keyboardShortcut(.escape, modifiers: [])
