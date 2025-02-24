@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import AppKit
 
@@ -22,43 +23,88 @@ struct ListItem: View { // TODO: move to a file
     }
 }
 
-struct CompletionView: View {
-    @State var text: String = ""
-    @State private var showPopover: Bool = false
-    @State var selectedIndex: Int = 0
-    private var works: [String] = ["asdf", "fdsa", "abcd"]
+class CompletionModel: ObservableObject {
+    struct Suggestion: Hashable {
+        let text: String
+        let isSelected: Bool
 
-    private var filteredSuggestions: [String] {
-        Array(works.filter { $0.hasPrefix(text) })
+        init(_ text: String, _ isSelected: Bool) {
+            self.text = text
+            self.isSelected = isSelected
+        }
     }
+
+    @Published private(set) var suggestions: [Suggestion] = []
+    @Published private(set) var selectedIndex: Int = 0
+    @Published var text: String = ""
+    private var works: [String]
+    private var cancellables = Set<AnyCancellable>()
+
+    var hasSuggestion: Bool {
+        !text.isEmpty && suggestions.count > 0
+    }
+
+    var selectoin: String {
+        suggestions[selectedIndex].text
+    }
+
+    init(works: [String]) {
+        assert(Set(works).count == works.count)
+        self.works = works
+        Publishers.CombineLatest($text, $selectedIndex).map { text, selectedIndex in
+            Array(self.works.filter { $0.hasPrefix(text) })
+                .enumerated()
+                .map { index, work in Suggestion(work, index == selectedIndex) }
+        }
+        .sink { [weak self] newValue in
+            guard let self = self else { return }
+            self.suggestions = newValue
+        }
+        .store(in: &cancellables)
+    }
+
+    func decrementSelection() {
+        selectedIndex = max(selectedIndex - 1, 0)
+    }
+
+    func incrementSelection() {
+        selectedIndex = min(selectedIndex + 1, suggestions.count - 1)
+    }
+}
+
+struct CompletionView: View {
+    @State private var text: String = ""
+    @State private var showPopover: Bool = false
+    @ObservedObject private var model: CompletionModel
 
     var body: some View {
         VStack {
             TextField("work...", text: $text)
-            .onChange(of: text) { _, newValue in
-                showPopover = !newValue.isEmpty && filteredSuggestions.count > 0
-            }
-            .popover(isPresented: $showPopover, arrowEdge: .bottom) {
-                VStack(alignment: .leading) {
-                    List {
-                        ForEach(Array(filteredSuggestions.enumerated()), id: \.element) { index, suggestion in
-                            ListItem(
-                                isSelected: index == selectedIndex,
-                                text: suggestion,
-                                onTap: {
-                                    text = suggestion
-                                    showPopover = false
-                                }
-                            )
-                            .padding(.horizontal)
+                .onChange(of: text) { _, newValue in
+                    model.text = newValue
+                    showPopover = model.hasSuggestion
+                }
+                .popover(isPresented: $showPopover, arrowEdge: .bottom) {
+                    VStack(alignment: .leading) {
+                        List {
+                            ForEach(model.suggestions, id: \.self) { suggestion in
+                                ListItem(
+                                    isSelected: suggestion.isSelected,
+                                    text: suggestion.text,
+                                    onTap: {
+                                        text = suggestion.text
+                                        showPopover = false
+                                    }
+                                )
+                                .padding(.horizontal)
+                            }
                         }
+                        .id(model.selectedIndex)
                     }
                 }
-                .id(selectedIndex)
-            }
-            .onSubmit {
-                showPopover = false
-            }
+                .onSubmit {
+                    showPopover = false
+                }
 
             Button("OFF") {
                 NSApplication.shared.keyWindow?.makeFirstResponder(nil)
@@ -66,7 +112,7 @@ struct CompletionView: View {
 
             Button("HIDDEN for shortcut") {
                 if showPopover {
-                    text = filteredSuggestions[selectedIndex]
+                    text = model.selectoin
                 }
                 showPopover = false
             }
@@ -81,7 +127,7 @@ struct CompletionView: View {
 
             Button("HIDDEN for shortcut") {
                 if showPopover {
-                    selectedIndex = min(selectedIndex + 1, filteredSuggestions.count - 1)
+                    model.incrementSelection()
                 }
             }
             .hidden()
@@ -89,15 +135,19 @@ struct CompletionView: View {
 
             Button("HIDDEN for shortcut") {
                 if showPopover {
-                    selectedIndex = max(selectedIndex - 1, 0)
+                    model.decrementSelection()
                 }
             }
             .hidden()
             .keyboardShortcut(.upArrow, modifiers: [])
         }
     }
+
+    init(model: CompletionModel) {
+        self.model = model
+    }
 }
 
 #Preview {
-    CompletionView()
+    CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz"]))
 }

@@ -27,7 +27,7 @@ struct TimaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CompletionView()
+            CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz", "abc"]))
 //            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
 //                .alert(isPresented: $showErrorDialog) {
 //                    Alert(
