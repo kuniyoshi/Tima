@@ -88,6 +88,9 @@ struct CompletionView: View {
                         showSuggestion = model.hasSuggestion
                     }
                     .onSubmit {
+                        if showSuggestion {
+                            text = model.selectoin
+                        }
                         showSuggestion = false
                     }
             }
@@ -117,15 +120,6 @@ struct CompletionView: View {
                     .position(x: geometry.size.width / 2, y: 120)
                 }
             }
-
-            Button("HIDDEN for shortcut") {
-                if showSuggestion {
-                    text = model.selectoin
-                }
-                showSuggestion = false
-            }
-            .hidden()
-            .keyboardShortcut(.return, modifiers: [])
 
             Button("HIDDEN for shortcut") {
                 showSuggestion = false
