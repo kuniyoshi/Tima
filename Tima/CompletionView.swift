@@ -15,7 +15,7 @@ extension String {
             }
         }
         return false
-    }
+    } // TODO: add score
 }
 
 struct ListItem: View { // TODO: move to a file
