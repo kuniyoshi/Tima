@@ -27,8 +27,8 @@ struct TimaApp: App {
 
     var body: some Scene {
         WindowGroup {
-//            CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz", "abc"]))
-            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
+            CompletionContent()
+//            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
                 .alert(isPresented: $showErrorDialog) {
                     Alert(
                         title: Text("Export Error"),

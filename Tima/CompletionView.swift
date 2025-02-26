@@ -110,57 +110,61 @@ struct CompletionView: View {
                         showSuggestion = false
                     }
             }
-
-            if showSuggestion {
-                GeometryReader { geometry in
-                    VStack(alignment: .leading, spacing: 0) {
-                        List {
-                            ForEach(model.suggestions, id: \.self) { suggestion in
-                                ListItem(
-                                    isSelected: suggestion.isSelected,
-                                    text: suggestion.text,
-                                    onTap: {
-                                        text = suggestion.text
-                                        showSuggestion = false
+            .overlay {
+                Group {
+                    if showSuggestion {
+                        GeometryReader { geometry in
+                            VStack(alignment: .leading, spacing: 0) {
+                                List {
+                                    ForEach(model.suggestions, id: \.self) { suggestion in
+                                        ListItem(
+                                            isSelected: suggestion.isSelected,
+                                            text: suggestion.text,
+                                            onTap: {
+                                                text = suggestion.text
+                                                showSuggestion = false
+                                            }
+                                        )
+                                        .padding(.horizontal)
                                     }
-                                )
-                                .padding(.horizontal)
+                                }
+                                .id(model.selectedIndex)
                             }
+                            .frame(width: 300, height: 200)
+                            .cornerRadius(8)
+                            .shadow(radius: 4)
+                            .padding(.top, 5)
+                            .position(x: geometry.size.width / 2, y: 120)
                         }
-                        .id(model.selectedIndex)
                     }
-                    .frame(width: 300, height: 200)
-                    .cornerRadius(8)
-                    .shadow(radius: 4)
-                    .padding(.top, 5)
-                    .position(x: geometry.size.width / 2, y: 120)
                 }
             }
+            .overlay {
+                Button("HIDDEN for shortcut") {
+                    showSuggestion = false
+                    if isFocused {
+                        NSApplication.shared.keyWindow?.makeFirstResponder(nil)
+                    }
+                }
+                .hidden()
+                .keyboardShortcut(.escape, modifiers: [])
 
-            Button("HIDDEN for shortcut") {
-                showSuggestion = false
-                if isFocused {
-                    NSApplication.shared.keyWindow?.makeFirstResponder(nil)
+                Button("HIDDEN for shortcut") {
+                    if showSuggestion {
+                        model.incrementSelection()
+                    }
                 }
-            }
-            .hidden()
-            .keyboardShortcut(.escape, modifiers: [])
+                .hidden()
+                .keyboardShortcut(.downArrow, modifiers: [])
 
-            Button("HIDDEN for shortcut") {
-                if showSuggestion {
-                    model.incrementSelection()
+                Button("HIDDEN for shortcut") {
+                    if showSuggestion {
+                        model.decrementSelection()
+                    }
                 }
+                .hidden()
+                .keyboardShortcut(.upArrow, modifiers: [])
             }
-            .hidden()
-            .keyboardShortcut(.downArrow, modifiers: [])
-
-            Button("HIDDEN for shortcut") {
-                if showSuggestion {
-                    model.decrementSelection()
-                }
-            }
-            .hidden()
-            .keyboardShortcut(.upArrow, modifiers: [])
         }
     }
 
@@ -169,6 +173,16 @@ struct CompletionView: View {
     }
 }
 
+struct CompletionContent: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "checkmark")
+            CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz"]))
+            Image(systemName: "pencil")
+        }
+    }
+}
+
 #Preview {
-    CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz"]))
+    CompletionContent()
 }
