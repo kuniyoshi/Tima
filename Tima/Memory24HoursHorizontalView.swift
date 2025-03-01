@@ -4,6 +4,10 @@ import SwiftUI
 struct Memory24HourHorizontalView: View {
     let spans: [(Int, Int, SwiftUI.Color)]
 
+    private var totalMinutes: Int {
+        spans.map { $0.1 }.reduce(0, +)
+    }
+
     var body: some View {
         VStack {
             ZStack(alignment: .leading) {
@@ -21,6 +25,20 @@ struct Memory24HourHorizontalView: View {
                 }
             }
             .frame(height: 40)
+            .padding(.horizontal)
+
+            HStack {
+                Spacer()
+
+                Text("total")
+                    .padding(.horizontal)
+                    .font(.caption)
+                Text("\(totalMinutes)")
+                    .foregroundColor(.accentColor)
+                    .font(.system(size: 18, weight: .bold, design: .monospaced))
+                Text("min")
+                    .font(.caption)
+            }
             .padding(.horizontal)
         }
         .allowsHitTesting(false)
