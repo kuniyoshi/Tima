@@ -148,22 +148,6 @@ struct CompletionView: View {
                 }
                 .hidden()
                 .keyboardShortcut(.escape, modifiers: [])
-
-                Button("HIDDEN for shortcut") {
-                    if showSuggestion {
-                        model.incrementSelection()
-                    }
-                }
-                .hidden()
-                .keyboardShortcut(.downArrow, modifiers: [])
-
-                Button("HIDDEN for shortcut") {
-                    if showSuggestion {
-                        model.decrementSelection()
-                    }
-                }
-                .hidden()
-                .keyboardShortcut(.upArrow, modifiers: [])
             }
         }
     }
