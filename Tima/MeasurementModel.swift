@@ -26,6 +26,10 @@ class MeasurementModel: ObservableObject {
     private let database: Database
     private var cancellables: Set<AnyCancellable> = []
 
+    var workModel: CompletionModel {
+        CompletionModel(works: database.works.map { $0.name })
+    }
+
     init(database: Database) {
         self.database = database
 

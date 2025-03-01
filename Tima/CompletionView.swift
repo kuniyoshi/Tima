@@ -140,30 +140,37 @@ struct CompletionView: View {
                 }
             }
             .overlay {
-                Button("HIDDEN for shortcut") {
-                    showSuggestion = false
-                    if isFocused {
-                        NSApplication.shared.keyWindow?.makeFirstResponder(nil)
-                    }
-                }
-                .hidden()
-                .keyboardShortcut(.escape, modifiers: [])
-
-                Button("HIDDEN for shortcut") {
-                    if showSuggestion {
+                KeyCaptureViewRepresentable { event in
+                    if event.keyCode == 126 {
+                        model.decrementSelection()
+                    } else if event.keyCode == 125 {
                         model.incrementSelection()
                     }
                 }
-                .hidden()
-                .keyboardShortcut(.downArrow, modifiers: [])
+//                Button("HIDDEN for shortcut") {
+//                    showSuggestion = false
+//                    if isFocused {
+//                        NSApplication.shared.keyWindow?.makeFirstResponder(nil)
+//                    }
+//                }
+//                .hidden()
+//                .keyboardShortcut(.escape, modifiers: [])
 
-                Button("HIDDEN for shortcut") {
-                    if showSuggestion {
-                        model.decrementSelection()
-                    }
-                }
-                .hidden()
-                .keyboardShortcut(.upArrow, modifiers: [])
+//                Button("HIDDEN for shortcut") {
+//                    if showSuggestion {
+//                        model.incrementSelection()
+//                    }
+//                }
+//                .hidden()
+//                .keyboardShortcut(.downArrow, modifiers: [])
+//
+//                Button("HIDDEN for shortcut") {
+//                    if showSuggestion {
+//                        model.decrementSelection()
+//                    }
+//                }
+//                .hidden()
+//                .keyboardShortcut(.upArrow, modifiers: [])
             }
         }
     }
@@ -174,12 +181,19 @@ struct CompletionView: View {
 }
 
 struct CompletionContent: View {
+    @State var work: String = ""
+
     var body: some View {
         VStack {
             Image(systemName: "checkmark")
-            CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz"]))
+            HStack {
+                TextField("Input group...", text: $work)
+                CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz"]))
+                TextField("Input group...", text: $work)
+            }
             Image(systemName: "pencil")
         }
+
     }
 }
 

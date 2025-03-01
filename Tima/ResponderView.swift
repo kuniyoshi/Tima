@@ -42,9 +42,11 @@ struct KeyCaptureViewRepresentable: NSViewRepresentable {
 // 使用例：矢印キーが押されたらテキストを更新するView
 struct ResponderView: View {
     @State private var message = "矢印キーを押してみてね"
+    @State private var text: String = ""
 
     var body: some View {
         VStack {
+            TextField("input...", text: $text)
             Text(message)
                 .padding()
             KeyCaptureViewRepresentable { event in
