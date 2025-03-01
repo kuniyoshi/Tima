@@ -67,9 +67,9 @@ class MeasurementModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func begin(taskName: String, work: String) {
-        self.work = taskName
-        self.detail = work
+    func begin(work: String, detail: String) {
+        self.work = work
+        self.detail = detail
         isRunning = true
         startedAt = Date()
         endedAt = nil
@@ -193,12 +193,12 @@ class MeasurementModel: ObservableObject {
                 isRunning = true
             case .stop:
                 isRunning = false
-            case .resume(let taskName, let work):
+            case .resume(let work, let detail):
                 if isRunning,
                    let newMeasurement = newMeasurementOnResume() {
                     save(measurement: newMeasurement)
                 }
-                begin(taskName: taskName, work: work)
+                begin(work: work, detail: detail)
         }
 
         if isRunning {
