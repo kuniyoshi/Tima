@@ -110,6 +110,16 @@ struct CompletionView: View {
                         showSuggestion = false
                     }
             }
+            .overlay { // TODO: move to root
+                Button("HIDDEN for shortcut") {
+                    showSuggestion = false
+                    if isFocused {
+                        NSApplication.shared.keyWindow?.makeFirstResponder(nil)
+                    }
+                }
+                .hidden()
+                .keyboardShortcut(.escape, modifiers: [])
+            }
             .overlay {
                 Group {
                     if showSuggestion {
@@ -138,16 +148,6 @@ struct CompletionView: View {
                         }
                     }
                 }
-            }
-            .overlay { // TODO: move to root
-                Button("HIDDEN for shortcut") {
-                    showSuggestion = false
-                    if isFocused {
-                        NSApplication.shared.keyWindow?.makeFirstResponder(nil)
-                    }
-                }
-                .hidden()
-                .keyboardShortcut(.escape, modifiers: [])
             }
         }
     }
