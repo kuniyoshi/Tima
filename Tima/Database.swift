@@ -7,7 +7,7 @@ import Foundation
 // This provides all of model which stored.
 @MainActor
 final class Database: ObservableObject {
-    private static func mapToGroupedMeasurements(from measurements: [Measurement], with works: [ImageColor]) -> [[(Measurement, ImageColor)]] {
+    private static func mapToGroupedMeasurements(from measurements: [Measurement], with imageColors: [ImageColor]) -> [[(Measurement, ImageColor)]] {
         let dictionary = Dictionary(grouping: measurements, by: { measurement in
             Calendar.current.startOfDay(for: measurement.start)
         })
@@ -17,7 +17,7 @@ final class Database: ObservableObject {
             values
                 .sorted { $0.start > $1.start }
                 .compactMap { item in
-                    if let work = works.first(where: { $0.name == item.work }) {
+                    if let work = imageColors.first(where: { $0.name == item.work }) {
                         return (item, work)
                     }
                     return nil
@@ -25,13 +25,13 @@ final class Database: ObservableObject {
         }
     }
 
-    private static func mapToMeasurementSpans(from measurements: [Measurement], with works: [ImageColor]) -> [(Int, Int, Color)] {
+    private static func mapToMeasurementSpans(from measurements: [Measurement], with imageColors: [ImageColor]) -> [(Int, Int, Color)] {
         let from = Calendar.current.startOfDay(for: Date())
         return measurements.filter { $0.start >= from }
             .map { measurement in
                 let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
                 let duration = Int(measurement.duration) / 60
-                let color = works.first(where: { $0.name == measurement.work })?.color.uiColor ?? .black
+                let color = imageColors.first(where: { $0.name == measurement.work })?.color.uiColor ?? .black
                 return (minutes, duration, color)
             }
     }
@@ -58,8 +58,8 @@ final class Database: ObservableObject {
             .store(in: &cancellables)
 
         Publishers.CombineLatest($measurements, $imageColors)
-            .map { measurements, works in
-                Self.mapToMeasurementSpans(from: measurements, with: works)
+            .map { measurements, imageColors in
+                Self.mapToMeasurementSpans(from: measurements, with: imageColors)
             }
             .sink { [unowned self] newValue in
                 self.measurementSpans = newValue
