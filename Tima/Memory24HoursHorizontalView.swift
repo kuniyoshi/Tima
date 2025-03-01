@@ -23,6 +23,7 @@ struct Memory24HourHorizontalView: View {
             .frame(height: 40)
             .padding(.horizontal)
         }
+        .allowsHitTesting(false)
     }
 }
 
