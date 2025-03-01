@@ -17,6 +17,11 @@ in `Measurement`,
 - `space` to progress time box in TimeBox view
 - `⌘-E` to export model data
 
+# POLICY
+
+We don't do complicated coding. Instead, we adopt effective features that
+can be implemented with simple coding.
+
 # SPECIFICATION NOTE
 
 - TimeBox
