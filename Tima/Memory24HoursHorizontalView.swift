@@ -2,7 +2,7 @@ import SwiftUI
 
 // Ruler for memoried span
 struct Memory24HourHorizontalView: View {
-    let spans: [(Int, Int, SwiftUI.Color)]
+    let spans: [(Int, Int, Color)]
 
     private var totalMinutes: Int {
         spans.map { $0.1 }.reduce(0, +)
@@ -72,7 +72,7 @@ private struct DividerView: View {
 private struct MemorySpanView: View {
     let startMinutes: Int
     let durationMinutes: Int
-    let color: SwiftUI.Color
+    let color: Color
 
     var body: some View {
         GeometryReader { geometry in

@@ -25,7 +25,7 @@ final class Database: ObservableObject {
         }
     }
 
-    private static func mapToMeasurementSpans(from measurements: [Measurement], with works: [ImageColor]) -> [(Int, Int, SwiftUI.Color)] {
+    private static func mapToMeasurementSpans(from measurements: [Measurement], with works: [ImageColor]) -> [(Int, Int, Color)] {
         let from = Calendar.current.startOfDay(for: Date())
         return measurements.filter { $0.start >= from }
             .map { measurement in
@@ -38,7 +38,7 @@ final class Database: ObservableObject {
 
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var groupedMeasurements: [[(Measurement, ImageColor)]] = []
-    @Published private(set) var measurementSpans: [(Int, Int, SwiftUI.Color)] = [] // TODO: use specific structure
+    @Published private(set) var measurementSpans: [(Int, Int, Color)] = [] // TODO: use specific structure
     @Published private(set) var works: [ImageColor] = []
     @Published private(set) var timeBoxes: [TimeBox] = []
 

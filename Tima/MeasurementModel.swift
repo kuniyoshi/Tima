@@ -18,7 +18,7 @@ class MeasurementModel: ObservableObject {
     @Published private(set) var endedAt: Date?
     @Published private(set) var alertDisplay = AlertDisplay(error: nil)
     @Published private(set) var elapsedSeconds: String = ""
-    @Published private(set) var spans: [(Int, Int, SwiftUI.Color)] = []
+    @Published private(set) var spans: [(Int, Int, Color)] = []
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var dailyListModels: [MeasurementDaillyListModel] = []
     private(set) var lastRemoved: Measurement?

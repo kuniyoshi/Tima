@@ -32,7 +32,7 @@ struct AppColor: Codable, Hashable, Identifiable {
         "\(red):\(green):\(blue)"
     }
 
-    var uiColor: SwiftUI.Color {
+    var uiColor: Color {
         .init(red: red, green: green, blue: blue)
     }
 }

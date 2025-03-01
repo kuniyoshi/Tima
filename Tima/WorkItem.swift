@@ -33,7 +33,7 @@ struct WorkItem: View {
                                 Text(work.name)
                                     .id(work.id)
                                     .font(.headline)
-                                    .background(work == self.work ? SwiftUI.Color.secondary.opacity(0.3) : SwiftUI.Color.clear)
+                                    .background(work == self.work ? Color.secondary.opacity(0.3) : SwiftUI.Color.clear)
                                     .padding(2)
                                     .onTapGesture {
                                         self.work = work

@@ -26,7 +26,7 @@ struct ListItem: View { // TODO: move to a file
     var body: some View {
         Text(text)
             .foregroundColor(isSelected ? .accentColor : .secondary)
-            .background(isSelected ? SwiftUI.Color.secondary.opacity(0.2) : SwiftUI.Color.clear)
+            .background(isSelected ? Color.secondary.opacity(0.2) : SwiftUI.Color.clear)
             .onTapGesture {
                 onTap()
             }
