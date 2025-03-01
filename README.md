@@ -83,7 +83,6 @@ can be implemented with simple coding.
 
 # TODO
 
-- add global function to unfocus on escape
 - add daily total time to measurement view
 - rename export json name
 - rename work to work color or other
