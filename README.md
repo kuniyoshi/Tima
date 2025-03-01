@@ -83,7 +83,6 @@ can be implemented with simple coding.
 
 # TODO
 
-- add daily total time to measurement view
 - rename export json name
 - rename work to work color or other
 - change from alert to sheet
