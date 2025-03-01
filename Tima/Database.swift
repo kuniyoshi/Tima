@@ -71,11 +71,11 @@ final class Database: ObservableObject {
 
     func load() {
         fetchMeasurements()
-        fetchTasks()
+        fetchImageColors()
         fetchTimeBoxes()
     }
 
-    func addTask(_ item: ImageColor) {
+    func addImageColor(_ item: ImageColor) {
         modelContext.insert(item)
         works.append(item)
     }
@@ -103,7 +103,7 @@ final class Database: ObservableObject {
     }
 
     func deleteMeasurement(_ measurement: Measurement) throws {
-        // keep task against addMeasurement add to tasks
+        // keep imageColor against addMeasurement add to imageColor
         modelContext.delete(measurement)
         try modelContext.save()
         measurements.removeAll { $0.id == measurement.id }
@@ -135,12 +135,12 @@ final class Database: ObservableObject {
         }
     }
 
-    private func fetchTasks() {
+    private func fetchImageColors() {
         do {
             let request = FetchDescriptor<ImageColor>()
             works = try modelContext.fetch(request)
         } catch {
-            print("Failed to fetch tasks: \(error)")
+            print("Failed to fetch imageColors: \(error)")
         }
     }
 
