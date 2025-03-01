@@ -49,8 +49,8 @@ final class Database: ObservableObject {
         self.modelContext = modelContext
 
         Publishers.CombineLatest($measurements, $imageColors)
-            .map { measurements, works in
-                Self.mapToGroupedMeasurements(from: measurements, with: works)
+            .map { measurements, imageColors in
+                Self.mapToGroupedMeasurements(from: measurements, with: imageColors)
             }
             .sink { [unowned self] newValue in
                 self.groupedMeasurements = newValue
