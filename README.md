@@ -85,7 +85,6 @@ can be implemented with simple coding.
 
 - notify when daily measurement finished
 - rename export json name
-- rename work to work color or other
 - change from alert to sheet
 - change color to appcolor, swiftui.color to color
 - add work list view, it can edit each works
