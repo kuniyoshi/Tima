@@ -87,6 +87,7 @@ can be implemented with simple coding.
 - rename export json name
 - rename work to work color or other
 - change from alert to sheet
+- change color to appcolor, swiftui.color to color
 - add work list view, it can edit each works
 - add indicator that wheter is in time box or not
 - keep layout while using measurement view
