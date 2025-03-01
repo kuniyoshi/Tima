@@ -1,7 +1,7 @@
 import SwiftUI
 
 // Codable Color to export application's data
-struct Color: Codable, Hashable, Identifiable {
+struct AppColor: Codable, Hashable, Identifiable {
     static let blue = Self(red: 0.0, green: 0.0, blue: 1.0)
     static let brown = Self(red: 0.6, green: 0.4, blue: 0.2)
     static let cyan = Self(red: 0.0, green: 1.0, blue: 1.0)
