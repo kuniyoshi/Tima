@@ -112,6 +112,22 @@ struct CompletionView: View {
             }
             .overlay { // TODO: move to root
                 Button("HIDDEN for shortcut") {
+                    if isFocused {
+                        model.decrementSelection()
+                    }
+                }
+                .hidden()
+                .keyboardShortcut(.upArrow, modifiers: [])
+
+                Button("HIDDEN for shortcut") {
+                    if isFocused {
+                        model.incrementSelection()
+                    }
+                }
+                .hidden()
+                .keyboardShortcut(.downArrow, modifiers: [])
+
+                Button("HIDDEN for shortcut") {
                     showSuggestion = false
                     if isFocused {
                         NSApplication.shared.keyWindow?.makeFirstResponder(nil)
