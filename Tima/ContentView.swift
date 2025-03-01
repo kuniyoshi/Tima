@@ -63,6 +63,14 @@ struct ContentView: View {
                 }
                 .hidden()
                 .keyboardShortcut("2", modifiers: .command)
+
+                Button(action: {
+                    NSApplication.shared.keyWindow?.makeFirstResponder(nil)
+                }) {
+                    EmptyView()
+                }
+                .hidden()
+                .keyboardShortcut(.escape, modifiers: [])
             }
         }
     }
