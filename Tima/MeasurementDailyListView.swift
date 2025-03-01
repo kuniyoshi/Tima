@@ -13,9 +13,9 @@ struct MeasurementDailyListView: View {
                 Spacer()
             }
         }
-        ForEach(model.pairs, id: \.0.measurement) { (itemModel, task) in
+        ForEach(model.pairs, id: \.0.measurement) { (itemModel, work) in
             HStack {
-                WorkItem(work: task)
+                WorkItem(work: work)
                 MeasurementItemView(itemModel)
                 Button(action: {
                     model.playMeasurement(itemModel.measurement)
