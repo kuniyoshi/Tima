@@ -82,7 +82,6 @@ in `Measurement`,
 - rename work to work color or other
 - change from alert to sheet
 - don't toggle on measurement field.  if playing, focus out, if not, then play
-- add work completion
 - add work list view, it can edit each works
 - add indicator that wheter is in time box or not
 - インポート機能をつける
@@ -91,6 +90,7 @@ in `Measurement`,
 - submit on enter while editing time
 - fix editing time on enter
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
+- add work completion
 - add a bit animation while time box
 - fix scroll on measurements
 - add a bit animation while measurement
