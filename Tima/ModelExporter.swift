@@ -13,11 +13,11 @@ struct ModelExporter {
 
     @MainActor func exportToJSON() throws -> URL? {
         let context = container.mainContext
-        let tasks = try context.fetch(FetchDescriptor<ImageColor>())
+        let imageColors = try context.fetch(FetchDescriptor<ImageColor>())
         let measurements = try context.fetch(FetchDescriptor<Measurement>())
         let timeBoxes = try context.fetch(FetchDescriptor<TimeBox>())
 
-        let exportData = ExportData(tasks: tasks, measurements: measurements, timeBoxes: timeBoxes)
+        let exportData = ExportData(imageColors: imageColors, measurements: measurements, timeBoxes: timeBoxes)
 
         let json = try JSONEncoder().encode(exportData)
 
@@ -40,7 +40,7 @@ struct ModelExporter {
 }
 
 private struct ExportData: Codable {
-    let tasks: [ImageColor]
+    let imageColors: [ImageColor]
     let measurements: [Measurement]
     let timeBoxes: [TimeBox]
 }
