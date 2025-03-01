@@ -140,37 +140,30 @@ struct CompletionView: View {
                 }
             }
             .overlay {
-                KeyCaptureViewRepresentable { event in
-                    if event.keyCode == 126 {
-                        model.decrementSelection()
-                    } else if event.keyCode == 125 {
+                Button("HIDDEN for shortcut") {
+                    showSuggestion = false
+                    if isFocused {
+                        NSApplication.shared.keyWindow?.makeFirstResponder(nil)
+                    }
+                }
+                .hidden()
+                .keyboardShortcut(.escape, modifiers: [])
+
+                Button("HIDDEN for shortcut") {
+                    if showSuggestion {
                         model.incrementSelection()
                     }
                 }
-//                Button("HIDDEN for shortcut") {
-//                    showSuggestion = false
-//                    if isFocused {
-//                        NSApplication.shared.keyWindow?.makeFirstResponder(nil)
-//                    }
-//                }
-//                .hidden()
-//                .keyboardShortcut(.escape, modifiers: [])
+                .hidden()
+                .keyboardShortcut(.downArrow, modifiers: [])
 
-//                Button("HIDDEN for shortcut") {
-//                    if showSuggestion {
-//                        model.incrementSelection()
-//                    }
-//                }
-//                .hidden()
-//                .keyboardShortcut(.downArrow, modifiers: [])
-//
-//                Button("HIDDEN for shortcut") {
-//                    if showSuggestion {
-//                        model.decrementSelection()
-//                    }
-//                }
-//                .hidden()
-//                .keyboardShortcut(.upArrow, modifiers: [])
+                Button("HIDDEN for shortcut") {
+                    if showSuggestion {
+                        model.decrementSelection()
+                    }
+                }
+                .hidden()
+                .keyboardShortcut(.upArrow, modifiers: [])
             }
         }
     }
