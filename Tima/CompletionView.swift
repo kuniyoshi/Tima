@@ -139,7 +139,7 @@ struct CompletionView: View {
                     }
                 }
             }
-            .overlay {
+            .overlay { // TODO: move to root
                 Button("HIDDEN for shortcut") {
                     showSuggestion = false
                     if isFocused {
