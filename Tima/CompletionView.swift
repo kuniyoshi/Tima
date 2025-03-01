@@ -157,23 +157,6 @@ struct CompletionView: View {
     }
 }
 
-struct CompletionContent: View {
-    @State var work: String = ""
-
-    var body: some View {
-        VStack {
-            Image(systemName: "checkmark")
-            HStack {
-                TextField("Input group...", text: $work)
-                CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz"]))
-                TextField("Input group...", text: $work)
-            }
-            Image(systemName: "pencil")
-        }
-
-    }
-}
-
 #Preview {
-    CompletionContent()
+    CompletionView(model: CompletionModel(works: ["asdf", "fdsa", "xyz"]))
 }
