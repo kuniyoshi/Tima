@@ -89,9 +89,9 @@ can be implemented with simple coding.
 - add work list view, it can edit each works
 - add indicator that wheter is in time box or not
 - keep layout while using measurement view
-- インポート機能をつける
-- Measurement で日付が編集できない <- 時間はできる
-- empty can be edit in measurement view
+- add data import feature
+- Measurement can't edit date, it can only hour
+- empty text can be edit in measurement view
 - submit on enter while editing time
 - fix editing time on enter
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
@@ -101,6 +101,6 @@ can be implemented with simple coding.
 - add a bit animation while measurement
 - show graph
 - ContentView's Picker leads to memory leak
-- github action
+- github action to build applicatoin
 - use logger to show error, instead of `print` <- Are the app users interesting in errors?
 
