@@ -156,7 +156,7 @@ class MeasurementModel: ObservableObject {
             try database.addMeasurement(measurement)
         } catch {
             alertDisplay = alertDisplay
-                .weakWritten(title: "Error", message: "Failed to create measurement, or task: \(error)")
+                .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
         }
     }
 
