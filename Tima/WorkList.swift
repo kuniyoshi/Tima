@@ -9,7 +9,7 @@ struct WorkList: View {
     var body: some View {
         VStack {
             ForEach(works) { work in
-                WorkItem(work: work)
+                ImageColorItem(work: work)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }

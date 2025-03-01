@@ -1,8 +1,8 @@
 import SwiftUI
 import SwiftData
 
-// Work view
-struct WorkItem: View {
+// ImageColor view
+struct ImageColorItem: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var works: [ImageColor]
 
@@ -71,6 +71,6 @@ struct WorkItem: View {
 
     let initial = ImageColor(name: "デザイン", color: .red)
 
-    return WorkItem(work: initial)
+    return ImageColorItem(work: initial)
         .modelContainer(container)
 }
