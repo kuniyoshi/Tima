@@ -10,9 +10,9 @@ final class ImageColor: Codable, Identifiable {
     }
 
     @Attribute(.unique) var name: String
-    var color: Tima.AppColor
+    var color: AppColor
 
-    init(name: String, color: Tima.AppColor) {
+    init(name: String, color: AppColor) {
         self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         self.color = color
     }
@@ -29,7 +29,7 @@ final class ImageColor: Codable, Identifiable {
                 debugDescription: "Invalid RGBA array: \(rgb)"
             )
         }
-        color = Tima.AppColor(
+        color = AppColor(
             red: rgb[0],
             green: rgb[1],
             blue: rgb[2]
