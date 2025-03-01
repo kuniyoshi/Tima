@@ -29,8 +29,6 @@ struct MeasurementView: View {
                     .onSubmit(model.toggleRunning)
                     .padding()
 
-                CompletionView(model: model.workModel)
-
                 TextField("Input work...", text: $model.detail)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .detail)
