@@ -39,7 +39,7 @@ final class Database: ObservableObject {
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var groupedMeasurements: [[(Measurement, ImageColor)]] = []
     @Published private(set) var measurementSpans: [(Int, Int, Color)] = [] // TODO: use specific structure
-    @Published private(set) var works: [ImageColor] = []
+    @Published private(set) var imageColors: [ImageColor] = []
     @Published private(set) var timeBoxes: [TimeBox] = []
 
     private var modelContext: ModelContext
@@ -48,7 +48,7 @@ final class Database: ObservableObject {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
 
-        Publishers.CombineLatest($measurements, $works)
+        Publishers.CombineLatest($measurements, $imageColors)
             .map { measurements, works in
                 Self.mapToGroupedMeasurements(from: measurements, with: works)
             }
@@ -57,7 +57,7 @@ final class Database: ObservableObject {
             }
             .store(in: &cancellables)
 
-        Publishers.CombineLatest($measurements, $works)
+        Publishers.CombineLatest($measurements, $imageColors)
             .map { measurements, works in
                 Self.mapToMeasurementSpans(from: measurements, with: works)
             }
@@ -77,7 +77,7 @@ final class Database: ObservableObject {
 
     func addImageColor(_ item: ImageColor) {
         modelContext.insert(item)
-        works.append(item)
+        imageColors.append(item)
     }
 
     func addMeasurement(_ measurement: Measurement) throws {
@@ -138,7 +138,7 @@ final class Database: ObservableObject {
     private func fetchImageColors() {
         do {
             let request = FetchDescriptor<ImageColor>()
-            works = try modelContext.fetch(request)
+            imageColors = try modelContext.fetch(request)
         } catch {
             print("Failed to fetch imageColors: \(error)")
         }
@@ -168,7 +168,7 @@ final class Database: ObservableObject {
         } else {
             let newWork = ImageColor(name: name, color: .random)
             modelContext.insert(newWork)
-            works = (works + [newWork])
+            imageColors = (imageColors + [newWork])
             return newWork
         }
     }
