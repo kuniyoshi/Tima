@@ -2,14 +2,14 @@ import SwiftUI
 import Combine
 
 class MeasurementDaillyListModel: ObservableObject, Identifiable {
-    @Published var pairs: [(MeasurementItemModel, Work)]
+    @Published var pairs: [(MeasurementItemModel, ImageColor)]
 
     private let onPlay: PassthroughSubject<Measurement, Never>
     private let onDelete: PassthroughSubject<Measurement, Never>
     private var cancellables: Set<AnyCancellable>
 
     init(
-        pairs: [(MeasurementItemModel, Work)],
+        pairs: [(MeasurementItemModel, ImageColor)],
         onPlay: @escaping (Measurement) -> Void,
         onDelete: @escaping (Measurement) -> Void
     ) {

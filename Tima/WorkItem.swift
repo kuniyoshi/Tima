@@ -4,9 +4,9 @@ import SwiftData
 // Work view
 struct WorkItem: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var works: [Work]
+    @Query private var works: [ImageColor]
 
-    @State private var work: Work
+    @State private var work: ImageColor
     @State private var name: String = ""
     @State private var isNameEditing = false
     @FocusState private var isNameFocused: Bool
@@ -52,7 +52,7 @@ struct WorkItem: View {
         }
     }
 
-    init(work: Work) {
+    init(work: ImageColor) {
         self.work = work
         self._name = State(initialValue: work.name)
     }
@@ -60,16 +60,16 @@ struct WorkItem: View {
 
 #Preview {
     let container = try! ModelContainer(
-        for: Work.self,
+        for: ImageColor.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let context = ModelContext(container)
 
-    context.insert(Work(name: "blue", color: .blue))
-    context.insert(Work(name: "red", color: .red))
-    context.insert(Work(name: "green", color: .green))
+    context.insert(ImageColor(name: "blue", color: .blue))
+    context.insert(ImageColor(name: "red", color: .red))
+    context.insert(ImageColor(name: "green", color: .green))
 
-    let initial = Work(name: "デザイン", color: .red)
+    let initial = ImageColor(name: "デザイン", color: .red)
 
     return WorkItem(work: initial)
         .modelContainer(container)

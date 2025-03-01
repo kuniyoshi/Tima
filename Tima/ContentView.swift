@@ -84,7 +84,7 @@ struct ContentView: View {
 
 #Preview {
     let schema = Schema([
-        Work.self,
+        ImageColor.self,
         Measurement.self,
         TimeBox.self,
     ])

@@ -7,7 +7,7 @@ struct TimaApp: App {
     var sharedModelContainer: ModelContainer = {
         // delete `~/Library/Containers/jp.pura.Tima/Data/Library/Application\ Support/default.store` on destructive change on model
         let schema = Schema([
-                                Work.self,
+                                ImageColor.self,
                                 Measurement.self,
                                 TimeBox.self,
                             ])

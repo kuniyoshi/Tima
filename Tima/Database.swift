@@ -7,7 +7,7 @@ import Foundation
 // This provides all of model which stored.
 @MainActor
 final class Database: ObservableObject {
-    private static func mapToGroupedMeasurements(from measurements: [Measurement], with works: [Work]) -> [[(Measurement, Work)]] {
+    private static func mapToGroupedMeasurements(from measurements: [Measurement], with works: [ImageColor]) -> [[(Measurement, ImageColor)]] {
         let dictionary = Dictionary(grouping: measurements, by: { measurement in
             Calendar.current.startOfDay(for: measurement.start)
         })
@@ -25,7 +25,7 @@ final class Database: ObservableObject {
         }
     }
 
-    private static func mapToMeasurementSpans(from measurements: [Measurement], with works: [Work]) -> [(Int, Int, SwiftUI.Color)] {
+    private static func mapToMeasurementSpans(from measurements: [Measurement], with works: [ImageColor]) -> [(Int, Int, SwiftUI.Color)] {
         let from = Calendar.current.startOfDay(for: Date())
         return measurements.filter { $0.start >= from }
             .map { measurement in
@@ -37,9 +37,9 @@ final class Database: ObservableObject {
     }
 
     @Published private(set) var measurements: [Measurement] = []
-    @Published private(set) var groupedMeasurements: [[(Measurement, Work)]] = []
+    @Published private(set) var groupedMeasurements: [[(Measurement, ImageColor)]] = []
     @Published private(set) var measurementSpans: [(Int, Int, SwiftUI.Color)] = [] // TODO: use specific structure
-    @Published private(set) var works: [Work] = []
+    @Published private(set) var works: [ImageColor] = []
     @Published private(set) var timeBoxes: [TimeBox] = []
 
     private var modelContext: ModelContext
@@ -75,7 +75,7 @@ final class Database: ObservableObject {
         fetchTimeBoxes()
     }
 
-    func addTask(_ item: Work) {
+    func addTask(_ item: ImageColor) {
         modelContext.insert(item)
         works.append(item)
     }
@@ -137,7 +137,7 @@ final class Database: ObservableObject {
 
     private func fetchTasks() {
         do {
-            let request = FetchDescriptor<Work>()
+            let request = FetchDescriptor<ImageColor>()
             works = try modelContext.fetch(request)
         } catch {
             print("Failed to fetch tasks: \(error)")
@@ -153,8 +153,8 @@ final class Database: ObservableObject {
         }
     }
 
-    private func findOrCreateWork(name: String) throws -> Work {
-        let request = FetchDescriptor<Work>(
+    private func findOrCreateWork(name: String) throws -> ImageColor {
+        let request = FetchDescriptor<ImageColor>(
             predicate: #Predicate {
                 $0.name == name
             }
@@ -166,7 +166,7 @@ final class Database: ObservableObject {
         if let existing = results.first {
             return existing
         } else {
-            let newWork = Work(name: name, color: .random)
+            let newWork = ImageColor(name: name, color: .random)
             modelContext.insert(newWork)
             works = (works + [newWork])
             return newWork

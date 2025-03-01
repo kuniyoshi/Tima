@@ -110,7 +110,7 @@ struct MeasurementItemView: View {
 }
 
 #Preview {
-    let work = Work(name: "デザイン", color: .blue)
+    let work = ImageColor(name: "デザイン", color: .blue)
     let measurement = Measurement(
         work: work.name,
         detail: "UIスケッチ",

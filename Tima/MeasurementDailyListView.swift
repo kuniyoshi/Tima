@@ -36,8 +36,8 @@ struct MeasurementDailyListView: View {
 }
 
 #Preview {
-    let workB = Work(name: "デザインb", color: .blue)
-    let workR = Work(name: "デザインr", color: .red)
+    let workB = ImageColor(name: "デザインb", color: .blue)
+    let workR = ImageColor(name: "デザインr", color: .red)
     let model = MeasurementDaillyListModel(
         pairs: [
             (MeasurementItemModel(Measurement(

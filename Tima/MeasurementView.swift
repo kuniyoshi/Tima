@@ -174,11 +174,11 @@ struct AlertDisplay: Equatable {
 }
 
 #Preview {
-    let container = try! ModelContainer(for: Schema([Work.self, Measurement.self]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let container = try! ModelContainer(for: Schema([ImageColor.self, Measurement.self]), configurations: ModelConfiguration(isStoredInMemoryOnly: true))
     let context = ModelContext(container)
 
-    let workA = Work(name: "task", color: .blue)
-    let workB = Work(name: "task2", color: .red)
+    let workA = ImageColor(name: "task", color: .blue)
+    let workB = ImageColor(name: "task2", color: .red)
 
     context.insert(workA)
     context.insert(workB)

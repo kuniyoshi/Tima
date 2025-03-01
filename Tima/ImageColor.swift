@@ -1,9 +1,9 @@
 import Foundation
 import SwiftData
 
-// Model class of task that represents name, and image color
+// Color of data
 @Model
-final class Work: Codable, Identifiable {
+final class ImageColor: Codable, Identifiable {
     private enum CodingKeys: String, CodingKey {
         case name
         case color
