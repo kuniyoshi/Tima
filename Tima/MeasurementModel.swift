@@ -8,7 +8,7 @@ class MeasurementModel: ObservableObject {
     private enum Transaction {
         case begin
         case stop
-        case resume(taskName: String, work: String)
+        case resume(work: String, detail: String)
     }
 
     @Published var work: String = ""
@@ -49,7 +49,7 @@ class MeasurementModel: ObservableObject {
                             }), work)
                         },
                         onPlay: { [unowned self] measurement in
-                            self.processTransaction(transaction: .resume(taskName: measurement.work, work: measurement.detail))
+                            self.processTransaction(transaction: .resume(work: measurement.work, detail: measurement.detail))
                         },
                         onDelete: { [unowned self] measurement in
                             self.delete(measurement: measurement)
