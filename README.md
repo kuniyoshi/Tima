@@ -25,8 +25,8 @@ can be implemented with simple coding.
 # SPECIFICATION NOTE
 
 - TimeBox
-- Task
-- Measurement includes Task
+- ImageColor decorates measurement's work
+- Measurement
 
 - やることを宣言する
 - かかった時間を振り返ることができる
