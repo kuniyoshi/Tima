@@ -9,16 +9,6 @@ class MeasurementTotalTimeModel: ObservableObject {
     private var lastPublishedAt: Date?
     private var cancellables: Set<AnyCancellable> = []
 
-    private var notification: UNMutableNotificationContent {
-        let content = UNMutableNotificationContent()
-        content.title = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndTitle.rawValue)
-        ?? SettingsDefaults.Measurement.dailyEndTitle
-        content.body = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndMessage.rawValue)
-        ?? SettingsDefaults.Measurement.dailyEndMessage
-        content.sound = nil
-        return content
-    }
-
     init(totalMinutes: Int = 0) {
         self.totalMinutes = totalMinutes
 
@@ -38,6 +28,16 @@ class MeasurementTotalTimeModel: ObservableObject {
                 lastPublishedAt = Date()
             }
             .store(in: &cancellables)
+    }
+
+    private var notification: UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.title = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndTitle.rawValue)
+        ?? SettingsDefaults.Measurement.dailyEndTitle
+        content.body = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndMessage.rawValue)
+        ?? SettingsDefaults.Measurement.dailyEndMessage
+        content.sound = nil
+        return content
     }
 
     func setValue(_ value: Int) {
