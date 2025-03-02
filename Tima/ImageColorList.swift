@@ -4,12 +4,12 @@ import SwiftData
 // List view for ImageColor
 struct ImageColorList: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var works: [ImageColor]
+    @Query private var imageColors: [ImageColor]
 
     var body: some View {
         VStack {
-            ForEach(works) { work in
-                ImageColorItem(work: work)
+            ForEach(imageColors) { imageColor in
+                ImageColorItem(work: imageColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
