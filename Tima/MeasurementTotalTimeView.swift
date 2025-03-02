@@ -31,7 +31,9 @@ struct MeasurementTotalTimeView: View {
     }
 
     private func notify(content: UNMutableNotificationContent) {
-        // TODO: settings where notify or not
+        if !model.canNotify {
+            return
+        }
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(

@@ -30,6 +30,10 @@ class MeasurementTotalTimeModel: ObservableObject {
             .store(in: &cancellables)
     }
 
+    var canNotify: Bool {
+        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)
+    }
+
     private var notification: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndTitle.rawValue)
@@ -39,7 +43,6 @@ class MeasurementTotalTimeModel: ObservableObject {
         content.sound = nil
         return content
     }
-
 
     private var dailyWorkMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
