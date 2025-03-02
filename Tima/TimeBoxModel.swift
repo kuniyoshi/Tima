@@ -148,18 +148,12 @@ class TimeBoxModel: ObservableObject {
                 case .Auto:
                     switch transition.state {
                         case .ready:
-                            playSe(
-                                fileName: Constants.timeBoxRestEndSound.rawValue,
-                                fileType: "mp3"
-                            )
+                            SoundManager.shared.playSe(fileName: Constants.timeBoxRestEndSound.rawValue)
                             notificationPublisher.send(endRestNotification)
                         case .running:
                             assert(false, "Should not be running automatically")
                         case .finished:
-                            playSe(
-                                fileName: Constants.timeBoxEndSound.rawValue,
-                                fileType: "mp3"
-                            )
+                            SoundManager.shared.playSe(fileName: Constants.timeBoxEndSound.rawValue)
                             notificationPublisher.send(endWorkNotification)
                     }
                 case .Button:
@@ -167,10 +161,7 @@ class TimeBoxModel: ObservableObject {
                         case .ready:
                             break
                         case .running:
-                            playSe(
-                                fileName: Constants.timeBoxBeginSound.rawValue,
-                                fileType: "mp3"
-                            )
+                            SoundManager.shared.playSe(fileName: Constants.timeBoxBeginSound.rawValue)
                         case .finished:
                             break
                     }
@@ -218,10 +209,6 @@ class TimeBoxModel: ObservableObject {
         let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
 
         return Date().timeIntervalSince(beganAt) >= adjustedDuration
-    }
-
-    private func playSe(fileName: String, fileType: String = "wav") {
-        SoundManager.shared.playSe(fileName: fileName)
     }
 
     private func tickWhileFinished() {
