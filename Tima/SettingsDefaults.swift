@@ -1,5 +1,11 @@
 // Application settings
 struct SettingsDefaults {
+    struct Measurement {
+        static let dailyWorkMinutes: Int = 8 * 60
+        static let dailyEndTitle = "Yeah!"
+        static let dailyEndMessage = "Today's work is over!"
+    }
+
     struct TimeBox {
         static let isSoundNotification: Bool = true
         static let isBannerNotification: Bool = true
