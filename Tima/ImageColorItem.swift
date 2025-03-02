@@ -52,9 +52,9 @@ struct ImageColorItem: View {
         }
     }
 
-    init(work: ImageColor) {
-        self.imageColor = work
-        self._name = State(initialValue: work.name)
+    init(imageColor: ImageColor) {
+        self.imageColor = imageColor
+        self._name = State(initialValue: imageColor.name)
     }
 }
 
@@ -71,6 +71,6 @@ struct ImageColorItem: View {
 
     let initial = ImageColor(name: "デザイン", color: .red)
 
-    return ImageColorItem(work: initial)
+    return ImageColorItem(imageColor: initial)
         .modelContainer(container)
 }

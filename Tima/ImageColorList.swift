@@ -9,7 +9,7 @@ struct ImageColorList: View {
     var body: some View {
         VStack {
             ForEach(imageColors) { imageColor in
-                ImageColorItem(work: imageColor)
+                ImageColorItem(imageColor: imageColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
