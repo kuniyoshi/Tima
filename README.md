@@ -94,6 +94,7 @@ These TODOs are not mandatory; they are just potential tasks (or suggestions).
 - add data import feature
 - Measurement can't edit date, it can only hour
 - empty text can be edit in measurement view
+- move sound file to settings?
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - add work completion
 - add a bit animation while time box
