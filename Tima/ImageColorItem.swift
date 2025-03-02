@@ -4,9 +4,9 @@ import SwiftData
 // ImageColor view
 struct ImageColorItem: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var works: [ImageColor]
+    @Query private var imageColors: [ImageColor]
 
-    @State private var work: ImageColor
+    @State private var imageColor: ImageColor
     @State private var name: String = ""
     @State private var isNameEditing = false
     @FocusState private var isNameFocused: Bool
@@ -15,11 +15,11 @@ struct ImageColorItem: View {
         VStack {
             HStack {
                 Image(systemName: "circle.fill")
-                    .foregroundColor(work.color.uiColor)
+                    .foregroundColor(imageColor.color.uiColor)
                     .onTapGesture {
                         // TODO: isColorEditing
                     }
-                Text(work.name)
+                Text(imageColor.name)
                     .font(.headline)
                     .onTapGesture {
                         isNameEditing = true
@@ -29,14 +29,14 @@ struct ImageColorItem: View {
                 ScrollViewReader { reader in
                     ScrollView(.vertical, showsIndicators: true) {
                         VStack {
-                            ForEach(works) { work in
+                            ForEach(imageColors) { work in
                                 Text(work.name)
                                     .id(work.id)
                                     .font(.headline)
-                                    .background(work == self.work ? Color.secondary.opacity(0.3) : SwiftUI.Color.clear)
+                                    .background(work == self.imageColor ? Color.secondary.opacity(0.3) : SwiftUI.Color.clear)
                                     .padding(2)
                                     .onTapGesture {
-                                        self.work = work
+                                        self.imageColor = work
                                         name = work.name
                                         isNameEditing = false
                                     }
@@ -45,7 +45,7 @@ struct ImageColorItem: View {
                     }
                     .padding()
                     .onAppear {
-                        reader.scrollTo(work.id, anchor: .center)
+                        reader.scrollTo(imageColor.id, anchor: .center)
                     }
                 }
             }
@@ -53,7 +53,7 @@ struct ImageColorItem: View {
     }
 
     init(work: ImageColor) {
-        self.work = work
+        self.imageColor = work
         self._name = State(initialValue: work.name)
     }
 }
