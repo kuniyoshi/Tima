@@ -43,7 +43,7 @@ struct TimeBoxView: View {
             TimeBoxListView(model.counts)
         }
         .task {
-            await requestNotificationPermission()
+            await requestNotificationPermission() // TODO: add to measurement too
         }
         .onAppear {
             model.notificationPublisher.sink { content in
