@@ -83,6 +83,8 @@ can be implemented with simple coding.
 
 # TODO
 
+These TODOs are not mandatory; they are just potential tasks (or suggestions).
+
 - notify when daily measurement finished
 - change from alert to sheet
 - add work list view, it can edit each works
