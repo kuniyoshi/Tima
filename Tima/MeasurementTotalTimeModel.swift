@@ -11,8 +11,10 @@ class MeasurementTotalTimeModel: ObservableObject {
 
     private var notification: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
-        content.title = "Yeah!" // TODO: settings
-        content.body = "Today's work is over!"
+        content.title = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndTitle.rawValue)
+        ?? SettingsDefaults.Measurement.dailyEndTitle
+        content.body = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndMessage.rawValue)
+        ?? SettingsDefaults.Measurement.dailyEndMessage
         content.sound = nil
         return content
     }
