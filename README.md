@@ -84,7 +84,6 @@ can be implemented with simple coding.
 # TODO
 
 - notify when daily measurement finished
-- rename export json name
 - change from alert to sheet
 - add work list view, it can edit each works
 - add indicator that wheter is in time box or not
