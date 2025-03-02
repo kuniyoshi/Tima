@@ -14,7 +14,7 @@ class MeasurementTotalTimeModel: ObservableObject {
 
         $totalMinutes
             .sink { [unowned self] newValue in
-                if newValue < 4 { // TODO: settings
+                if newValue < dailyWorkMinutes {
                     return
                 }
 
@@ -38,6 +38,11 @@ class MeasurementTotalTimeModel: ObservableObject {
         ?? SettingsDefaults.Measurement.dailyEndMessage
         content.sound = nil
         return content
+    }
+
+
+    private var dailyWorkMinutes: Int {
+        UserDefaults.standard.integer(forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
     }
 
     func setValue(_ value: Int) {
