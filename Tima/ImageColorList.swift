@@ -1,8 +1,8 @@
 import SwiftUI
 import SwiftData
 
-// List view for work
-struct WorkList: View {
+// List view for ImageColor
+struct ImageColorList: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var works: [ImageColor]
 
@@ -24,6 +24,6 @@ struct WorkList: View {
     context.insert(ImageColor(name: "red", color: .red))
     context.insert(ImageColor(name: "green", color: .green))
 
-    return WorkList()
+    return ImageColorList()
         .modelContext(context)
 }
