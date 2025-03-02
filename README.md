@@ -82,6 +82,10 @@ can be implemented with simple coding.
 - 履歴
   - 時間バーに実行履歴をマーク
 
+# SOUND
+
+Sounds are from [効果音ラボ](https://soundeffect-lab.info).
+
 # TODO
 
 These TODOs are not mandatory; they are just potential tasks (or suggestions).
