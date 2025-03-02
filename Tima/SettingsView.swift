@@ -177,10 +177,18 @@ struct SettingsView: View {
                             TextField("Message", text: $model.onWorkedMessage)
                         }
                     }
+
                     Section(header: Text("On rested").font(.subheadline)) {
                         VStack {
                             TextField("Title", text: $model.onRestedTitle)
                             TextField("Message", text: $model.onRestedMessage)
+                        }
+                    }
+
+                    Section(header: Text("On day end").font(.subheadline)) {
+                        VStack {
+                            TextField("Title", text: $model.onDailyEndTitle)
+                            TextField("Message", text: $model.onDailyEndMessage)
                         }
                     }
                 }

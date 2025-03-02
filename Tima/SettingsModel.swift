@@ -23,6 +23,18 @@ class SettingsModel: ObservableObject {
                 .set(onRestedMessage, forKey: SettingsKeys.TimeBox.restEndMessage.rawValue)
         }
     }
+    @Published var onDailyEndTitle: String {
+        didSet {
+            UserDefaults.standard
+                .set(onDailyEndTitle, forKey: SettingsKeys.Measurement.dailyEndTitle.rawValue)
+        }
+    }
+    @Published var onDailyEndMessage: String {
+        didSet {
+            UserDefaults.standard
+                .set(onDailyEndMessage, forKey: SettingsKeys.Measurement.dailyEndMessage.rawValue)
+        }
+    }
 
     init() {
         _onWorkedTitle = .init(
@@ -42,6 +54,15 @@ class SettingsModel: ObservableObject {
         _onRestedMessage = .init(
             initialValue: UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.restEndMessage.rawValue)
             ?? SettingsDefaults.TimeBox.restEndMessage
+        )
+        _onDailyEndTitle = .init(
+            initialValue: UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndTitle.rawValue)
+            ?? SettingsDefaults.Measurement.dailyEndTitle
+        )
+        _onDailyEndMessage = .init(
+            initialValue: UserDefaults.standard
+                .string(forKey: SettingsKeys.Measurement.dailyEndMessage.rawValue)
+            ?? SettingsDefaults.Measurement.dailyEndMessage
         )
     }
 }
