@@ -2,6 +2,7 @@ import Combine
 import UserNotifications
 import SwiftUI
 
+@MainActor
 class MeasurementTotalTimeModel: ObservableObject {
     @Published private(set) var totalMinutes: Int
     let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
@@ -30,6 +31,7 @@ class MeasurementTotalTimeModel: ObservableObject {
                    calendar.isDate(lastPublishedAt, inSameDayAs: Date()) {
                     return
                 }
+                SoundManager.shared.playSe(fileName: Constants.measurementDailyEndSound.rawValue)
                 notificationPublisher.send(notification)
                 lastPublishedAt = Date()
             }
