@@ -35,7 +35,7 @@ struct MeasurementTotalTimeView: View {
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
-            identifier: "notification", // TODO: commonize
+            identifier: Constants.notificationID.rawValue,
             content: content,
             trigger: trigger
         )

@@ -6,8 +6,6 @@ import Combine
 
 // TimeBox main view
 struct TimeBoxView: View {
-    private static let notificationID = "Tima.timeBoxNotification" // TODO: commonize
-
     @StateObject private var model: TimeBoxModel
     @State private var cancellable: Set<AnyCancellable> = []
 
@@ -61,7 +59,7 @@ struct TimeBoxView: View {
     private func onButton() {
         model.makeTransition()
         let center = UNUserNotificationCenter.current()
-        center.removeDeliveredNotifications(withIdentifiers: [Self.notificationID])
+        center.removeDeliveredNotifications(withIdentifiers: [Constants.notificationID.rawValue])
     }
 
     private func notify(content: UNMutableNotificationContent) {
@@ -71,7 +69,7 @@ struct TimeBoxView: View {
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
-            identifier: Self.notificationID,
+            identifier: Constants.notificationID.rawValue,
             content: content,
             trigger: trigger
         )

@@ -3,4 +3,5 @@ enum Constants: String {
     case timeBoxEndSound = "time_box_end"
     case timeBoxRestEndSound = "rest_end"
     case measurementDailyEndSound = "todays_work_time_end"
+    case notificationID = "Tima.timeBoxNotification"
 }
