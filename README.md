@@ -14,7 +14,8 @@ in `Measurement`,
 - `⌘-1` to show Measurement view
 - `⌘-2` to show TimeBox view
 - `⌘-I` to focus new item field in Measurement view
-- `space` to progress time box in TimeBox view
+- `Space` to progress time box in TimeBox view
+- `Escape` to quit editing
 - `⌘-E` to export model data
 
 # POLICY
