@@ -227,6 +227,7 @@ struct SettingsView: View {
         } else {
             errorMessageForBreakMinutes = "Please enter a valid number."
         }
+        // TODO: move to model
     }
 }
 
