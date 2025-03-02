@@ -37,8 +37,6 @@ class TimeBoxModel: ObservableObject {
     @Published private(set) var beganAt: Date?
     @Published private(set) var endAt: Date?
     @Published private(set) var remainingTime: String = "00:00"
-    @Published private(set) var audioPlayer: AVAudioPlayer?
-    // TODO: ^ move to view?
     let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
     private var transition: Transition?
     private var runningState = RunningState.ready {
@@ -94,10 +92,6 @@ class TimeBoxModel: ObservableObject {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
     }
 
-    private var canPlaySe: Bool {
-        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
-    }
-
     private var durationMinutes: Int {
         UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
     }
@@ -125,15 +119,6 @@ class TimeBoxModel: ObservableObject {
         content.body = body
         content.sound = nil
         return content
-    }
-
-    private var soundVolume: Float {
-        if (UserDefaults.standard
-            .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil) {
-            return UserDefaults.standard.float(forKey: SettingsKeys.TimeBox.soundVolume.rawValue)
-        } else {
-            return SettingsDefaults.TimeBox.soundVolume
-        }
     }
 
     func beginTick() {
@@ -236,22 +221,7 @@ class TimeBoxModel: ObservableObject {
     }
 
     private func playSe(fileName: String, fileType: String = "wav") {
-        if !canPlaySe {
-            return
-        }
-
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
-            print("Could not find \(fileName).\(fileType)")
-            return
-        }
-
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.volume = soundVolume
-            audioPlayer?.play()
-        } catch {
-            print("Could not play(\(fileName).\(fileType)): \(error.localizedDescription)")
-        }
+        SoundManager.shared.playSe(fileName: fileName)
     }
 
     private func tickWhileFinished() {
