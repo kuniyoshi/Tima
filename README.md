@@ -91,8 +91,6 @@ can be implemented with simple coding.
 - add data import feature
 - Measurement can't edit date, it can only hour
 - empty text can be edit in measurement view
-- submit on enter while editing time
-- fix editing time on enter
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
 - add work completion
 - add a bit animation while time box
