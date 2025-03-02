@@ -6,7 +6,7 @@ import Combine
 
 // TimeBox main view
 struct TimeBoxView: View {
-    private static let notificationID = "Tima.timeBoxNotification"
+    private static let notificationID = "Tima.timeBoxNotification" // TODO: commonize
 
     @StateObject private var model: TimeBoxModel
     @State private var cancellable: Set<AnyCancellable> = []
