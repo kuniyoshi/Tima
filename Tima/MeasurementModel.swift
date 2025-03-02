@@ -21,6 +21,7 @@ class MeasurementModel: ObservableObject {
     @Published private(set) var spans: [(Int, Int, Color)] = []
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var dailyListModels: [MeasurementDaillyListModel] = []
+    @Published private(set) var totalTimeModel: MeasurementTotalTimeModel
     private(set) var lastRemoved: Measurement?
     private var timer: Timer?
     private let database: Database
@@ -28,6 +29,7 @@ class MeasurementModel: ObservableObject {
 
     init(database: Database) {
         self.database = database
+        totalTimeModel = .init()
 
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
@@ -65,6 +67,11 @@ class MeasurementModel: ObservableObject {
                 self?.onSleep()
             }
             .store(in: &cancellables)
+
+        $spans.sink { [unowned self] spans in
+            totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +))
+        }
+        .store(in: &cancellables)
     }
 
     func begin(work: String, detail: String) {
@@ -170,6 +177,8 @@ class MeasurementModel: ObservableObject {
             } else {
                 elapsedSeconds = "\(seconds)"
             }
+
+            totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
         }
     }
 

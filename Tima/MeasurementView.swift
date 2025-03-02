@@ -88,6 +88,11 @@ struct MeasurementView: View {
             Memory24HourHorizontalView(spans: model.spans)
                 .padding()
 
+            HStack {
+                Spacer()
+                MeasurementTotalTimeView(model: model.totalTimeModel)
+            }
+
             ScrollViewReader { proxy in
                 List {
                     HStack {
