@@ -24,6 +24,9 @@ struct MeasurementTotalTimeView: View {
             }
             .store(in: &cancellables)
         }
+        .task {
+            await NotificationManager.shared.requestNotificationPermission()
+        }
     }
 
     init(model: MeasurementTotalTimeModel) {
