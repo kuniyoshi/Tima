@@ -138,6 +138,9 @@ struct MeasurementView: View {
                 showAlert = newValue.error != nil
             }
         }
+        .task {
+            await NotificationManager.shared.requestNotificationPermission()
+        }
     }
 
     init(model: MeasurementModel) {
