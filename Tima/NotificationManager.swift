@@ -20,7 +20,7 @@ actor NotificationManager {
     }
 
     @MainActor
-    func notify(content: UNMutableNotificationContent) {
+    func notify(_ content: UNMutableNotificationContent) {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
             identifier: Constants.notificationID.rawValue,
