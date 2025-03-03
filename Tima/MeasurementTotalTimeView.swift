@@ -20,7 +20,7 @@ struct MeasurementTotalTimeView: View {
         .padding(.horizontal)
         .onAppear {
             model.notificationPublisher.sink { notification in
-                notify(content: notification)
+                NotificationManager.shared.notify(content: notification)
             }
             .store(in: &cancellables)
         }
@@ -32,28 +32,6 @@ struct MeasurementTotalTimeView: View {
     init(model: MeasurementTotalTimeModel) {
         _model = .init(wrappedValue: model)
     }
-
-    private func notify(content: UNMutableNotificationContent) {
-        if !model.canNotify {
-            return
-        }
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(
-            identifier: Constants.notificationID.rawValue,
-            content: content,
-            trigger: trigger
-        )
-
-        Task {
-            do {
-                try await UNUserNotificationCenter.current().add(request)
-            } catch {
-                print("Could not add notification: \(error.localizedDescription)")
-            }
-        }
-    }
-
 }
 
 #Preview {
