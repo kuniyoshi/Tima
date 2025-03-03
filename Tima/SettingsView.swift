@@ -71,9 +71,7 @@ struct SettingsView: View {
                     HStack {
                         Slider(value: $soundVolume)
                             .frame(width: 240)
-                            .onChange(of: soundVolume) {
- _,
- newValue in
+                            .onChange(of: soundVolume) { _, newValue in
                                 audioPlayer?.volume = newValue
                                 UserDefaults.standard
                                     .set(
