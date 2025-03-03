@@ -41,7 +41,7 @@ struct TimeBoxView: View {
             TimeBoxListView(model.counts)
         }
         .task {
-            await requestNotificationPermission() // TODO: add to measurement too
+            await NotificationManager.shared.requestNotificationPermission()
         }
         .onAppear {
             model.notificationPublisher.sink { content in
@@ -81,10 +81,6 @@ struct TimeBoxView: View {
                 print("Could not add notification: \(error.localizedDescription)")
             }
         }
-    }
-
-    private func requestNotificationPermission() async {
-        await NotificationManager.shared.requestNotificationPermission()
     }
 }
 
