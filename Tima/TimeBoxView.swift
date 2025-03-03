@@ -63,23 +63,8 @@ struct TimeBoxView: View {
     }
 
     private func notify(content: UNMutableNotificationContent) {
-        if !model.isBannerNotification {
-            return
-        }
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let request = UNNotificationRequest(
-            identifier: Constants.notificationID.rawValue,
-            content: content,
-            trigger: trigger
-        )
-
-        Task {
-            do {
-                try await UNUserNotificationCenter.current().add(request)
-            } catch {
-                print("Could not add notification: \(error.localizedDescription)")
-            }
+        if model.isBannerNotification {
+            NotificationManager.shared.notify(content)
         }
     }
 }
