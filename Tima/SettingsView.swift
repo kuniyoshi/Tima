@@ -37,10 +37,6 @@ struct SettingsView: View {
     @State private var workMinutes: String = UserDefaults.standard
         .string(forKey: SettingsKeys.TimeBox.workMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.workMinutes)
     @State private var errorMessageForWorkMinutes: String?
-    // TODO: 長い
-    @State private var breakMinutes: String = UserDefaults.standard
-        .string(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.breakMinutes)
-    @State private var errorMessageForBreakMinutes: String?
 
     @State private var soundVolume: Float = {
         if UserDefaults.standard
@@ -128,17 +124,14 @@ struct SettingsView: View {
                         VStack {
                             HStack {
                                 Text("Break Minutes")
-                                TextField("", text: $breakMinutes)
+                                TextField("", text: $model.breakMinutes.value)
                                     .frame(width: 60)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: breakMinutes) {
-                                        setBreakMinutes(breakMinutes)
-                                    }
                             }
 
-                            if let errorMessageForBreakMinutes {
-                                Text(errorMessageForBreakMinutes)
+                            if let error = model.breakMinutes.error {
+                                Text(error)
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }
@@ -199,15 +192,6 @@ struct SettingsView: View {
             UserDefaults.standard.set(value, forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
         } else {
             errorMessageForWorkMinutes = "Please enter a valid number."
-        }
-    }
-
-    private func setBreakMinutes(_ minutes: String) {
-        if let value = Int(minutes) {
-            errorMessageForBreakMinutes = nil
-            UserDefaults.standard.set(value, forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
-        } else {
-            errorMessageForBreakMinutes = "Please enter a valid number."
         }
     }
 }

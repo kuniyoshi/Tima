@@ -5,21 +5,23 @@ class SettingsNumberItem: ObservableObject { // TODO; isolate file
         didSet {
             error = nil
             if let newValue = Int(value) {
-                UserDefaults.standard
-                    .set(newValue, forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
+                UserDefaults.standard.set(newValue, forKey: key)
             } else {
                 error = "Please enter a valid number."
             }
         }
     }
     @Published var error: String?
+    private let key: String
 
-    init(_ value: String) {
+    init(_ value: String, forKey: String) {
         self.value = value
+        self.key = forKey
     }
 }
 
 class SettingsModel: ObservableObject {
+    var breakMinutes: SettingsNumberItem
     var dailyWorkMinutes: SettingsNumberItem
 
     @Published var onWorkedTitle: String {
@@ -58,9 +60,15 @@ class SettingsModel: ObservableObject {
     }
 
     init() {
+        breakMinutes = SettingsNumberItem(
+            UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
+            ?? String(SettingsDefaults.TimeBox.breakMinutes),
+            forKey: SettingsKeys.TimeBox.breakMinutes.rawValue
+        )
         dailyWorkMinutes = SettingsNumberItem(
             UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
-            ?? String(SettingsDefaults.Measurement.dailyWorkMinutes)
+            ?? String(SettingsDefaults.Measurement.dailyWorkMinutes),
+            forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue
         )
 
         _onWorkedTitle = .init(
