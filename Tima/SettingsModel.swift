@@ -1,6 +1,27 @@
 import SwiftUI
 
+class SettingsNumberItem: ObservableObject { // TODO; isolate file
+    @Published var value: String {
+        didSet {
+            error = nil
+            if let newValue = Int(value) {
+                UserDefaults.standard
+                    .set(newValue, forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
+            } else {
+                error = "Please enter a valid number."
+            }
+        }
+    }
+    @Published var error: String?
+
+    init(_ value: String) {
+        self.value = value
+    }
+}
+
 class SettingsModel: ObservableObject {
+    var dailyWorkMinutes: SettingsNumberItem
+
     @Published var onWorkedTitle: String {
         didSet {
             UserDefaults.standard.set(onWorkedTitle, forKey: SettingsKeys.TimeBox.workEndTitle.rawValue)
@@ -37,6 +58,11 @@ class SettingsModel: ObservableObject {
     }
 
     init() {
+        dailyWorkMinutes = SettingsNumberItem(
+            UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
+            ?? String(SettingsDefaults.Measurement.dailyWorkMinutes)
+        )
+
         _onWorkedTitle = .init(
             initialValue: UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.workEndTitle.rawValue)
             ?? SettingsDefaults.TimeBox.workEndTitle

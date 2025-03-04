@@ -40,9 +40,6 @@ struct SettingsView: View {
     // TODO: 長い
     @State private var breakMinutes: String = UserDefaults.standard
         .string(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.breakMinutes)
-    @State private var dailyWorkMinutes: String = UserDefaults.standard
-        .string(forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
-    ?? String(SettingsDefaults.Measurement.dailyWorkMinutes)
     @State private var errorMessageForBreakMinutes: String?
 
     @State private var soundVolume: Float = {
@@ -113,7 +110,7 @@ struct SettingsView: View {
                             HStack {
                                 Text("Work Minutes")
                                 TextField("", text: $workMinutes)
-                                    .frame(width: 50)
+                                    .frame(width: 60)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .multilineTextAlignment(.trailing)
                                     .onChange(of: workMinutes) {
@@ -132,7 +129,7 @@ struct SettingsView: View {
                             HStack {
                                 Text("Break Minutes")
                                 TextField("", text: $breakMinutes)
-                                    .frame(width: 50)
+                                    .frame(width: 60)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .multilineTextAlignment(.trailing)
                                     .onChange(of: breakMinutes) {
@@ -150,17 +147,14 @@ struct SettingsView: View {
                         VStack {
                             HStack {
                                 Text("Daily work minutes")
-                                TextField("", text: $dailyWorkMinutes)
-                                    .frame(width: 50)
+                                TextField("", text: $model.dailyWorkMinutes.value)
+                                    .frame(width: 60)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: dailyWorkMinutes) {
-                                        setDailyWorkMinutes(dailyWorkMinutes)
-                                    }
                             }
 
-                            if let errorMessageForBreakMinutes {
-                                Text(errorMessageForBreakMinutes)
+                            if let error = model.dailyWorkMinutes.error {
+                                Text(error)
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }
@@ -215,17 +209,6 @@ struct SettingsView: View {
         } else {
             errorMessageForBreakMinutes = "Please enter a valid number."
         }
-    }
-
-    private func setDailyWorkMinutes(_ minutes: String) {
-        if let value = Int(minutes) {
-            errorMessageForBreakMinutes = nil
-            UserDefaults.standard
-                .set(value, forKey: SettingsKeys.Measurement.dailyWorkMinutes.rawValue)
-        } else {
-            errorMessageForBreakMinutes = "Please enter a valid number."
-        }
-        // TODO: move to model
     }
 }
 
