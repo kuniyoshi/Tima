@@ -90,7 +90,6 @@ Sounds are from [効果音ラボ](https://soundeffect-lab.info).
 
 These TODOs are not mandatory; they are just potential tasks (or suggestions).
 
-- notify when daily measurement finished
 - change from alert to sheet
 - add work list view, it can edit each works
 - add indicator that wheter is in time box or not
