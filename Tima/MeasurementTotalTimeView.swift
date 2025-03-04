@@ -20,7 +20,7 @@ struct MeasurementTotalTimeView: View {
         .padding(.horizontal)
         .onAppear {
             model.notificationPublisher.sink { notification in
-                notify(notification)
+                NotificationManager.shared.notify(notification)
             }
             .store(in: &cancellables)
         }
@@ -31,10 +31,6 @@ struct MeasurementTotalTimeView: View {
 
     init(model: MeasurementTotalTimeModel) {
         _model = .init(wrappedValue: model)
-    }
-
-    func notify(_ content: UNMutableNotificationContent) {
-        NotificationManager.shared.notify(content) // TODO: inline
     }
 }
 

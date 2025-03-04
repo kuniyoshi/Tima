@@ -45,7 +45,7 @@ struct TimeBoxView: View {
         }
         .onAppear {
             model.notificationPublisher.sink { content in
-                notify(content: content)
+                NotificationManager.shared.notify(content)
             }
             .store(in: &cancellable)
             model.beginTick()
@@ -60,10 +60,6 @@ struct TimeBoxView: View {
         model.makeTransition()
         let center = UNUserNotificationCenter.current()
         center.removeDeliveredNotifications(withIdentifiers: [Constants.notificationID.rawValue])
-    }
-
-    private func notify(content: UNMutableNotificationContent) {
-        NotificationManager.shared.notify(content) // TODO: inline
     }
 }
 
