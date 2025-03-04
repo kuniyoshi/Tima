@@ -22,9 +22,9 @@ In `TimeBox`,
 
 - `⌘-1` to show Measurement view
 - `⌘-2` to show TimeBox view
-- `⌘-I` to focus new item field in Measurement view
-- `Space` to progress time box in TimeBox view
-- `Escape` to quit editing
+- `⌘-I` to focus on the new item field in the Measurement view
+- `Space` to progress timebox in the TimeBox view
+- `Escape` to quit textfield editing
 - `⌘-E` to export model data
 
 # POLICY
