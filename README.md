@@ -33,8 +33,16 @@ In `TimeBox`,
 We don't do complicated coding. Instead, we adopt effective features that
 can be implemented with simple coding.
 
-# SPECIFICATION NOTE
+# PURPOSE
 
+Focus to the work by time box.
+
+1. assert, and recognize what work to be
+1. dive into time box
+1. rest a few minutes
+1. repeat time box until work finished
+
+The app will be designed to control by keyboard only.
 - TimeBox
 - ImageColor decorates measurement's work
 - Measurement
