@@ -30,10 +30,6 @@ class MeasurementTotalTimeModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    var canNotify: Bool {
-        UserDefaults.standard.bool(forKey: SettingsKeys.Notification.showBanner.rawValue)
-    }
-
     private var notification: UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = UserDefaults.standard.string(forKey: SettingsKeys.Measurement.dailyEndTitle.rawValue)
