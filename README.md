@@ -4,20 +4,19 @@ Tima
 
 # USAGE
 
-First, select a view from, `Measurement` or `TimeBox`.
+First, select a view: `Measurement` or `TimeBox`.
 
 In `Measurement`,
 
-1. write work name, and detail
-1. and push play button.
+1. Enter the work name and details
+1. Press the play button.
 
 In `TimeBox`,
 
-1. `Space` to start time box
-1. after the specific minutes passed,
-1. the app notify the time box over,
-1. then rest a few minutes,
-1. and finnaly the app notify a new time box to begin.
+1. Press `Space` to start a timebox
+1. After the specific minutes passed, the app notifies you when timebox is over
+1. Take a short break
+1. The app notifies you when the next timebox to begin.
 
 # KEY BINDINGS
 
