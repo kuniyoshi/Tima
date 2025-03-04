@@ -90,21 +90,25 @@ Sounds are from [効果音ラボ](https://soundeffect-lab.info).
 
 These TODOs are not mandatory; they are just potential tasks (or suggestions).
 
+## Difficult TODO
+
+- add indicator that wheter is in time box or not
+- add work completion
+- ContentView's Picker leads to memory leak
+
+## Lower Priority TODO
+
 - change from alert to sheet
 - add work list view, it can edit each works
-- add indicator that wheter is in time box or not
 - keep layout while using measurement view
 - add data import feature
 - Measurement can't edit date, it can only hour
 - empty text can be edit in measurement view
 - move sound file to settings?
 - TimeBox も編集したい, しかし記号で表示しているので WYSIWYG にならない
-- add work completion
 - add a bit animation while time box
-- fix scroll on measurements
 - add a bit animation while measurement
+- fix scroll on measurements
 - show graph
-- ContentView's Picker leads to memory leak
 - github action to build applicatoin
 - use logger to show error, instead of `print` <- Are the app users interesting in errors?
-
