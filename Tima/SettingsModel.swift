@@ -1,26 +1,26 @@
 import SwiftUI
 
-class SettingsNumberItem: ObservableObject { // TODO; isolate file
-    @Published var value: String {
-        didSet {
-            error = nil
-            if let newValue = Int(value) {
-                UserDefaults.standard.set(newValue, forKey: key)
-            } else {
-                error = "Please enter a valid number."
+class SettingsModel: ObservableObject {
+    class SettingsNumberItem: ObservableObject {
+        @Published var value: String {
+            didSet {
+                error = nil
+                if let newValue = Int(value) {
+                    UserDefaults.standard.set(newValue, forKey: key)
+                } else {
+                    error = "Please enter a valid number."
+                }
             }
         }
-    }
-    @Published var error: String?
-    private let key: String
+        @Published var error: String?
+        private let key: String
 
-    init(_ value: String, forKey: String) {
-        self.value = value
-        self.key = forKey
+        init(_ value: String, forKey: String) {
+            self.value = value
+            self.key = forKey
+        }
     }
-}
 
-class SettingsModel: ObservableObject {
     var workMinutes: SettingsNumberItem
     var breakMinutes: SettingsNumberItem
     var dailyWorkMinutes: SettingsNumberItem
