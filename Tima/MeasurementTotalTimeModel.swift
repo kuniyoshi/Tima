@@ -31,7 +31,7 @@ class MeasurementTotalTimeModel: ObservableObject {
     }
 
     var canNotify: Bool {
-        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)
+        UserDefaults.standard.bool(forKey: SettingsKeys.Notification.showBanner.rawValue)
     }
 
     private var notification: UNMutableNotificationContent {

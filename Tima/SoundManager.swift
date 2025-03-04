@@ -10,7 +10,7 @@ class SoundManager {
     }
 
     private var canPlaySe: Bool {
-        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isSoundNotification.rawValue)
+        UserDefaults.standard.bool(forKey: SettingsKeys.Notification.playSound.rawValue)
     }
 
     private var soundVolume: Float {

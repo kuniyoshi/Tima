@@ -1,5 +1,10 @@
 // Application settings keys
 enum SettingsKeys {
+    enum Notification: String {
+        case playSound = "notification.playSound"
+        case showBanner = "notification.showBanner"
+    }
+
     enum Measurement: String {
         case dailyWorkMinutes = "measurement.dailyWorkMinutes"
         case dailyEndTitle = "measurement.dailyEndTitle"
@@ -7,8 +12,6 @@ enum SettingsKeys {
     }
 
     enum TimeBox: String {
-        case isSoundNotification = "timeBox.isSoundNotification" // TODO: commonize
-        case isBannerNotification = "timeBox.isBannerNotification"
         case workMinutes = "timeBox.workMinutes"
         case breakMinutes = "timeBox.breakMinutes"
         case soundVolume = "timeBox.soundVolume"

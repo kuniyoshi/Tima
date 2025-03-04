@@ -28,10 +28,10 @@ struct SettingsView: View {
         }
     }
 
-    @AppStorage(SettingsKeys.TimeBox.isSoundNotification.rawValue)
+    @AppStorage(SettingsKeys.Notification.playSound.rawValue)
     private var notificationWithSound: Bool = SettingsDefaults.TimeBox.isSoundNotification
 
-    @AppStorage(SettingsKeys.TimeBox.isBannerNotification.rawValue)
+    @AppStorage(SettingsKeys.Notification.showBanner.rawValue)
     private var notificationFromCenter: Bool = SettingsDefaults.TimeBox.isBannerNotification
 
     @State private var soundVolume: Float = {

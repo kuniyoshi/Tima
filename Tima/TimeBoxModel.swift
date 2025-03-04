@@ -73,8 +73,8 @@ class TimeBoxModel: ObservableObject {
         .assign(to: &$counts)
     }
 
-    var isBannerNotification: Bool {
-        UserDefaults.standard.bool(forKey: SettingsKeys.TimeBox.isBannerNotification.rawValue)
+    var isBannerNotification: Bool { // TODO: move to manager, check measurement
+        UserDefaults.standard.bool(forKey: SettingsKeys.Notification.showBanner.rawValue)
     }
 
     var isRemainingTimeViable: Bool {
