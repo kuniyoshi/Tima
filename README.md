@@ -4,10 +4,20 @@ Tima
 
 # USAGE
 
-First, select a view from, `Measurement` or `TimeBoxe`.
+First, select a view from, `Measurement` or `TimeBox`.
 
-in `Measurement`,
+In `Measurement`,
 
+1. write work name, and detail
+1. and push play button.
+
+In `TimeBox`,
+
+1. `Space` to start time box
+1. after the specific minutes passed,
+1. the app notify the time box over,
+1. then rest a few minutes,
+1. and finnaly the app notify a new time box to begin.
 
 # KEY BINDINGS
 
@@ -33,26 +43,6 @@ can be implemented with simple coding.
 - かかった時間を振り返ることができる
 - サウンドと通知とで 25 分のタイムボックスを提供する
 - 作業を邪魔しない、つまり、キーボードだけで操作できる
-
-## USAGE
-
-### MEASUREMENT
-
-1. アプリを起動する
-1. Tab キーで大項目にフォーカスする
-1. 大項目にテキストを入力する
-1. Tab キーで小項目にフォーカスする
-1. 小項目にテキストを入力する
-1. Enter キーで測定を始める
-
-### TIMEBOX
-
-1. Tab キーでアラームにフォーカスする
-1. Space キーでタイムボックスを開始する
-1. 25 分経過する
-1. サウンドを再生し、通知を表示する
-1. 5 分経過する
-1. サウンドを再生し、通知を表示する
 
 # SOUND
 
