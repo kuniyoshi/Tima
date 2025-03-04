@@ -6,6 +6,11 @@ actor NotificationManager {
     private init() {
     }
 
+    @MainActor
+    private var showBanner: Bool {
+        UserDefaults.standard.bool(forKey: SettingsKeys.Notification.showBanner.rawValue)
+    }
+
     func requestNotificationPermission() async {
         let center = UNUserNotificationCenter.current()
         do {
@@ -21,6 +26,10 @@ actor NotificationManager {
 
     @MainActor
     func notify(_ content: UNMutableNotificationContent) {
+        if !showBanner {
+            return
+        }
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(
             identifier: Constants.notificationID.rawValue,

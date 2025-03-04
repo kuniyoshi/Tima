@@ -63,9 +63,7 @@ struct TimeBoxView: View {
     }
 
     private func notify(content: UNMutableNotificationContent) {
-        if model.isBannerNotification {
-            NotificationManager.shared.notify(content)
-        }
+        NotificationManager.shared.notify(content) // TODO: inline
     }
 }
 

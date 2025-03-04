@@ -34,9 +34,7 @@ struct MeasurementTotalTimeView: View {
     }
 
     func notify(_ content: UNMutableNotificationContent) {
-        if model.canNotify {
-            NotificationManager.shared.notify(content)
-        }
+        NotificationManager.shared.notify(content) // TODO: inline
     }
 }
 
