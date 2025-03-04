@@ -21,6 +21,7 @@ class SettingsNumberItem: ObservableObject { // TODO; isolate file
 }
 
 class SettingsModel: ObservableObject {
+    var workMinutes: SettingsNumberItem
     var breakMinutes: SettingsNumberItem
     var dailyWorkMinutes: SettingsNumberItem
 
@@ -60,6 +61,12 @@ class SettingsModel: ObservableObject {
     }
 
     init() {
+        workMinutes = SettingsNumberItem(
+            UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+            ?? String(SettingsDefaults.TimeBox.workMinutes),
+            forKey: SettingsKeys.TimeBox.workMinutes.rawValue
+        )
+
         breakMinutes = SettingsNumberItem(
             UserDefaults.standard.string(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
             ?? String(SettingsDefaults.TimeBox.breakMinutes),

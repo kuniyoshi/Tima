@@ -34,10 +34,6 @@ struct SettingsView: View {
     @AppStorage(SettingsKeys.TimeBox.isBannerNotification.rawValue)
     private var notificationFromCenter: Bool = SettingsDefaults.TimeBox.isBannerNotification
 
-    @State private var workMinutes: String = UserDefaults.standard
-        .string(forKey: SettingsKeys.TimeBox.workMinutes.rawValue) ?? String(SettingsDefaults.TimeBox.workMinutes)
-    @State private var errorMessageForWorkMinutes: String?
-
     @State private var soundVolume: Float = {
         if UserDefaults.standard
             .object(forKey: SettingsKeys.TimeBox.soundVolume.rawValue) != nil {
@@ -105,17 +101,14 @@ struct SettingsView: View {
                         VStack {
                             HStack {
                                 Text("Work Minutes")
-                                TextField("", text: $workMinutes)
+                                TextField("", text: $model.workMinutes.value)
                                     .frame(width: 60)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: workMinutes) {
-                                        setWorkMinutes(workMinutes)
-                                    }
-
                             }
-                            if let errorMessageForWorkMinutes {
-                                Text(errorMessageForWorkMinutes)
+
+                            if let error = model.workMinutes.error {
+                                Text(error)
                                     .foregroundColor(.red)
                                     .font(.caption)
                             }
@@ -184,15 +177,6 @@ struct SettingsView: View {
 
     init(model: SettingsModel) {
         _model = .init(wrappedValue: model)
-    }
-
-    private func setWorkMinutes(_ minutes: String) {
-        if let value = Int(minutes) {
-            errorMessageForWorkMinutes = nil
-            UserDefaults.standard.set(value, forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
-        } else {
-            errorMessageForWorkMinutes = "Please enter a valid number."
-        }
     }
 }
 
