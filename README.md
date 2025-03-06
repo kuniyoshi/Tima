@@ -54,6 +54,7 @@ These TODOs are optional suggestions rather ran strict requirements.
 ## Normal TODO
 
 - daily notificatoin is notworking
+- improve visibility of timebox view
 
 ## Difficult TODO
 
