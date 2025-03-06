@@ -51,6 +51,10 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 
 These TODOs are optional suggestions rather ran strict requirements.
 
+## Normal TODO
+
+- daily notificatoin is notworking
+
 ## Difficult TODO
 
 - Add some indicator to show wheter the app is currently in a timebox
