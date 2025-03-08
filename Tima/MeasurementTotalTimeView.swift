@@ -4,7 +4,6 @@ import UserNotifications
 
 struct MeasurementTotalTimeView: View {
     @StateObject private var model: MeasurementTotalTimeModel
-    @State private var cancellables = Set<AnyCancellable>()
 
     var body: some View {
         HStack {

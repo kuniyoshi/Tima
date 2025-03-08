@@ -1,7 +1,6 @@
 import SwiftUI
 import AVFoundation
 import UserNotifications
-import Combine
 
 // TimeBox model
 @MainActor
@@ -37,7 +36,6 @@ class TimeBoxModel: ObservableObject {
     @Published private(set) var beganAt: Date?
     @Published private(set) var endAt: Date?
     @Published private(set) var remainingTime: String = "00:00"
-    let notificationPublisher = PassthroughSubject<UNMutableNotificationContent, Never>()
     private var transition: Transition?
     private var runningState = RunningState.ready {
         didSet {
@@ -145,12 +143,12 @@ class TimeBoxModel: ObservableObject {
                     switch transition.state {
                         case .ready:
                             SoundManager.shared.playSe(fileName: Constants.timeBoxRestEndSound.rawValue)
-                            notificationPublisher.send(endRestNotification)
+                            NotificationManager.shared.notify(endRestNotification)
                         case .running:
                             assert(false, "Should not be running automatically")
                         case .finished:
                             SoundManager.shared.playSe(fileName: Constants.timeBoxEndSound.rawValue)
-                            notificationPublisher.send(endWorkNotification)
+                            NotificationManager.shared.notify(endWorkNotification)
                     }
                 case .Button:
                     switch transition.state {

@@ -7,7 +7,6 @@ import Combine
 // TimeBox main view
 struct TimeBoxView: View {
     @StateObject private var model: TimeBoxModel
-    @State private var cancellable: Set<AnyCancellable> = []
 
     var body: some View {
         VStack {
@@ -44,10 +43,6 @@ struct TimeBoxView: View {
             await NotificationManager.shared.requestNotificationPermission()
         }
         .onAppear {
-            model.notificationPublisher.sink { content in
-                NotificationManager.shared.notify(content)
-            }
-            .store(in: &cancellable)
             model.beginTick()
         }
     }
