@@ -53,7 +53,7 @@ These TODOs are optional suggestions rather ran strict requirements.
 
 ## Normal TODO
 
-- improve visibility of timebox view
+None now.
 
 ## Difficult TODO
 
@@ -76,4 +76,5 @@ These TODOs are optional suggestions rather ran strict requirements.
 - Fix scrolling behavior in the Measurement view
 - Display a graph of recorded
 - Set up a GitHub Action for building the application
+- Improve the visibility of the timebox count. However, making the count too explicit might not be ideal.
 - Use a logger for error messages instead of `print` <- Are the app users interesting in errors?
