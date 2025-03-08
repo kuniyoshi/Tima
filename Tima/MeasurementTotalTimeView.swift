@@ -18,12 +18,6 @@ struct MeasurementTotalTimeView: View {
                 .font(.caption)
         }
         .padding(.horizontal)
-        .onAppear {
-            model.notificationPublisher.sink { notification in
-                NotificationManager.shared.notify(notification)
-            }
-            .store(in: &cancellables)
-        }
         .task {
             await NotificationManager.shared.requestNotificationPermission()
         }
