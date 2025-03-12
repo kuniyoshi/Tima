@@ -61,6 +61,15 @@ class MeasurementModel: ObservableObject {
             }
             .assign(to: &$dailyListModels)
 
+        onTerminate.sink { [weak self] in
+            guard let self else { return }
+            if !self.isRunning {
+                return
+            }
+            self.processTransaction(transaction: .stop)
+        }
+        .store(in: &cancellables)
+
         let center = NSWorkspace.shared.notificationCenter
         center.publisher(for: NSWorkspace.willSleepNotification)
             .sink { [weak self] _ in
