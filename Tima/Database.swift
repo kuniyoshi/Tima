@@ -66,7 +66,8 @@ final class Database: ObservableObject {
             }
             .store(in: &cancellables)
 
-        onRefreshDate.sink { [unowned self] in
+        onRefreshDate.sink { [weak self] in
+            guard let self else { return }
             self.groupedMeasurements = Self.mapToGroupedMeasurements(from: self.measurements, with: self.imageColors)
             self.measurementSpans = Self.mapToMeasurementSpans(from: self.measurements, with: self.imageColors)
         }
