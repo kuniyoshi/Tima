@@ -27,7 +27,7 @@ class MeasurementModel: ObservableObject {
     private let database: Database
     private var cancellables: Set<AnyCancellable> = []
 
-    init(database: Database) {
+    init(database: Database, onTerminate: AnyPublisher<Void, Never>) {
         self.database = database
         totalTimeModel = .init()
 

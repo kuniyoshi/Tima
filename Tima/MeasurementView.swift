@@ -204,8 +204,10 @@ struct AlertDisplay: Equatable {
             end: Date(timeIntervalSinceNow: -3600)
         )
     )
-    let database = Database(modelContext: context)
+    let subject = PassthroughSubject<Void, Never>()
+    let database = Database(modelContext: context, onRefreshDate: subject.eraseToAnyPublisher())
+    let model = MeasurementModel(database: database, onTerminate: subject.eraseToAnyPublisher())
 
-    return MeasurementView(model: MeasurementModel(database: database))
+    return MeasurementView(model: model)
         .modelContainer(container)
 }

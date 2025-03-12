@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 // Entry point
 @main
@@ -25,9 +26,19 @@ struct TimaApp: App {
     @State private var showErrorDialog: Bool = false
     @State private var errorMessage: String = ""
 
+    private let refreshSubject = PassthroughSubject<Void, Never>()
+    private let terminateSubject = PassthroughSubject<Void, Never>()
+
     var body: some Scene {
         WindowGroup {
-            ContentView(database: Database(modelContext: sharedModelContainer.mainContext))
+            ContentView(
+                database: Database(
+                    modelContext: sharedModelContainer.mainContext,
+                    onRefreshDate: refreshSubject.eraseToAnyPublisher()
+                ),
+                onRefreshDate: refreshSubject.eraseToAnyPublisher(),
+                onTerminate: terminateSubject.eraseToAnyPublisher()
+            )
                 .alert(isPresented: $showErrorDialog) {
                     Alert(
                         title: Text("Export Error"),
@@ -44,6 +55,18 @@ struct TimaApp: App {
                     exportData()
                 }
                 .keyboardShortcut("E", modifiers: [.command])
+            }
+
+            CommandGroup(after: .textEditing) {
+                Button("Terminate Running") {
+                    terminateSubject.send()
+                }
+                .keyboardShortcut("T", modifiers: [.command])
+
+                Button("Refresh Today") {
+                    refreshSubject.send()
+                }
+                .keyboardShortcut("R", modifiers: [.command])
             }
         }
 

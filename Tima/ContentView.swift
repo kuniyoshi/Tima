@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 // Main view
 struct ContentView: View {
@@ -75,10 +76,12 @@ struct ContentView: View {
         }
     }
 
-    init(database: Database) {
+    init(database: Database, onRefreshDate: AnyPublisher<Void, Never>, onTerminate: AnyPublisher<Void, Never>) {
         self.database = database
-        _measurementModel = .init(wrappedValue: MeasurementModel(database: database))
-        _timeBoxModel = .init(wrappedValue: TimeBoxModel(database: database))
+        _measurementModel = .init(
+            wrappedValue: MeasurementModel(database: database, onTerminate: onTerminate)
+        )
+        _timeBoxModel = .init(wrappedValue: TimeBoxModel(database: database, onRefreshDate: onRefreshDate))
     }
 }
 
@@ -91,7 +94,12 @@ struct ContentView: View {
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
     do {
         let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-        return ContentView(database: Database(modelContext: container.mainContext))
+        let subject = PassthroughSubject<Void, Never>()
+        return ContentView(
+            database: Database(modelContext: container.mainContext, onRefreshDate: subject.eraseToAnyPublisher()),
+            onRefreshDate: subject.eraseToAnyPublisher(),
+            onTerminate: subject.eraseToAnyPublisher()
+        )
     } catch {
         fatalError("Could not create ModelContainer: \(error)")
     }

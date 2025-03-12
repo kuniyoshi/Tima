@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 import UserNotifications
+import Combine
 
 // TimeBox model
 @MainActor
@@ -29,6 +30,17 @@ class TimeBoxModel: ObservableObject {
         var queryType: QueryType
     }
 
+    private static func timeBoxesToSpans(_ timeBoxes: [TimeBox]) -> [(Int, Int)] {
+        let from = Calendar.current.startOfDay(for: Date())
+        let list = timeBoxes.filter {
+            $0.start >= from
+        }
+        return list.map { timeBox in
+            let minutes = Int(timeBox.start.timeIntervalSince(from)) / 60
+            return (minutes, timeBox.workMinutes)
+        }
+    }
+
     @Published private(set) var spans: [(Int, Int)] = []
     @Published private(set) var counts: [(String, Int)] = []
     @Published private(set) var isStateRunning: Bool = false
@@ -45,18 +57,12 @@ class TimeBoxModel: ObservableObject {
     }
     private let database: Database
     private var timer: Timer?
+    private var cancellables: Set<AnyCancellable> = []
 
-    init(database: Database) {
+    init(database: Database, onRefreshDate: AnyPublisher<Void, Never>) {
         self.database = database
         database.$timeBoxes.map { timeBoxes in
-            let from = Calendar.current.startOfDay(for: Date())
-            let list = timeBoxes.filter {
-                $0.start >= from
-            }
-            return list.map { timeBox in
-                let minutes = Int(timeBox.start.timeIntervalSince(from)) / 60
-                return (minutes, timeBox.workMinutes)
-            }
+            Self.timeBoxesToSpans(timeBoxes)
         }
         .assign(to: &$spans)
         database.$timeBoxes.map { timeBoxes in
@@ -69,6 +75,12 @@ class TimeBoxModel: ObservableObject {
             }
         }
         .assign(to: &$counts)
+
+        onRefreshDate.sink { [weak self] in
+            guard let self else { return }
+            self.spans = Self.timeBoxesToSpans(self.database.timeBoxes)
+        }
+        .store(in: &cancellables)
     }
 
     var isRemainingTimeViable: Bool {

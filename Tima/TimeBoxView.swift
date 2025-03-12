@@ -73,8 +73,9 @@ struct TimeBoxView: View {
     context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, workMinutes: 25))
     context.insert(TimeBox(start: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, workMinutes: 25))
 
-    let database = Database(modelContext: context)
+    let subject = PassthroughSubject<Void, Never>()
+    let database = Database(modelContext: context, onRefreshDate: subject.eraseToAnyPublisher())
 
-    return TimeBoxView(model: TimeBoxModel(database: database))
+    return TimeBoxView(model: TimeBoxModel(database: database, onRefreshDate: subject.eraseToAnyPublisher()))
         .modelContainer(container)
 }
