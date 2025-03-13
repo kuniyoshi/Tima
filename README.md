@@ -56,6 +56,7 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 Just a TODO.
 
 - Think about a view state when next day
+- Sometime, daily completion notification not worked
 
 ## Difficult TODO
 
