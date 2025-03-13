@@ -51,19 +51,23 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 
 # TODO
 
-These TODOs are optional suggestions rather ran strict requirements.
-
 ## Normal TODO
+
+Just a TODO.
 
 - Think about a view state when next day
 
 ## Difficult TODO
+
+These TODOs are optional suggestions rather ran strict requirements.
 
 - Add some indicator to show wheter the app is currently in a timebox
 - Implement work completion
 - Fix memory leaks caused by ContentView's Picker
 
 ## Lower Priority TODO
+
+These TODOs are optional suggestions rather ran strict requirements.
 
 - Change from alert to sheet
 - Add a work list view, it can edit each works
