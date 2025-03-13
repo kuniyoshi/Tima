@@ -53,7 +53,6 @@ These TODOs are optional suggestions rather ran strict requirements.
 
 ## Normal TODO
 
-- Think about finish button/short cut that stops measurement, and timebox
 - Think about a view state when next day
 
 ## Difficult TODO
