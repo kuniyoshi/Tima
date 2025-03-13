@@ -81,7 +81,13 @@ struct ContentView: View {
         _measurementModel = .init(
             wrappedValue: MeasurementModel(database: database, onTerminate: onTerminate)
         )
-        _timeBoxModel = .init(wrappedValue: TimeBoxModel(database: database, onRefreshDate: onRefreshDate))
+        _timeBoxModel = .init(
+            wrappedValue: TimeBoxModel(
+                database: database,
+                onRefreshDate: onRefreshDate,
+                onTerminate: onTerminate
+            )
+        )
     }
 }
 

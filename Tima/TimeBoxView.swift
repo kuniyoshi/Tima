@@ -75,7 +75,12 @@ struct TimeBoxView: View {
 
     let subject = PassthroughSubject<Void, Never>()
     let database = Database(modelContext: context, onRefreshDate: subject.eraseToAnyPublisher())
+    let model = TimeBoxModel(
+        database: database,
+        onRefreshDate: subject.eraseToAnyPublisher(),
+        onTerminate: subject.eraseToAnyPublisher()
+    )
 
-    return TimeBoxView(model: TimeBoxModel(database: database, onRefreshDate: subject.eraseToAnyPublisher()))
+    return TimeBoxView(model: model)
         .modelContainer(container)
 }

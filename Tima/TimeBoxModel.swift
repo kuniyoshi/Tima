@@ -59,7 +59,7 @@ class TimeBoxModel: ObservableObject {
     private var timer: Timer?
     private var cancellables: Set<AnyCancellable> = []
 
-    init(database: Database, onRefreshDate: AnyPublisher<Void, Never>) {
+    init(database: Database, onRefreshDate: AnyPublisher<Void, Never>, onTerminate: AnyPublisher<Void, Never>) {
         self.database = database
         database.$timeBoxes.map { timeBoxes in
             Self.timeBoxesToSpans(timeBoxes)
@@ -79,6 +79,12 @@ class TimeBoxModel: ObservableObject {
         onRefreshDate.sink { [weak self] in
             guard let self else { return }
             self.spans = Self.timeBoxesToSpans(self.database.timeBoxes)
+        }
+        .store(in: &cancellables)
+
+        onTerminate.sink { [weak self] in
+            guard let self else { return }
+            self.terminate()
         }
         .store(in: &cancellables)
     }
@@ -215,6 +221,28 @@ class TimeBoxModel: ObservableObject {
         let adjustedDuration = TimeInterval(durationMinutes * 60) * 0.9
 
         return Date().timeIntervalSince(beganAt) >= adjustedDuration
+    }
+
+    private func terminate() {
+        switch runningState {
+            case .ready:
+                break
+            case .running:
+                transition = .init(state: .finished, queryType: .Auto)
+            case .finished:
+                transition = .init(state: .ready, queryType: .Auto)
+        }
+        tick()
+
+        switch runningState {
+            case .ready:
+                break
+            case .running:
+                break
+            case .finished:
+                transition = .init(state: .ready, queryType: .Auto)
+        }
+        tick()
     }
 
     private func tickWhileFinished() {
