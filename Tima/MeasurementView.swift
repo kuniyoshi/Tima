@@ -47,7 +47,7 @@ struct MeasurementView: View {
                             "",
                             selection: Binding( // TODO: model?
                                 get: { start },
-                                set: { newValue in model.startedAt = newValue }
+                                set: { newValue in model.updateStartedAt(newValue) }
                             ),
                             displayedComponents: .hourAndMinute
                         )

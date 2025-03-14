@@ -14,7 +14,7 @@ class MeasurementModel: ObservableObject {
     @Published var work: String = ""
     @Published var detail: String = ""
     @Published private(set) var isRunning: Bool = false
-    @Published var startedAt: Date?
+    @Published private(set) var startedAt: Date?
     @Published private(set) var endedAt: Date?
     @Published private(set) var alertDisplay = AlertDisplay(error: nil)
     @Published private(set) var elapsedSeconds: String = ""
@@ -189,6 +189,10 @@ class MeasurementModel: ObservableObject {
 
             totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
         }
+    }
+
+    func updateStartedAt(_ startedAt: Date) {
+        self.startedAt = startedAt
     }
 
     func toggleRunning() {
