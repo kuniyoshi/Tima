@@ -34,7 +34,7 @@ struct ContentView: View {
                 .pickerStyle(SegmentedPickerStyle())
             }
             ToolbarItem {
-                switch measurementModel.isRunning {
+                switch measurementModel.state.isRunning {
                     case true:
                         Image(systemName: "ruler")
                             .padding()

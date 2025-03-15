@@ -11,11 +11,15 @@ class MeasurementModel: ObservableObject {
         case resume(work: String, detail: String)
     }
 
-    @Published var work: String = ""
-    @Published var detail: String = ""
-    @Published private(set) var isRunning: Bool = false
-    @Published private(set) var startedAt: Date?
-    @Published private(set) var endedAt: Date?
+    struct MeasurementState {
+        var work: String
+        var detail: String
+        var isRunning: Bool
+        var startedAt: Date?
+        var endedAt: Date?
+    }
+
+    @Published var state = MeasurementState(work: "", detail: "", isRunning: false, startedAt: nil, endedAt: nil)
     @Published private(set) var alertDisplay = AlertDisplay(error: nil)
     @Published private(set) var elapsedSeconds: String = ""
     @Published private(set) var spans: [(Int, Int, Color)] = []
@@ -63,7 +67,7 @@ class MeasurementModel: ObservableObject {
 
         onTerminate.sink { [weak self] in
             guard let self else { return }
-            if !self.isRunning {
+            if !self.state.isRunning {
                 return
             }
             self.processTransaction(transaction: .stop)
@@ -84,19 +88,19 @@ class MeasurementModel: ObservableObject {
     }
 
     func begin(work: String, detail: String) {
-        self.work = work
-        self.detail = detail
-        isRunning = true
-        startedAt = Date()
-        endedAt = nil
+        state.work = work
+        state.detail = detail
+        state.isRunning = true
+        state.startedAt = Date()
+        state.endedAt = nil
         elapsedSeconds = ""
     }
 
     func clear() {
-        startedAt = nil
-        endedAt = nil
-        work = ""
-        detail = ""
+        state.startedAt = nil
+        state.endedAt = nil
+        state.work = ""
+        state.detail = ""
         elapsedSeconds = ""
     }
 
@@ -105,11 +109,11 @@ class MeasurementModel: ObservableObject {
     }
 
     func newMeasurementOnStop() -> Measurement? {
-        if let startedAt,
-           let endedAt {
+        if let startedAt = state.startedAt,
+           let endedAt = state.endedAt {
             return Measurement(
-                work: work,
-                detail: detail,
+                work: state.work,
+                detail: state.detail,
                 start: startedAt,
                 end: endedAt
             )
@@ -118,10 +122,10 @@ class MeasurementModel: ObservableObject {
     }
 
     func newMeasurementOnResume() -> Measurement? {
-        if let startedAt {
+        if let startedAt = state.startedAt {
             return Measurement(
-                work: work,
-                detail: detail,
+                work: state.work,
+                detail: state.detail,
                 start: startedAt,
                 end: Date()
             )
@@ -177,7 +181,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func tick() {
-        if let startedAt = startedAt {
+        if let startedAt = state.startedAt {
             let duration = Int(Date().timeIntervalSince(startedAt))
             let minutes = duration / 60
             let seconds = duration % 60
@@ -192,11 +196,11 @@ class MeasurementModel: ObservableObject {
     }
 
     func updateStartedAt(_ startedAt: Date) {
-        self.startedAt = startedAt
+        state.startedAt = startedAt
     }
 
     func toggleRunning() {
-        if isRunning {
+        if state.isRunning {
             processTransaction(transaction: .stop)
         } else {
             processTransaction(transaction: .begin)
@@ -204,7 +208,7 @@ class MeasurementModel: ObservableObject {
     }
 
     private func onSleep() {
-        guard isRunning else { return }
+        guard state.isRunning else { return }
         processTransaction(transaction: .stop)
         alertDisplay = alertDisplay.weakWritten(title: "Auto stop", message: "You may fogot stop measurement.")
     }
@@ -212,32 +216,32 @@ class MeasurementModel: ObservableObject {
     private func processTransaction(transaction: Transaction) {
         switch transaction {
             case .begin:
-                isRunning = true
+                state.isRunning = true
             case .stop:
-                isRunning = false
+                state.isRunning = false
             case .resume(let work, let detail):
-                if isRunning,
+                if state.isRunning,
                    let newMeasurement = newMeasurementOnResume() {
                     save(measurement: newMeasurement)
                 }
                 begin(work: work, detail: detail)
         }
 
-        if isRunning {
-            startedAt = Date()
+        if state.isRunning {
+            state.startedAt = Date()
         } else {
-            endedAt = Date()
+            state.endedAt = Date()
         }
 
-        assert(!isRunning || (isRunning && startedAt != nil))
+        assert(!state.isRunning || (state.isRunning && state.startedAt != nil))
 
-        if !isRunning,
+        if !state.isRunning,
            let newMeasurement = newMeasurementOnStop() {
             save(measurement: newMeasurement)
             clear()
         }
 
-        if isRunning {
+        if state.isRunning {
             beginTick()
         }
     }
