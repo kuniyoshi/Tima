@@ -18,7 +18,7 @@ class MeasurementModel: ObservableObject {
         var startedAt: Date?
         var endedAt: Date?
 
-        func begin(work: String, detail: String) -> Self {
+        func begined(work: String, detail: String) -> Self {
             .init(
                 work: work,
                 detail: detail,
@@ -98,7 +98,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func begin(work: String, detail: String) {
-        state = state.begin(work: work, detail: detail)
+        state = state.begined(work: work, detail: detail)
         elapsedSeconds = ""
     }
 
