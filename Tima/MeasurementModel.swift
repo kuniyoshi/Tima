@@ -27,6 +27,16 @@ class MeasurementModel: ObservableObject {
                 endedAt: nil
             )
         }
+
+        func cleared() -> Self {
+            .init(
+                work: work,
+                detail: detail,
+                isRunning: false,
+                startedAt: nil,
+                endedAt: nil
+            )
+        }
     }
 
     @Published var state = MeasurementState(work: "", detail: "", isRunning: false, startedAt: nil, endedAt: nil)
@@ -103,10 +113,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func clear() {
-        state.startedAt = nil
-        state.endedAt = nil
-        state.work = ""
-        state.detail = ""
+        state = state.cleared()
         elapsedSeconds = ""
     }
 
