@@ -17,6 +17,16 @@ class MeasurementModel: ObservableObject {
         var isRunning: Bool
         var startedAt: Date?
         var endedAt: Date?
+
+        func begin(work: String, detail: String) -> Self {
+            .init(
+                work: work,
+                detail: detail,
+                isRunning: true,
+                startedAt: Date(),
+                endedAt: nil
+            )
+        }
     }
 
     @Published var state = MeasurementState(work: "", detail: "", isRunning: false, startedAt: nil, endedAt: nil)
@@ -88,11 +98,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func begin(work: String, detail: String) {
-        state.work = work
-        state.detail = detail
-        state.isRunning = true
-        state.startedAt = Date()
-        state.endedAt = nil
+        state = state.begin(work: work, detail: detail)
         elapsedSeconds = ""
     }
 
