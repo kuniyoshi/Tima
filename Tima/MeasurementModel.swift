@@ -131,10 +131,6 @@ class MeasurementModel: ObservableObject {
         .store(in: &cancellables)
     }
 
-    func dismissAlert() {
-        alertDisplay = alertDisplay.cleared()
-    }
-
     func delete(measurement: Measurement) {
         do {
             try database.deleteMeasurement(measurement)
@@ -143,6 +139,10 @@ class MeasurementModel: ObservableObject {
             alertDisplay = alertDisplay
                 .weakWritten(title: "Error", message: "Failed to delete measurement: \(error.localizedDescription)")
         }
+    }
+
+    func dismissAlert() {
+        alertDisplay = alertDisplay.cleared()
     }
 
     func restoreRemoved(measurement: Measurement) {
@@ -158,16 +158,16 @@ class MeasurementModel: ObservableObject {
         }
     }
 
-    func updateStartedAt(_ startedAt: Date) {
-        state.startedAt = startedAt
-    }
-
     func toggleRunning() {
         if state.isRunning {
             processTransaction(transaction: .stop)
         } else {
             processTransaction(transaction: .begin)
         }
+    }
+
+    func updateStartedAt(_ startedAt: Date) {
+        state.startedAt = startedAt
     }
 
     private func begin(work: String, detail: String) {
