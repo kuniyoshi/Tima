@@ -230,11 +230,6 @@ class MeasurementModel: ObservableObject {
             case .begin:
                 state.isRunning = true
             case .stop:
-                if state.isRunning,
-                   let newMeasurement = state.measurementForStop() {
-                    save(measurement: newMeasurement)
-                    clear()
-                }
                 state.isRunning = false
             case .resume(let work, let detail):
                 if state.isRunning,
@@ -248,6 +243,14 @@ class MeasurementModel: ObservableObject {
             state.startedAt = Date()
         } else {
             state.endedAt = Date()
+        }
+
+        assert(!state.isRunning || (state.isRunning && state.startedAt != nil))
+
+        if !state.isRunning,
+           let newMeasurement = state.measurementForStop() {
+            save(measurement: newMeasurement)
+            clear()
         }
 
         if state.isRunning {
