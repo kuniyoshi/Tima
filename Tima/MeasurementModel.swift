@@ -12,11 +12,11 @@ class MeasurementModel: ObservableObject {
     }
 
     struct MeasurementState {
-        var work: String
-        var detail: String
-        var isRunning: Bool
-        var startedAt: Date?
-        var endedAt: Date?
+        private(set) var work: String
+        private(set) var detail: String
+        private(set) var isRunning: Bool
+        private(set) var startedAt: Date?
+        private(set) var endedAt: Date?
 
         func assuredForBegin() -> Self {
             .init(
