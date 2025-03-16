@@ -175,11 +175,6 @@ class MeasurementModel: ObservableObject {
         elapsedSeconds = ""
     }
 
-    private func clear() {
-        state = state.cleared()
-        elapsedSeconds = ""
-    }
-
     private func beginTick() {
         timer?.invalidate()
         timer = nil
@@ -195,28 +190,9 @@ class MeasurementModel: ObservableObject {
         elapsedSeconds = ""
     }
 
-    private func save(measurement: Measurement) {
-        do {
-            try database.addMeasurement(measurement)
-        } catch {
-            alertDisplay = alertDisplay
-                .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
-        }
-    }
-
-    private func tick() {
-        if let startedAt = state.startedAt {
-            let duration = Int(Date().timeIntervalSince(startedAt))
-            let minutes = duration / 60
-            let seconds = duration % 60
-            if minutes > 0 {
-                elapsedSeconds = String(format: "%d:%02d", minutes, seconds)
-            } else {
-                elapsedSeconds = "\(seconds)"
-            }
-
-            totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
-        }
+    private func clear() {
+        state = state.cleared()
+        elapsedSeconds = ""
     }
 
     private func onSleep() {
@@ -246,6 +222,30 @@ class MeasurementModel: ObservableObject {
 
         if state.isRunning {
             beginTick()
+        }
+    }
+
+    private func save(measurement: Measurement) {
+        do {
+            try database.addMeasurement(measurement)
+        } catch {
+            alertDisplay = alertDisplay
+                .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
+        }
+    }
+
+    private func tick() {
+        if let startedAt = state.startedAt {
+            let duration = Int(Date().timeIntervalSince(startedAt))
+            let minutes = duration / 60
+            let seconds = duration % 60
+            if minutes > 0 {
+                elapsedSeconds = String(format: "%d:%02d", minutes, seconds)
+            } else {
+                elapsedSeconds = "\(seconds)"
+            }
+
+            totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
         }
     }
 }
