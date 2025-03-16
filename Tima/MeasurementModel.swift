@@ -205,11 +205,6 @@ class MeasurementModel: ObservableObject {
         elapsedSeconds = ""
     }
 
-    private func clear() {
-        state = state.cleared()
-        elapsedSeconds = ""
-    }
-
     private func onSleep() {
         guard state.isRunning else { return }
         processTransaction(transaction: .stop)
@@ -225,7 +220,8 @@ class MeasurementModel: ObservableObject {
                 state = state.stopped()
                 if let newMeasurement = state.measurementForStop() {
                     save(measurement: newMeasurement)
-                    clear()
+                    state = state.cleared()
+                    elapsedSeconds = ""
                 }
             case .resume(let work, let detail):
                 if state.isRunning,
