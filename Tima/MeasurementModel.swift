@@ -229,28 +229,20 @@ class MeasurementModel: ObservableObject {
         switch transaction {
             case .begin:
                 state.isRunning = true
+                state.startedAt = Date()
             case .stop:
                 state.isRunning = false
+                state.endedAt = Date()
+                if let newMeasurement = state.measurementForStop() {
+                    save(measurement: newMeasurement)
+                    clear()
+                }
             case .resume(let work, let detail):
                 if state.isRunning,
                    let newMeasurement = state.newMeasurementOnResume() {
                     save(measurement: newMeasurement)
                 }
                 begin(work: work, detail: detail)
-        }
-
-        if state.isRunning {
-            state.startedAt = Date()
-        } else {
-            state.endedAt = Date()
-        }
-
-        assert(!state.isRunning || (state.isRunning && state.startedAt != nil))
-
-        if !state.isRunning,
-           let newMeasurement = state.measurementForStop() {
-            save(measurement: newMeasurement)
-            clear()
         }
 
         if state.isRunning {
