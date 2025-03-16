@@ -48,6 +48,16 @@ class MeasurementModel: ObservableObject {
             )
         }
 
+        func edited(startedAt: Date) -> Self {
+            .init(
+                work: work,
+                detail: detail,
+                isRunning: isRunning,
+                startedAt: startedAt,
+                endedAt: endedAt
+            )
+        }
+
         func measurementForStop() -> Measurement? {
             if let startedAt, let endedAt {
                 return Measurement(
@@ -187,7 +197,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func updateStartedAt(_ startedAt: Date) {
-        state.startedAt = startedAt
+        state = state.edited(startedAt: startedAt)
     }
 
     private func beginTick() {
