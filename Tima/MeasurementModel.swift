@@ -131,33 +131,8 @@ class MeasurementModel: ObservableObject {
         .store(in: &cancellables)
     }
 
-    private func begin(work: String, detail: String) {
-        state = state.begined(work: work, detail: detail)
-        elapsedSeconds = ""
-    }
-
-    private func clear() {
-        state = state.cleared()
-        elapsedSeconds = ""
-    }
-
     func dismissAlert() {
         alertDisplay = alertDisplay.cleared()
-    }
-
-    private func beginTick() {
-        timer?.invalidate()
-        timer = nil
-
-        let newTimer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.tick()
-            }
-        }
-        RunLoop.main.add(newTimer, forMode: .common)
-        timer = newTimer
-
-        elapsedSeconds = ""
     }
 
     func delete(measurement: Measurement) {
@@ -183,6 +158,43 @@ class MeasurementModel: ObservableObject {
         }
     }
 
+    func updateStartedAt(_ startedAt: Date) {
+        state.startedAt = startedAt
+    }
+
+    func toggleRunning() {
+        if state.isRunning {
+            processTransaction(transaction: .stop)
+        } else {
+            processTransaction(transaction: .begin)
+        }
+    }
+
+    private func begin(work: String, detail: String) {
+        state = state.begined(work: work, detail: detail)
+        elapsedSeconds = ""
+    }
+
+    private func clear() {
+        state = state.cleared()
+        elapsedSeconds = ""
+    }
+
+    private func beginTick() {
+        timer?.invalidate()
+        timer = nil
+
+        let newTimer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.tick()
+            }
+        }
+        RunLoop.main.add(newTimer, forMode: .common)
+        timer = newTimer
+
+        elapsedSeconds = ""
+    }
+
     private func save(measurement: Measurement) {
         do {
             try database.addMeasurement(measurement)
@@ -204,18 +216,6 @@ class MeasurementModel: ObservableObject {
             }
 
             totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
-        }
-    }
-
-    func updateStartedAt(_ startedAt: Date) {
-        state.startedAt = startedAt
-    }
-
-    func toggleRunning() {
-        if state.isRunning {
-            processTransaction(transaction: .stop)
-        } else {
-            processTransaction(transaction: .begin)
         }
     }
 
