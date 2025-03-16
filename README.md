@@ -57,6 +57,7 @@ Just a TODO.
 
 - Register measurement on begin measurement
 - Sometime, daily completion notification not worked
+- Make database singleton
 
 ## Difficult TODO
 
