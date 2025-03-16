@@ -145,10 +145,6 @@ class MeasurementModel: ObservableObject {
         alertDisplay = alertDisplay.cleared()
     }
 
-    func newMeasurementOnResume() -> Measurement? {
-        state.newMeasurementOnResume()
-    }
-
     func beginTick() {
         timer?.invalidate()
         timer = nil
@@ -237,7 +233,7 @@ class MeasurementModel: ObservableObject {
                 state.isRunning = false
             case .resume(let work, let detail):
                 if state.isRunning,
-                   let newMeasurement = newMeasurementOnResume() {
+                   let newMeasurement = state.newMeasurementOnResume() {
                     save(measurement: newMeasurement)
                 }
                 begin(work: work, detail: detail)
