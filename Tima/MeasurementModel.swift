@@ -131,12 +131,12 @@ class MeasurementModel: ObservableObject {
         .store(in: &cancellables)
     }
 
-    func begin(work: String, detail: String) {
+    private func begin(work: String, detail: String) {
         state = state.begined(work: work, detail: detail)
         elapsedSeconds = ""
     }
 
-    func clear() {
+    private func clear() {
         state = state.cleared()
         elapsedSeconds = ""
     }
@@ -145,7 +145,7 @@ class MeasurementModel: ObservableObject {
         alertDisplay = alertDisplay.cleared()
     }
 
-    func beginTick() {
+    private func beginTick() {
         timer?.invalidate()
         timer = nil
 
@@ -183,7 +183,7 @@ class MeasurementModel: ObservableObject {
         }
     }
 
-    func save(measurement: Measurement) {
+    private func save(measurement: Measurement) {
         do {
             try database.addMeasurement(measurement)
         } catch {
@@ -192,7 +192,7 @@ class MeasurementModel: ObservableObject {
         }
     }
 
-    func tick() {
+    private func tick() {
         if let startedAt = state.startedAt {
             let duration = Int(Date().timeIntervalSince(startedAt))
             let minutes = duration / 60
