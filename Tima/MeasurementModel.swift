@@ -12,11 +12,12 @@ class MeasurementModel: ObservableObject {
     }
 
     struct MeasurementState {
-        private(set) var work: String
-        private(set) var detail: String
+        var work: String
+        var detail: String
         private(set) var isRunning: Bool
         private(set) var startedAt: Date?
         private(set) var endedAt: Date?
+        private(set) var database: Database
 
         func assuredForBegin() -> Self {
             .init(
@@ -24,7 +25,8 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: true,
                 startedAt: Date(),
-                endedAt: nil
+                endedAt: nil,
+                database: database
             )
         }
 
@@ -34,7 +36,8 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: true,
                 startedAt: Date(),
-                endedAt: nil
+                endedAt: nil,
+                database: database
             )
         }
 
@@ -44,7 +47,8 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: false,
                 startedAt: nil,
-                endedAt: nil
+                endedAt: nil,
+                database: database
             )
         }
 
@@ -54,7 +58,8 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: isRunning,
                 startedAt: startedAt,
-                endedAt: endedAt
+                endedAt: endedAt,
+                database: database
             )
         }
 
@@ -88,12 +93,13 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: false,
                 startedAt: startedAt,
-                endedAt: Date()
+                endedAt: Date(),
+                database: database
             )
         }
     }
 
-    @Published var state = MeasurementState(work: "", detail: "", isRunning: false, startedAt: nil, endedAt: nil)
+    @Published var state: MeasurementState
     @Published private(set) var alertDisplay = AlertDisplay(error: nil)
     @Published private(set) var elapsedSeconds: String = "" // TODO: move to struct
     @Published private(set) var spans: [(Int, Int, Color)] = []
@@ -108,6 +114,14 @@ class MeasurementModel: ObservableObject {
     init(database: Database, onTerminate: AnyPublisher<Void, Never>) {
         self.database = database
         totalTimeModel = .init()
+        state = .init(
+            work: "",
+            detail: "",
+            isRunning: false,
+            startedAt: nil,
+            endedAt: nil,
+            database: database
+        )
 
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
