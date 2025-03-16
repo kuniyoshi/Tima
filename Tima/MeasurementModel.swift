@@ -170,11 +170,6 @@ class MeasurementModel: ObservableObject {
         state.startedAt = startedAt
     }
 
-    private func begin(work: String, detail: String) {
-        state = state.begined(work: work, detail: detail)
-        elapsedSeconds = ""
-    }
-
     private func beginTick() {
         timer?.invalidate()
         timer = nil
@@ -204,7 +199,8 @@ class MeasurementModel: ObservableObject {
     private func processTransaction(transaction: Transaction) {
         switch transaction {
             case .begin:
-                begin(work: state.work, detail: state.detail)
+                state = state.begined(work: state.work, detail: state.detail)
+                elapsedSeconds = ""
             case .stop:
                 state.isRunning = false
                 state.endedAt = Date()
@@ -217,7 +213,8 @@ class MeasurementModel: ObservableObject {
                    let newMeasurement = state.newMeasurementOnResume() {
                     save(measurement: newMeasurement)
                 }
-                begin(work: work, detail: detail)
+                state = state.begined(work: work, detail: detail)
+                elapsedSeconds = ""
         }
 
         if state.isRunning {
