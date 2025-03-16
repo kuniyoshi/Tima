@@ -18,6 +18,16 @@ class MeasurementModel: ObservableObject {
         var startedAt: Date?
         var endedAt: Date?
 
+        func assuredForBegin() -> Self {
+            .init(
+                work: work,
+                detail: detail,
+                isRunning: true,
+                startedAt: Date(),
+                endedAt: nil
+            )
+        }
+
         func begined(work: String, detail: String) -> Self {
             .init(
                 work: work,
@@ -199,7 +209,7 @@ class MeasurementModel: ObservableObject {
     private func processTransaction(transaction: Transaction) {
         switch transaction {
             case .begin:
-                state = state.begined(work: state.work, detail: state.detail)
+                state = state.assuredForBegin()
                 elapsedSeconds = ""
             case .stop:
                 state.isRunning = false
