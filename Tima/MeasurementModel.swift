@@ -133,10 +133,6 @@ class MeasurementModel: ObservableObject {
         alertDisplay = alertDisplay.cleared()
     }
 
-    func newMeasurementOnStop() -> Measurement? {
-        state.measurementForStop()
-    }
-
     func newMeasurementOnResume() -> Measurement? {
         if let startedAt = state.startedAt {
             return Measurement(
@@ -252,7 +248,7 @@ class MeasurementModel: ObservableObject {
         assert(!state.isRunning || (state.isRunning && state.startedAt != nil))
 
         if !state.isRunning,
-           let newMeasurement = newMeasurementOnStop() {
+           let newMeasurement = state.measurementForStop() {
             save(measurement: newMeasurement)
             clear()
         }
