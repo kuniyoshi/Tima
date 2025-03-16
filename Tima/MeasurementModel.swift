@@ -49,6 +49,18 @@ class MeasurementModel: ObservableObject {
             }
             return nil
         }
+
+        func newMeasurementOnResume() -> Measurement? {
+            if let startedAt {
+                return Measurement(
+                    work: work,
+                    detail: detail,
+                    start: startedAt,
+                    end: Date()
+                )
+            }
+            return nil
+        }
     }
 
     @Published var state = MeasurementState(work: "", detail: "", isRunning: false, startedAt: nil, endedAt: nil)
@@ -134,15 +146,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func newMeasurementOnResume() -> Measurement? {
-        if let startedAt = state.startedAt {
-            return Measurement(
-                work: state.work,
-                detail: state.detail,
-                start: startedAt,
-                end: Date()
-            )
-        }
-        return nil
+        state.newMeasurementOnResume()
     }
 
     func beginTick() {
