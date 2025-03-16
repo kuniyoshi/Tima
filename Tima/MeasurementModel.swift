@@ -228,8 +228,7 @@ class MeasurementModel: ObservableObject {
     private func processTransaction(transaction: Transaction) {
         switch transaction {
             case .begin:
-                state.isRunning = true
-                state.startedAt = Date()
+                begin(work: state.work, detail: state.detail)
             case .stop:
                 state.isRunning = false
                 state.endedAt = Date()
