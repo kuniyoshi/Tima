@@ -71,6 +71,16 @@ class MeasurementModel: ObservableObject {
             }
             return nil
         }
+
+        func stopped() -> Self {
+            .init(
+                work: work,
+                detail: detail,
+                isRunning: false,
+                startedAt: startedAt,
+                endedAt: Date()
+            )
+        }
     }
 
     @Published var state = MeasurementState(work: "", detail: "", isRunning: false, startedAt: nil, endedAt: nil)
@@ -212,8 +222,7 @@ class MeasurementModel: ObservableObject {
                 state = state.assuredForBegin()
                 elapsedSeconds = ""
             case .stop:
-                state.isRunning = false
-                state.endedAt = Date()
+                state = state.stopped()
                 if let newMeasurement = state.measurementForStop() {
                     save(measurement: newMeasurement)
                     clear()
