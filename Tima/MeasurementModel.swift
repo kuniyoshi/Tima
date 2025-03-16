@@ -11,7 +11,7 @@ class MeasurementModel: ObservableObject {
         case resume(work: String, detail: String)
     }
 
-    struct MeasurementState {
+    struct MeasurementState { // TODO: rename
         var work: String
         var detail: String
         private(set) var isRunning: Bool
@@ -242,6 +242,7 @@ class MeasurementModel: ObservableObject {
                 elapsedSeconds = ""
             case .stop:
                 state = state.stopped()
+                state.
                 if let newMeasurement = state.measurementForStop() {
                     save(measurement: newMeasurement)
                     state = state.cleared()
