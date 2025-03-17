@@ -17,7 +17,6 @@ class MeasurementModel: ObservableObject {
         private(set) var isRunning: Bool
         private(set) var startedAt: Date?
         private(set) var endedAt: Date?
-        private(set) var database: Database
 
         func assuredForBegin() -> Self {
             .init(
@@ -25,8 +24,7 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: true,
                 startedAt: Date(),
-                endedAt: nil,
-                database: database
+                endedAt: nil
             )
         }
 
@@ -36,8 +34,7 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: true,
                 startedAt: Date(),
-                endedAt: nil,
-                database: database
+                endedAt: nil
             )
         }
 
@@ -47,8 +44,7 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: false,
                 startedAt: nil,
-                endedAt: nil,
-                database: database
+                endedAt: nil
             )
         }
 
@@ -58,8 +54,7 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: isRunning,
                 startedAt: startedAt,
-                endedAt: endedAt,
-                database: database
+                endedAt: endedAt
             )
         }
 
@@ -69,47 +64,60 @@ class MeasurementModel: ObservableObject {
                 detail: detail,
                 isRunning: false,
                 startedAt: startedAt,
-                endedAt: Date(),
-                database: database
+                endedAt: Date()
             )
         }
     }
 
     private struct CurrentMeasurement {
         private(set) var value: Measurement?
+        private(set) var database: Database
 
         func fromBufferForStop(_ buffer: MeasurementState) -> Self {
             if let startedAt = buffer.startedAt,
                let endedAt = buffer.endedAt {
-                .init(value: .init(
-                    work: buffer.work,
-                    detail: buffer.detail,
-                    start: startedAt,
-                    end: endedAt
-                ))
+                .init(
+                    value: .init(
+                        work: buffer.work,
+                        detail: buffer.detail,
+                        start: startedAt,
+                        end: endedAt
+                    ),
+                    database: database
+                )
             } else {
-                .init(value: nil)
+                .init(value: nil, database: database)
             }
         }
 
         func fromBufferOnResume(_ buffer: MeasurementState) -> Self {
             if let startedAt = buffer.startedAt {
-                .init(value: .init(
-                    work: buffer.work,
-                    detail: buffer.detail,
-                    start: startedAt,
-                    end: Date()
-                ))
+                .init(
+                    value: .init(
+                        work: buffer.work,
+                        detail: buffer.detail,
+                        start: startedAt,
+                        end: Date()
+                    ),
+                    database: database
+                )
             } else {
-                .init(value: nil)
+                .init(value: nil, database: database)
             }
         }
 
         func refreshed() -> Self {
             if let value {
-                .init(value: .init(work: value.work, detail: value.detail, start: value.start, end: value.end))
+                .init(value: .init(
+                    work: value.work,
+                    detail: value.detail,
+                    start: value.start,
+                    end: value.end
+                ),
+                      database: database
+                )
             } else {
-                .init(value: nil)
+                .init(value: nil, database: database)
             }
         }
     }
@@ -135,10 +143,9 @@ class MeasurementModel: ObservableObject {
             detail: "",
             isRunning: false,
             startedAt: nil,
-            endedAt: nil,
-            database: database
+            endedAt: nil
         )
-        current = .init(value: nil)
+        current = .init(value: nil, database: database)
 
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
