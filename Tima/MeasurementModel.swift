@@ -63,30 +63,6 @@ class MeasurementModel: ObservableObject {
             )
         }
 
-        func measurementForStop() -> Measurement? {
-            if let startedAt, let endedAt {
-                return Measurement(
-                    work: work,
-                    detail: detail,
-                    start: startedAt,
-                    end: endedAt
-                )
-            }
-            return nil
-        }
-
-        func newMeasurementOnResume() -> Measurement? {
-            if let startedAt {
-                return Measurement(
-                    work: work,
-                    detail: detail,
-                    start: startedAt,
-                    end: Date()
-                )
-            }
-            return nil
-        }
-
         func stopped() -> Self {
             .init(
                 work: work,
@@ -96,6 +72,45 @@ class MeasurementModel: ObservableObject {
                 endedAt: Date(),
                 database: database
             )
+        }
+    }
+
+    private struct CurrentMeasurement {
+        private(set) var value: Measurement?
+
+        func fromBufferForStop(_ buffer: MeasurementState) -> Self {
+            if let startedAt = buffer.startedAt,
+               let endedAt = buffer.endedAt {
+                .init(value: .init(
+                    work: buffer.work,
+                    detail: buffer.detail,
+                    start: startedAt,
+                    end: endedAt
+                ))
+            } else {
+                .init(value: nil)
+            }
+        }
+
+        func fromBufferOnResume(_ buffer: MeasurementState) -> Self {
+            if let startedAt = buffer.startedAt {
+                .init(value: .init(
+                    work: buffer.work,
+                    detail: buffer.detail,
+                    start: startedAt,
+                    end: Date()
+                ))
+            } else {
+                .init(value: nil)
+            }
+        }
+
+        func refreshed() -> Self {
+            if let value {
+                .init(value: .init(work: value.work, detail: value.detail, start: value.start, end: value.end))
+            } else {
+                .init(value: nil)
+            }
         }
     }
 
@@ -110,6 +125,7 @@ class MeasurementModel: ObservableObject {
     private var timer: Timer?
     private let database: Database
     private var cancellables: Set<AnyCancellable> = []
+    private var current: CurrentMeasurement
 
     init(database: Database, onTerminate: AnyPublisher<Void, Never>) {
         self.database = database
@@ -122,6 +138,7 @@ class MeasurementModel: ObservableObject {
             endedAt: nil,
             database: database
         )
+        current = .init(value: nil)
 
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
@@ -242,15 +259,15 @@ class MeasurementModel: ObservableObject {
                 elapsedSeconds = ""
             case .stop:
                 state = state.stopped()
-                state.
-                if let newMeasurement = state.measurementForStop() {
+                current = current.fromBufferForStop(state)
+                if let newMeasurement = current.value {
                     save(measurement: newMeasurement)
-                    state = state.cleared()
-                    elapsedSeconds = ""
                 }
+                state = state.cleared()
+                elapsedSeconds = ""
             case .resume(let work, let detail):
-                if state.isRunning,
-                   let newMeasurement = state.newMeasurementOnResume() {
+                current = current.fromBufferOnResume(state)
+                if let newMeasurement = current.value {
                     save(measurement: newMeasurement)
                 }
                 state = state.begined(work: work, detail: detail)
