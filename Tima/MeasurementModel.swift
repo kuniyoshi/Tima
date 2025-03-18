@@ -73,7 +73,42 @@ class MeasurementModel: ObservableObject {
         private(set) var value: Measurement?
         private(set) var database: Database
 
-        func fromBufferForStop(_ buffer: MeasurementState) -> Self {
+        @MainActor
+        func savedForStop(buffer: MeasurementState) throws -> Self {
+            let new = fromBufferForStop(buffer)
+            if let newMeasurement = new.value {
+                try database.addMeasurement(newMeasurement)
+                return new
+            }
+            return self
+        }
+
+        @MainActor
+        func savedOnResume(buffer: MeasurementState) throws -> Self {
+            let new = fromBufferOnResume(buffer)
+            if let newMeasurement = new.value {
+                try database.addMeasurement(newMeasurement)
+                return new
+            }
+            return self
+        }
+
+        func refreshed() -> Self {
+            if let value {
+                .init(value: .init(
+                    work: value.work,
+                    detail: value.detail,
+                    start: value.start,
+                    end: value.end
+                ),
+                      database: database
+                )
+            } else {
+                .init(value: nil, database: database)
+            }
+        }
+
+        private func fromBufferForStop(_ buffer: MeasurementState) -> Self {
             if let startedAt = buffer.startedAt,
                let endedAt = buffer.endedAt {
                 .init(
@@ -90,7 +125,7 @@ class MeasurementModel: ObservableObject {
             }
         }
 
-        func fromBufferOnResume(_ buffer: MeasurementState) -> Self {
+        private func fromBufferOnResume(_ buffer: MeasurementState) -> Self {
             if let startedAt = buffer.startedAt {
                 .init(
                     value: .init(
@@ -100,21 +135,6 @@ class MeasurementModel: ObservableObject {
                         end: Date()
                     ),
                     database: database
-                )
-            } else {
-                .init(value: nil, database: database)
-            }
-        }
-
-        func refreshed() -> Self {
-            if let value {
-                .init(value: .init(
-                    work: value.work,
-                    detail: value.detail,
-                    start: value.start,
-                    end: value.end
-                ),
-                      database: database
                 )
             } else {
                 .init(value: nil, database: database)
@@ -266,16 +286,20 @@ class MeasurementModel: ObservableObject {
                 elapsedSeconds = ""
             case .stop:
                 state = state.stopped()
-                current = current.fromBufferForStop(state)
-                if let newMeasurement = current.value {
-                    save(measurement: newMeasurement)
+                do {
+                    current = try current.savedForStop(buffer: state)
+                } catch {
+                    alertDisplay = alertDisplay
+                        .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
                 }
                 state = state.cleared()
                 elapsedSeconds = ""
             case .resume(let work, let detail):
-                current = current.fromBufferOnResume(state)
-                if let newMeasurement = current.value {
-                    save(measurement: newMeasurement)
+                do {
+                    current = try current.savedOnResume(buffer: state)
+                } catch {
+                    alertDisplay = alertDisplay
+                        .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
                 }
                 state = state.begined(work: work, detail: detail)
                 elapsedSeconds = ""
@@ -283,15 +307,6 @@ class MeasurementModel: ObservableObject {
 
         if state.isRunning {
             beginTick()
-        }
-    }
-
-    private func save(measurement: Measurement) {
-        do {
-            try database.addMeasurement(measurement)
-        } catch {
-            alertDisplay = alertDisplay
-                .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
         }
     }
 
