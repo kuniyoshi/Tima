@@ -70,8 +70,15 @@ class MeasurementModel: ObservableObject {
     }
 
     private struct CurrentMeasurement {
-        private(set) var value: Measurement?
-        private(set) var database: Database
+        private let value: Measurement?
+        private let database: Database
+        private let id: UUID
+
+        init(value: Measurement?, id: UUID, database: Database) {
+            self.value = value
+            self.id = id
+            self.database = database
+        }
 
         @MainActor
         func savedForStop(buffer: MeasurementState) throws -> Self {
@@ -101,10 +108,11 @@ class MeasurementModel: ObservableObject {
                     start: value.start,
                     end: value.end
                 ),
+                      id: self.id,
                       database: database
                 )
             } else {
-                .init(value: nil, database: database)
+                .init(value: nil, id: self.id, database: database)
             }
         }
 
@@ -118,10 +126,11 @@ class MeasurementModel: ObservableObject {
                         start: startedAt,
                         end: endedAt
                     ),
+                    id: self.id,
                     database: database
                 )
             } else {
-                .init(value: nil, database: database)
+                .init(value: nil, id: self.id, database: database)
             }
         }
 
@@ -134,10 +143,11 @@ class MeasurementModel: ObservableObject {
                         start: startedAt,
                         end: Date()
                     ),
+                    id: self.id,
                     database: database
                 )
             } else {
-                .init(value: nil, database: database)
+                .init(value: nil, id: self.id, database: database)
             }
         }
     }
@@ -165,7 +175,7 @@ class MeasurementModel: ObservableObject {
             startedAt: nil,
             endedAt: nil
         )
-        current = .init(value: nil, database: database)
+        current = .init(value: nil, id: UUID(), database: database)
 
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
