@@ -100,22 +100,6 @@ class MeasurementModel: ObservableObject {
             return self
         }
 
-        func refreshed() -> Self {
-            if let value {
-                .init(value: .init(
-                    work: value.work,
-                    detail: value.detail,
-                    start: value.start,
-                    end: value.end
-                ),
-                      id: self.id,
-                      database: database
-                )
-            } else {
-                .init(value: nil, id: self.id, database: database)
-            }
-        }
-
         private func fromBufferForStop(_ buffer: MeasurementState) -> Self {
             if let startedAt = buffer.startedAt,
                let endedAt = buffer.endedAt {
