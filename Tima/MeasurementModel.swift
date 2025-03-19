@@ -11,7 +11,7 @@ class MeasurementModel: ObservableObject {
         case resume(work: String, detail: String)
     }
 
-    struct MeasurementState { // TODO: rename
+    struct MeasurementBuffer {
         var work: String
         var detail: String
         private(set) var isRunning: Bool
@@ -81,7 +81,7 @@ class MeasurementModel: ObservableObject {
         }
 
         @MainActor
-        func savedForStop(buffer: MeasurementState) throws -> Self {
+        func savedForStop(buffer: MeasurementBuffer) throws -> Self {
             let new = fromBufferForStop(buffer)
             if let newMeasurement = new.value {
                 try database.addMeasurement(newMeasurement)
@@ -91,7 +91,7 @@ class MeasurementModel: ObservableObject {
         }
 
         @MainActor
-        func savedOnResume(buffer: MeasurementState) throws -> Self {
+        func savedOnResume(buffer: MeasurementBuffer) throws -> Self {
             let new = fromBufferOnResume(buffer)
             if let newMeasurement = new.value {
                 try database.addMeasurement(newMeasurement)
@@ -100,7 +100,7 @@ class MeasurementModel: ObservableObject {
             return self
         }
 
-        private func fromBufferForStop(_ buffer: MeasurementState) -> Self {
+        private func fromBufferForStop(_ buffer: MeasurementBuffer) -> Self {
             if let startedAt = buffer.startedAt,
                let endedAt = buffer.endedAt {
                 .init(
@@ -119,7 +119,7 @@ class MeasurementModel: ObservableObject {
             }
         }
 
-        private func fromBufferOnResume(_ buffer: MeasurementState) -> Self {
+        private func fromBufferOnResume(_ buffer: MeasurementBuffer) -> Self {
             if let startedAt = buffer.startedAt {
                 .init(
                     value: .init(
@@ -142,7 +142,7 @@ class MeasurementModel: ObservableObject {
         }
     }
 
-    @Published var state: MeasurementState
+    @Published var buffer: MeasurementBuffer
     @Published private(set) var alertDisplay = AlertDisplay(error: nil)
     @Published private(set) var elapsedSeconds: String = "" // TODO: move to struct
     @Published private(set) var spans: [(Int, Int, Color)] = []
@@ -158,7 +158,7 @@ class MeasurementModel: ObservableObject {
     init(database: Database, onTerminate: AnyPublisher<Void, Never>) {
         self.database = database
         totalTimeModel = .init()
-        state = .init(
+        buffer = .init(
             work: "",
             detail: "",
             isRunning: false,
@@ -199,7 +199,7 @@ class MeasurementModel: ObservableObject {
 
         onTerminate.sink { [weak self] in
             guard let self else { return }
-            if !self.state.isRunning {
+            if !self.buffer.isRunning {
                 return
             }
             self.processTransaction(transaction: .stop)
@@ -247,7 +247,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func toggleRunning() {
-        if state.isRunning {
+        if buffer.isRunning {
             processTransaction(transaction: .stop)
         } else {
             processTransaction(transaction: .begin)
@@ -255,7 +255,7 @@ class MeasurementModel: ObservableObject {
     }
 
     func updateStartedAt(_ startedAt: Date) {
-        state = state.edited(startedAt: startedAt)
+        buffer = buffer.edited(startedAt: startedAt)
     }
 
     private func beginTick() {
@@ -274,7 +274,7 @@ class MeasurementModel: ObservableObject {
     }
 
     private func onSleep() {
-        guard state.isRunning else { return }
+        guard buffer.isRunning else { return }
         processTransaction(transaction: .stop)
         alertDisplay = alertDisplay.weakWritten(title: "Auto stop", message: "You may fogot stop measurement.")
     }
@@ -282,36 +282,36 @@ class MeasurementModel: ObservableObject {
     private func processTransaction(transaction: Transaction) {
         switch transaction {
             case .begin:
-                state = state.assuredForBegin()
+                buffer = buffer.assuredForBegin()
                 elapsedSeconds = ""
             case .stop:
-                state = state.stopped()
+                buffer = buffer.stopped()
                 do {
-                    current = try current.savedForStop(buffer: state)
+                    current = try current.savedForStop(buffer: buffer)
                 } catch {
                     alertDisplay = alertDisplay
                         .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
                 }
-                state = state.cleared()
+                buffer = buffer.cleared()
                 elapsedSeconds = ""
             case .resume(let work, let detail):
                 do {
-                    current = try current.savedOnResume(buffer: state)
+                    current = try current.savedOnResume(buffer: buffer)
                 } catch {
                     alertDisplay = alertDisplay
                         .weakWritten(title: "Error", message: "Failed to create measurement, or imageColor: \(error)")
                 }
-                state = state.begined(work: work, detail: detail)
+                buffer = buffer.begined(work: work, detail: detail)
                 elapsedSeconds = ""
         }
 
-        if state.isRunning {
+        if buffer.isRunning {
             beginTick()
         }
     }
 
     private func tick() {
-        if let startedAt = state.startedAt {
+        if let startedAt = buffer.startedAt {
             let duration = Int(Date().timeIntervalSince(startedAt))
             let minutes = duration / 60
             let seconds = duration % 60
