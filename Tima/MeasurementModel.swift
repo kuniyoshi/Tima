@@ -85,7 +85,7 @@ class MeasurementModel: ObservableObject {
             let new = fromBufferForStop(buffer)
             if let newMeasurement = new.value {
                 try database.addMeasurement(newMeasurement)
-                return new
+                return new.ided()
             }
             return self
         }
@@ -95,7 +95,7 @@ class MeasurementModel: ObservableObject {
             let new = fromBufferOnResume(buffer)
             if let newMeasurement = new.value {
                 try database.addMeasurement(newMeasurement)
-                return new
+                return new.ided()
             }
             return self
         }
@@ -121,6 +121,7 @@ class MeasurementModel: ObservableObject {
                let endedAt = buffer.endedAt {
                 .init(
                     value: .init(
+                        id: self.id,
                         work: buffer.work,
                         detail: buffer.detail,
                         start: startedAt,
@@ -138,6 +139,7 @@ class MeasurementModel: ObservableObject {
             if let startedAt = buffer.startedAt {
                 .init(
                     value: .init(
+                        id: self.id,
                         work: buffer.work,
                         detail: buffer.detail,
                         start: startedAt,
@@ -149,6 +151,10 @@ class MeasurementModel: ObservableObject {
             } else {
                 .init(value: nil, id: self.id, database: database)
             }
+        }
+
+        private func ided() -> Self {
+            return CurrentMeasurement(value: value, id: UUID(), database: database)
         }
     }
 
