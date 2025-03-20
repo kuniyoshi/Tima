@@ -105,17 +105,17 @@ class MeasurementModel: ObservableObject {
                let endedAt = buffer.endedAt {
                 .init(
                     value: .init(
-                        id: self.id,
+                        id: id,
                         work: buffer.work,
                         detail: buffer.detail,
                         start: startedAt,
                         end: endedAt
                     ),
-                    id: self.id,
+                    id: id,
                     database: database
                 )
             } else {
-                .init(value: nil, id: self.id, database: database)
+                .init(value: nil, id: id, database: database)
             }
         }
 
@@ -123,17 +123,17 @@ class MeasurementModel: ObservableObject {
             if let startedAt = buffer.startedAt {
                 .init(
                     value: .init(
-                        id: self.id,
+                        id: id,
                         work: buffer.work,
                         detail: buffer.detail,
                         start: startedAt,
                         end: Date()
                     ),
-                    id: self.id,
+                    id: id,
                     database: database
                 )
             } else {
-                .init(value: nil, id: self.id, database: database)
+                .init(value: nil, id: id, database: database)
             }
         }
 
