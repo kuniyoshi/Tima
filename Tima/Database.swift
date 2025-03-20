@@ -116,6 +116,10 @@ final class Database: ObservableObject {
         measurements.removeAll { $0.id == measurement.id }
     }
 
+    func hasMeasurement(_ measurement: Measurement) -> Bool {
+        return measurements.contains(where: { $0.id == measurement.id })
+    }
+
     func updateMeasurement(_ measurement: Measurement) throws {
         guard let index = measurements.firstIndex(where: { $0.id == measurement.id} ) else {
             throw NSError(

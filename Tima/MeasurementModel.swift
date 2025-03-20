@@ -70,7 +70,7 @@ class MeasurementModel: ObservableObject {
     }
 
     private struct CurrentMeasurement {
-        private let value: Measurement?
+        let value: Measurement?
         private let database: Database
         private let id: UUID
 
@@ -80,11 +80,33 @@ class MeasurementModel: ObservableObject {
             self.database = database
         }
 
+        func buffered(_ buffer: MeasurementBuffer) -> Self {
+            if let start = buffer.startedAt {
+                .init(
+                    value: .init(
+                        id: id,
+                        work: buffer.work,
+                        detail: buffer.detail,
+                        start: start,
+                        end: Date()
+                    ),
+                    id: id,
+                    database: database
+                )
+            } else {
+                .init(value: nil, id: UUID(), database: database)
+            }
+        }
+
+        func cleared() -> Self {
+            .init(value: nil, id: UUID(), database: database)
+        }
+
         @MainActor
         func savedForStop(buffer: MeasurementBuffer) throws -> Self {
             let new = fromBufferForStop(buffer)
             if let newMeasurement = new.value {
-                try database.addMeasurement(newMeasurement)
+                try database.updateMeasurement(newMeasurement)
                 return new.ided()
             }
             return self
@@ -306,7 +328,10 @@ class MeasurementModel: ObservableObject {
         }
 
         if buffer.isRunning {
+            current = current.buffered(buffer)
             beginTick()
+        } else {
+            current = current.cleared()
         }
     }
 
@@ -323,5 +348,22 @@ class MeasurementModel: ObservableObject {
         }
 
         totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
+
+        if let runningMeasurement = current.value {
+            runningMeasurement.end = Date()
+
+            do {
+                if database.hasMeasurement(runningMeasurement) {
+                    try database.updateMeasurement(runningMeasurement)
+                } else {
+                    try database.addMeasurement(runningMeasurement)
+                }
+            } catch {
+                alertDisplay = alertDisplay.weakWritten(
+                    title: "Error",
+                    message: "Could not update measurement: \(error.localizedDescription)"
+                )
+            }
+        }
     }
 }
