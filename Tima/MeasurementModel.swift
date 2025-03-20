@@ -311,17 +311,17 @@ class MeasurementModel: ObservableObject {
     }
 
     private func tick() {
-        if let startedAt = buffer.startedAt {
-            let duration = Int(Date().timeIntervalSince(startedAt))
-            let minutes = duration / 60
-            let seconds = duration % 60
-            if minutes > 0 {
-                elapsedSeconds = String(format: "%d:%02d", minutes, seconds)
-            } else {
-                elapsedSeconds = "\(seconds)"
-            }
+        guard let startedAt = buffer.startedAt else { return }
 
-            totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
+        let duration = Int(Date().timeIntervalSince(startedAt))
+        let minutes = duration / 60
+        let seconds = duration % 60
+        if minutes > 0 {
+            elapsedSeconds = String(format: "%d:%02d", minutes, seconds)
+        } else {
+            elapsedSeconds = "\(seconds)"
         }
+
+        totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +) + minutes)
     }
 }
