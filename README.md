@@ -57,7 +57,6 @@ Just a TODO.
 
 - Sometime, daily completion notification not worked
 - Make database singleton
-- Clear TextField on measurement stop
 
 ## Difficult TODO
 
