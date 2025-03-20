@@ -55,7 +55,6 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 
 Just a TODO.
 
-- Register measurement on begin measurement
 - Sometime, daily completion notification not worked
 - Make database singleton
 
