@@ -40,8 +40,8 @@ class MeasurementModel: ObservableObject {
 
         func cleared() -> Self {
             .init(
-                work: work,
-                detail: detail,
+                work: "",
+                detail: "",
                 isRunning: false,
                 startedAt: nil,
                 endedAt: nil
