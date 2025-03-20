@@ -23,13 +23,13 @@ struct MeasurementView: View {
     var body: some View {
         VStack {
             HStack {
-                TextField("Input group...", text: $model.state.work)
+                TextField("Input group...", text: $model.buffer.work)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .work)
                     .onSubmit(model.toggleRunning)
                     .padding()
 
-                TextField("Input work...", text: $model.state.detail)
+                TextField("Input work...", text: $model.buffer.detail)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusedField, equals: .detail)
                     .onSubmit(model.toggleRunning)
@@ -41,7 +41,7 @@ struct MeasurementView: View {
                 .keyboardShortcut("I", modifiers: [.command])
                 .hidden()
 
-                if let start = model.state.startedAt {
+                if let start = model.buffer.startedAt {
                     if isStartEditing {
                         DatePicker(
                             "",
@@ -74,12 +74,12 @@ struct MeasurementView: View {
                     }
                 }
 
-                Text(model.state.isRunning ? model.elapsedSeconds : "")
+                Text(model.buffer.isRunning ? model.elapsedSeconds : "")
                     .font(.headline.monospaced())
                     .padding()
 
                 Button(action: model.toggleRunning) {
-                    Image(systemName: model.state.isRunning ? "stop.circle" : "play.circle")
+                    Image(systemName: model.buffer.isRunning ? "stop.circle" : "play.circle")
                         .font(.title)
                 }
                 .padding()
