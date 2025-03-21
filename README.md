@@ -55,6 +55,8 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 
 Just a TODO.
 
+- Flicker while daily total minutes updating
+- When resuming Measurement, it sometimes registers duplicate entries
 - Sometime, daily completion notification not worked
 - Make database singleton
 
