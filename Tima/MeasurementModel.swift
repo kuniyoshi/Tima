@@ -116,7 +116,7 @@ class MeasurementModel: ObservableObject {
         func savedOnResume(buffer: MeasurementBuffer) throws -> Self {
             let new = fromBufferOnResume(buffer)
             if let newMeasurement = new.value {
-                try database.addMeasurement(newMeasurement)
+                try database.updateMeasurement(newMeasurement)
                 return new.ided()
             }
             return self
