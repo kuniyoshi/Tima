@@ -7,7 +7,8 @@ import Foundation
 // This provides all of model which stored.
 @MainActor
 final class Database: ObservableObject {
-    private static func mapToGroupedMeasurements(from measurements: [Measurement], with imageColors: [ImageColor]) -> [[(Measurement, ImageColor)]] {
+    private static func mapToGroupedMeasurements(from measurements: [Measurement],
+                                                 with imageColors: [ImageColor]) -> [[(Measurement, ImageColor)]] {
         let dictionary = Dictionary(grouping: measurements, by: { measurement in
             Calendar.current.startOfDay(for: measurement.start)
         })
@@ -25,7 +26,8 @@ final class Database: ObservableObject {
         }
     }
 
-    private static func mapToMeasurementSpans(from measurements: [Measurement], with imageColors: [ImageColor]) -> [(Int, Int, Color)] {
+    private static func mapToMeasurementSpans(from measurements: [Measurement],
+                                              with imageColors: [ImageColor]) -> [(Int, Int, Color)] {
         let from = Calendar.current.startOfDay(for: Date())
         return measurements.filter { $0.start >= from }
             .map { measurement in
