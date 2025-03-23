@@ -138,6 +138,9 @@ struct MeasurementView: View {
                 showAlert = newValue.error != nil
             }
         }
+        .task {
+            model.workFinishModel.beginTick()
+        }
     }
 
     init(model: MeasurementModel) {

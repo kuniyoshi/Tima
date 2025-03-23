@@ -171,6 +171,7 @@ class MeasurementModel: ObservableObject {
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var dailyListModels: [MeasurementDaillyListModel] = []
     @Published private(set) var totalTimeModel: MeasurementTotalTimeModel
+    @Published private(set) var workFinishModel: WorkFinishModel
     private(set) var lastRemoved: Measurement?
     private var timer: Timer?
     private let database: Database
@@ -188,6 +189,7 @@ class MeasurementModel: ObservableObject {
             endedAt: nil
         )
         current = .init(value: nil, id: UUID(), database: database)
+        workFinishModel = .init(database: database)
 
         database.$measurementSpans
             .receive(on: DispatchQueue.main)
