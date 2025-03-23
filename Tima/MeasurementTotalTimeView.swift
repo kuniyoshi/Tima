@@ -1,6 +1,4 @@
-import Combine
 import SwiftUI
-import UserNotifications
 
 struct MeasurementTotalTimeView: View {
     @StateObject private var model: MeasurementTotalTimeModel
@@ -17,9 +15,6 @@ struct MeasurementTotalTimeView: View {
                 .font(.caption)
         }
         .padding(.horizontal)
-        .task {
-            await NotificationManager.shared.requestNotificationPermission()
-        }
     }
 
     init(model: MeasurementTotalTimeModel) {
