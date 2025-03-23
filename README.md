@@ -58,6 +58,7 @@ Just a TODO.
 - Flicker while daily total minutes updating
 - Sometime, daily completion notification not worked
 - Make database singleton
+- Filter old measurements and timeboxes to improve performance
 
 ## Difficult TODO
 
