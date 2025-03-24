@@ -55,6 +55,9 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 
 Just a TODO.
 
+- Show background color to current measurement
+- Switching to timebox is slow
+- Show background color to daily measurement list
 - Flicker while daily total minutes updating
 - Sometime, daily completion notification not worked
 - Make database singleton
