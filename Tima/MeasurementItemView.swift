@@ -101,9 +101,25 @@ struct MeasurementItemView: View {
         }
         .padding(8)
         .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(.primary.opacity(0.05))
-                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+            ZStack(alignment: .trailing) {
+                GeometryReader { geometry in
+                    let maxWidth = geometry.size.width
+                    let totalSeconds: TimeInterval = 60 * 60 * 8 // 8時間勤務を仮定
+                    let ratio = model.measurement.duration / totalSeconds
+                    let barWidth = maxWidth * ratio
+
+                    HStack {
+                        Spacer()
+                        Rectangle()
+                            .fill(model.color.opacity(0.5))
+                            .frame(width: barWidth)
+                    }
+                }
+
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.primary.opacity(0.05))
+                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+            }
         )
         .padding(0)
     }
@@ -115,8 +131,8 @@ struct MeasurementItemView: View {
         work: work.name,
         detail: "UIスケッチ",
         start: Date(),
-        end: Date(timeInterval: 180, since: Date())
+        end: Date(timeInterval: 1800, since: Date())
     )
 
-    MeasurementItemView(MeasurementItemModel(measurement, onUpdate: { _ in }))
+    MeasurementItemView(MeasurementItemModel(measurement, color: work.color.uiColor, onUpdate: { _ in }))
 }

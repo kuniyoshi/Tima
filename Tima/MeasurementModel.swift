@@ -202,7 +202,9 @@ class MeasurementModel: ObservableObject {
                 groupedMeasurements.compactMap { pairs in
                     MeasurementDaillyListModel(
                         pairs: pairs.map { (measurement, work) in
-                            (MeasurementItemModel(measurement, onUpdate: { measurement in
+                            (MeasurementItemModel(measurement,
+                                                  color: work.color.uiColor,
+                                                  onUpdate: { measurement in
                                 do {
                                     try database.updateMeasurement(measurement)
                                 } catch {

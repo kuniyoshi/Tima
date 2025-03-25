@@ -45,19 +45,25 @@ struct MeasurementDailyListView: View {
                 detail: "UIスケッチ",
                 start: Date(timeInterval: 700, since: Date()),
                 end: Date(timeInterval: 1080, since: Date())
-            ), onUpdate: { _ in }), workB),
+            ),
+                                  color: workB.color.uiColor,
+                                  onUpdate: { _ in }), workB),
             (MeasurementItemModel(Measurement(
                 work: workB.name,
                 detail: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            ), onUpdate: { _ in }), workB),
+            ),
+                                  color: workB.color.uiColor,
+                                  onUpdate: { _ in }), workB),
             (MeasurementItemModel(Measurement(
                 work: workR.name,
                 detail: "UIスケッチ",
                 start: Date(),
                 end: Date(timeInterval: 300, since: Date())
-            ), onUpdate: { _ in }), workR)
+            ),
+                                  color: workR.color.uiColor,
+                                  onUpdate: { _ in }), workR)
         ],
         onPlay: { _ in },
         onDelete: { _ in }
