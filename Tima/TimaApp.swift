@@ -55,6 +55,10 @@ struct TimaApp: App {
                     exportData()
                 }
                 .keyboardShortcut("E", modifiers: [.command])
+
+                Button("Remove All Data") {
+                    exportData()
+                }
             }
 
             CommandGroup(after: .textEditing) {
@@ -91,6 +95,16 @@ struct TimaApp: App {
         } catch {
             print("Could not export data: \(error.localizedDescription)")
             errorMessage = "Could not export data."
+            showErrorDialog = true
+        }
+    }
+
+    private func removeAllData() {
+        do {
+            try ModelExporter(container: sharedModelContainer).removeAll()
+        } catch {
+            print("Could not remove all data: \(error.localizedDescription)")
+            errorMessage = "Could not remove all data."
             showErrorDialog = true
         }
     }
