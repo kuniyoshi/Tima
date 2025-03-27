@@ -12,6 +12,27 @@ struct ModelExporter {
     }
 
     @MainActor
+    func removeAll() throws {
+        let context = container.mainContext
+
+        let imageColors = try context.fetch(FetchDescriptor<ImageColor>())
+        let measurements = try context.fetch(FetchDescriptor<Measurement>())
+        let timeboxes = try context.fetch(FetchDescriptor<TimeBox>())
+
+        for imageColor in imageColors {
+            context.delete(imageColor)
+        }
+        for measurement in measurements {
+            context.delete(measurement)
+        }
+        for timebox in timeboxes {
+            context.delete(timebox)
+        }
+
+        try context.save()
+    }
+
+    @MainActor
     func exportToJSON() throws -> URL? {
         let context = container.mainContext
         let imageColors = try context.fetch(FetchDescriptor<ImageColor>())
