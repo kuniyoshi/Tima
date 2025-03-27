@@ -11,7 +11,8 @@ struct ModelExporter {
         self.container = container
     }
 
-    @MainActor func exportToJSON() throws -> URL? {
+    @MainActor
+    func exportToJSON() throws -> URL? {
         let context = container.mainContext
         let imageColors = try context.fetch(FetchDescriptor<ImageColor>())
         let measurements = try context.fetch(FetchDescriptor<Measurement>())
