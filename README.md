@@ -46,6 +46,13 @@ The app helps you focus on work using the timebox method.
 
 The app is designed for keyboard-only control.
 
+# FEATURES
+
+## Importing Data
+
+Imported data will be added to the existing data.
+It will not replace, overwrite, or merge with existing records.
+
 # SOUND
 
 Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
