@@ -125,7 +125,7 @@ struct TimaApp: App {
             do {
                 try ModelExporter(container: sharedModelContainer).importFromJSON(url: url)
                 errorMessage = ""
-                refreshDaySubject.send()
+                refreshAllSubject.send()
             } catch {
                 print("Could not import data: \(error.localizedDescription)")
                 errorMessage = "Could not import data."
@@ -137,6 +137,7 @@ struct TimaApp: App {
     private func removeAllData() {
         do {
             try ModelExporter(container: sharedModelContainer).removeAll()
+            refreshAllSubject.send()
         } catch {
             print("Could not remove all data: \(error.localizedDescription)")
             errorMessage = "Could not remove all data."
