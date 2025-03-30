@@ -84,10 +84,10 @@ final class Database: ObservableObject {
         }
         .store(in: &cancellables)
 
-        load() // TODO: move out of init
+        refreshAllModels() // TODO: move out of init
     }
 
-    func load() {
+    func refreshAllModels() {
         refreshAllMeasurements()
         refreshAllImageColors()
         refreshAllTimeBoxes()
