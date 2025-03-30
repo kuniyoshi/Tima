@@ -49,8 +49,7 @@ struct TimaApp: App {
                 }
                 .alert("Are you sure you want to remove all data?", isPresented: $showRemoveConfirmationDialog) {
                     Button("Remove All", role: .destructive) {
-                        print("remove confirmed") // TODO
-//                        removeAllData()
+                        removeAllData()
                     }
                     Button("Cancel", role: .cancel) {}
                 }
