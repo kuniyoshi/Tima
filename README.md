@@ -67,13 +67,13 @@ Just a TODO.
 - Switching to timebox is slow
 - Flicker while daily total minutes updating
 - Sometime, daily completion notification is not send
-- Make database singleton
 - Filter old measurements and timeboxes to improve performance
 
 ## Difficult TODO
 
 These TODOs are optional suggestions rather ran strict requirements.
 
+- Make database singleton
 - Add some indicator to show wheter the app is currently in a timebox
 - Implement work completion
 - Fix memory leaks caused by ContentView's Picker
