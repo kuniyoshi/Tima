@@ -25,6 +25,7 @@ struct TimaApp: App {
     @State private var showPreferences: Bool = false
     @State private var showErrorDialog: Bool = false
     @State private var errorMessage: String = ""
+    @State private var showRemoveConfirmationDialog: Bool = false
 
     private let refreshSubject = PassthroughSubject<Void, Never>()
     private let terminateSubject = PassthroughSubject<Void, Never>()
@@ -46,6 +47,13 @@ struct TimaApp: App {
                         dismissButton: .default(Text("OK"))
                     )
                 }
+                .alert("Are you sure you want to remove all data?", isPresented: $showRemoveConfirmationDialog) {
+                    Button("Remove All", role: .destructive) {
+                        print("remove confirmed") // TODO
+//                        removeAllData()
+                    }
+                    Button("Cancel", role: .cancel) {}
+                }
         }
         .modelContainer(sharedModelContainer)
         .windowStyle(HiddenTitleBarWindowStyle())
@@ -57,7 +65,7 @@ struct TimaApp: App {
                 .keyboardShortcut("E", modifiers: [.command])
 
                 Button("Remove All Data") {
-                    exportData()
+                    confirmRemoveAllData()
                 }
             }
 
@@ -107,5 +115,9 @@ struct TimaApp: App {
             errorMessage = "Could not remove all data."
             showErrorDialog = true
         }
+    }
+
+    private func confirmRemoveAllData() {
+        showRemoveConfirmationDialog = true
     }
 }
