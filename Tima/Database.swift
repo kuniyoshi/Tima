@@ -47,7 +47,9 @@ final class Database: ObservableObject {
     private var modelContext: ModelContext
     private var cancellables = Set<AnyCancellable>()
 
-    init(modelContext: ModelContext, onRefreshDate: AnyPublisher<Void, Never>) {
+    init(modelContext: ModelContext,
+         onRefreshDate: AnyPublisher<Void, Never>,
+         onRefreshAll: AnyPublisher<Void, Never>) {
         self.modelContext = modelContext
 
         Publishers.CombineLatest($measurements, $imageColors)
@@ -72,6 +74,13 @@ final class Database: ObservableObject {
             guard let self else { return }
             self.groupedMeasurements = Self.mapToGroupedMeasurements(from: self.measurements, with: self.imageColors)
             self.measurementSpans = Self.mapToMeasurementSpans(from: self.measurements, with: self.imageColors)
+        }
+        .store(in: &cancellables)
+
+        onRefreshAll.sink { [weak self] in
+            guard let self else { return }
+            // TODO
+
         }
         .store(in: &cancellables)
 

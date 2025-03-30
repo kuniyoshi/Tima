@@ -102,7 +102,11 @@ struct ContentView: View {
         let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
         let subject = PassthroughSubject<Void, Never>()
         return ContentView(
-            database: Database(modelContext: container.mainContext, onRefreshDate: subject.eraseToAnyPublisher()),
+            database: Database(
+                modelContext: container.mainContext,
+                onRefreshDate: subject.eraseToAnyPublisher(),
+                onRefreshAll: subject.eraseToAnyPublisher()
+            ),
             onRefreshDate: subject.eraseToAnyPublisher(),
             onTerminate: subject.eraseToAnyPublisher()
         )

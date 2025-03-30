@@ -28,6 +28,7 @@ struct TimaApp: App {
     @State private var showRemoveConfirmationDialog: Bool = false
 
     private let refreshDaySubject = PassthroughSubject<Void, Never>()
+    private let refreshAllSubject = PassthroughSubject<Void, Never>()
     private let terminateSubject = PassthroughSubject<Void, Never>()
 
     var body: some Scene {
@@ -35,7 +36,8 @@ struct TimaApp: App {
             ContentView(
                 database: Database(
                     modelContext: sharedModelContainer.mainContext,
-                    onRefreshDate: refreshDaySubject.eraseToAnyPublisher()
+                    onRefreshDate: refreshDaySubject.eraseToAnyPublisher(),
+                    onRefreshAll: refreshAllSubject.eraseToAnyPublisher()
                 ),
                 onRefreshDate: refreshDaySubject.eraseToAnyPublisher(),
                 onTerminate: terminateSubject.eraseToAnyPublisher()

@@ -208,7 +208,11 @@ struct AlertDisplay: Equatable {
         )
     )
     let subject = PassthroughSubject<Void, Never>()
-    let database = Database(modelContext: context, onRefreshDate: subject.eraseToAnyPublisher())
+    let database = Database(
+        modelContext: context,
+        onRefreshDate: subject.eraseToAnyPublisher(),
+        onRefreshAll: subject.eraseToAnyPublisher()
+    )
     let model = MeasurementModel(database: database, onTerminate: subject.eraseToAnyPublisher())
 
     return MeasurementView(model: model)
