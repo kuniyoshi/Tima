@@ -88,9 +88,9 @@ final class Database: ObservableObject {
     }
 
     func refreshAllModels() {
-        refreshAllMeasurements()
-        refreshAllImageColors()
         refreshAllTimeBoxes()
+        refreshAllImageColors()
+        refreshAllMeasurements()
     }
 
     func addImageColor(_ item: ImageColor) {
