@@ -66,7 +66,7 @@ Just a TODO.
 - Show background color to current measurement
 - Switching to timebox is slow
 - Flicker while daily total minutes updating
-- Sometime, daily completion notification not worked
+- Sometime, daily completion notification is not send
 - Make database singleton
 - Filter old measurements and timeboxes to improve performance
 
