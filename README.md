@@ -56,8 +56,8 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 
 Just a TODO.
 
-- Import data
 - Update view on remove all data
+- Update view on import data
 - Show background color to current measurement
 - Switching to timebox is slow
 - Flicker while daily total minutes updating
