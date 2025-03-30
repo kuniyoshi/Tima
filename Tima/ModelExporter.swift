@@ -59,6 +59,25 @@ struct ModelExporter {
 
         return nil
     }
+
+    @MainActor
+    func importFromJSON(url: URL) throws {
+        let context = container.mainContext
+        let data = try Data(contentsOf: url)
+        let decoded = try JSONDecoder().decode(ExportData.self, from: data)
+
+        for imageColor in decoded.imageColors {
+            context.insert(imageColor)
+        }
+        for measurement in decoded.measurements {
+            context.insert(measurement)
+        }
+        for timeBox in decoded.timeBoxes {
+            context.insert(timeBox)
+        }
+
+        try context.save()
+    }
 }
 
 private struct ExportData: Codable {

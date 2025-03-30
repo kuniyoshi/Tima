@@ -26,6 +26,7 @@ In `TimeBox`,
 - `Space` to progress timebox in the TimeBox view
 - `Escape` to quit textfield editing
 - `⌘-E` to export model data
+- `⌘-M` to import model data
 - `⌘-T` to terminate measurement/timebox
 - `⌘-R` to refresh the date
 

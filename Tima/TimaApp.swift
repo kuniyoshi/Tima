@@ -63,6 +63,11 @@ struct TimaApp: App {
                 }
                 .keyboardShortcut("E", modifiers: [.command])
 
+                Button("Imprt Data") {
+                    importData()
+                }
+                .keyboardShortcut("M", modifiers: [.command])
+
                 Button("Remove All Data") {
                     confirmRemoveAllData()
                 }
@@ -103,6 +108,27 @@ struct TimaApp: App {
             print("Could not export data: \(error.localizedDescription)")
             errorMessage = "Could not export data."
             showErrorDialog = true
+        }
+    }
+
+    private func importData() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.json]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.title = "Select JSON file to import"
+
+        if panel.runModal() == .OK,
+           let url = panel.url {
+            do {
+                try ModelExporter(container: sharedModelContainer).importFromJSON(url: url)
+                errorMessage = ""
+                refreshSubject.send()
+            } catch {
+                print("Could not import data: \(error.localizedDescription)")
+                errorMessage = "Could not import data."
+                showErrorDialog = true
+            }
         }
     }
 
