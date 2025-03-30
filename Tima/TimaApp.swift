@@ -27,7 +27,7 @@ struct TimaApp: App {
     @State private var errorMessage: String = ""
     @State private var showRemoveConfirmationDialog: Bool = false
 
-    private let refreshSubject = PassthroughSubject<Void, Never>()
+    private let refreshDaySubject = PassthroughSubject<Void, Never>()
     private let terminateSubject = PassthroughSubject<Void, Never>()
 
     var body: some Scene {
@@ -35,9 +35,9 @@ struct TimaApp: App {
             ContentView(
                 database: Database(
                     modelContext: sharedModelContainer.mainContext,
-                    onRefreshDate: refreshSubject.eraseToAnyPublisher()
+                    onRefreshDate: refreshDaySubject.eraseToAnyPublisher()
                 ),
-                onRefreshDate: refreshSubject.eraseToAnyPublisher(),
+                onRefreshDate: refreshDaySubject.eraseToAnyPublisher(),
                 onTerminate: terminateSubject.eraseToAnyPublisher()
             )
                 .alert(isPresented: $showErrorDialog) {
@@ -80,7 +80,7 @@ struct TimaApp: App {
                 .keyboardShortcut("T", modifiers: [.command])
 
                 Button("Refresh Today") {
-                    refreshSubject.send()
+                    refreshDaySubject.send()
                 }
                 .keyboardShortcut("R", modifiers: [.command])
             }
@@ -123,7 +123,7 @@ struct TimaApp: App {
             do {
                 try ModelExporter(container: sharedModelContainer).importFromJSON(url: url)
                 errorMessage = ""
-                refreshSubject.send()
+                refreshDaySubject.send()
             } catch {
                 print("Could not import data: \(error.localizedDescription)")
                 errorMessage = "Could not import data."
