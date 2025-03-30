@@ -88,9 +88,9 @@ final class Database: ObservableObject {
     }
 
     func load() {
-        fetchMeasurements()
-        fetchImageColors()
-        fetchTimeBoxes()
+        refreshAllMeasurements()
+        refreshAllImageColors()
+        refreshAllTimeBoxes()
     }
 
     func addImageColor(_ item: ImageColor) {
@@ -145,7 +145,7 @@ final class Database: ObservableObject {
         measurements.sort { $0.start > $1.start }
     }
 
-    private func fetchMeasurements() {
+    private func refreshAllMeasurements() {
         do {
             let request = FetchDescriptor<Measurement>(
                 predicate: nil,
@@ -157,7 +157,7 @@ final class Database: ObservableObject {
         }
     }
 
-    private func fetchImageColors() {
+    private func refreshAllImageColors() {
         do {
             let request = FetchDescriptor<ImageColor>()
             imageColors = try modelContext.fetch(request)
@@ -166,7 +166,7 @@ final class Database: ObservableObject {
         }
     }
 
-    private func fetchTimeBoxes() {
+    private func refreshAllTimeBoxes() {
         do {
             let request = FetchDescriptor<TimeBox>()
             timeBoxes = try modelContext.fetch(request)
