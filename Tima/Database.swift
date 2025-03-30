@@ -79,7 +79,7 @@ final class Database: ObservableObject {
 
         onRefreshAll.sink { [weak self] in
             guard let self else { return }
-            // TODO
+            self.refreshAllModels()
 
         }
         .store(in: &cancellables)
