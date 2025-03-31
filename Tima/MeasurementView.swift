@@ -23,17 +23,21 @@ struct MeasurementView: View {
     var body: some View {
         VStack {
             HStack {
-                TextField("Input group...", text: $model.buffer.work)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .focused($focusedField, equals: .work)
-                    .onSubmit(model.toggleRunning)
-                    .padding()
+                HStack {
+                    Image(systemName: "circle.fill")
+                        .foregroundColor(model.bufferColor)
 
-                TextField("Input work...", text: $model.buffer.detail)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .focused($focusedField, equals: .detail)
-                    .onSubmit(model.toggleRunning)
-                    .padding()
+                    TextField("Input group...", text: $model.buffer.work)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .focused($focusedField, equals: .work)
+                        .onSubmit(model.toggleRunning)
+
+                    TextField("Input work...", text: $model.buffer.detail)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .focused($focusedField, equals: .detail)
+                        .onSubmit(model.toggleRunning)
+                }
+                .padding()
 
                 Button("Focus Field") {
                     focusedField = .work

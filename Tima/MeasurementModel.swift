@@ -164,6 +164,7 @@ class MeasurementModel: ObservableObject {
         }
     }
 
+    @Published private(set) var bufferColor: Color = .clear
     @Published var buffer: MeasurementBuffer
     @Published private(set) var alertDisplay = AlertDisplay(error: nil)
     @Published private(set) var elapsedSeconds: String = "" // TODO: move to struct
@@ -243,6 +244,14 @@ class MeasurementModel: ObservableObject {
             totalTimeModel.setValue(spans.map { $0.1 }.reduce(0, +))
         }
         .store(in: &cancellables)
+
+        $buffer
+            .sink { [weak self] buffer in
+                guard let self else { return }
+                let imageColor = database.findImageColorColor(name: buffer.work)
+                self.bufferColor = imageColor ?? .clear
+            }
+            .store(in: &cancellables)
     }
 
     func delete(measurement: Measurement) {

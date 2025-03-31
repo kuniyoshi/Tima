@@ -127,6 +127,10 @@ final class Database: ObservableObject {
         measurements.removeAll { $0.id == measurement.id }
     }
 
+    func findImageColorColor(name: String) -> Color? {
+        imageColors.first(where: { $0.name == name })?.color.uiColor
+    }
+
     func hasMeasurement(_ measurement: Measurement) -> Bool {
         return measurements.contains(where: { $0.id == measurement.id })
     }
