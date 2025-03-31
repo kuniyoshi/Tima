@@ -99,7 +99,7 @@ final class Database: ObservableObject {
     }
 
     func addMeasurement(_ measurement: Measurement) throws {
-        _ = try findOrCreateWork(name: measurement.work)
+        _ = try findOrCreateImageColor(name: measurement.work)
 
         modelContext.insert(measurement)
 
@@ -175,7 +175,7 @@ final class Database: ObservableObject {
         }
     }
 
-    private func findOrCreateWork(name: String) throws -> ImageColor {
+    private func findOrCreateImageColor(name: String) throws -> ImageColor {
         let request = FetchDescriptor<ImageColor>(
             predicate: #Predicate {
                 $0.name == name
