@@ -65,7 +65,6 @@ Just a TODO.
 
 - Switching to timebox is slow
 - Flicker while daily total minutes updating
-- Sometime, daily completion notification is not send
 - Filter old measurements and timeboxes to improve performance
 
 ## Difficult TODO
