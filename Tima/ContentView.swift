@@ -24,6 +24,9 @@ struct ContentView: View {
                     TimeBoxView(model: timeBoxModel)
             }
         }
+        .onAppear {
+            StatusBarController.shared.bind(to: timeBoxModel)
+        }
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Picker(selection: $selection, label: EmptyView()) {
