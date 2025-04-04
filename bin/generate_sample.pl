@@ -5,10 +5,28 @@ use strict;
 use warnings;
 use open qw( :utf8 :std );
 use Data::Dumper;
+use Time::Piece qw( );
+use Time::Seconds qw( ONE_DAY ONE_HOUR );
+use JSON;
 
+my @timeBoxes = map { timeBoxes( $_ ) }
+                map { scalar Time::Piece->localtime( time - $_ * ONE_DAY ) }
+                reverse
+                1 .. 40;
+die Dumper \@timeBoxes;
 
 
 exit;
+
+sub timeBoxes {
+    my $time = shift;
+    my $count = 5 + int( 7 * rand );
+
+    return map {
+        my $now = $time - ( $time->epoch % ONE_DAY ) + $_ * ONE_HOUR;
+        { workMinutes => 30, start => $now->datetime . ".000+09:00" };
+    } 1 .. $count;
+}
 
 __END__
 {
