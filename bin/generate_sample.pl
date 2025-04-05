@@ -11,9 +11,9 @@ use JSON;
 use Data::UUID;
 use Readonly;
 
-Readonly my $TIME_BOX_DAYS => 40;
-Readonly my $MEASUREMENT_DAYS => 40;
-Readonly my $IMAGE_COLOR_SIZE => 40;
+Readonly my $TIME_BOX_DAYS => 200;
+Readonly my $MEASUREMENT_DAYS => 200;
+Readonly my $IMAGE_COLOR_SIZE => 70;
 Readonly my $RANDOM_COUNT_TIME_BOXES_PER_DAY => 7;
 Readonly my $RANDOM_COUNT_MEASUREMENTS_PER_DAY => 10;
 
