@@ -66,6 +66,7 @@ Just a TODO.
 - Switching to timebox is slow
 - Flicker while daily total minutes updating
 - Filter old measurements and timeboxes to improve performance
+- Line vertical bar to Memory24HourHorizontalView
 
 ## Difficult TODO
 
