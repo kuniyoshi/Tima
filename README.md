@@ -58,6 +58,7 @@ It will not replace, overwrite, or merge with existing records.
 1. Archive
 1. Distribute App
 1. Copy App
+1. Run a command to create DMG: `create-dmg Tima.dmg Tima.v1.4.1/Tima.app`
 
 # SOUND
 
