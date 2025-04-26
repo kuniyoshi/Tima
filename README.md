@@ -53,6 +53,12 @@ The app is designed for keyboard-only control.
 Imported data will be added to the existing data.
 It will not replace, overwrite, or merge with existing records.
 
+# BUILD AND DISTRIBUTE
+
+1. Archive
+1. Distribute App
+1. Copy App
+
 # SOUND
 
 Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
