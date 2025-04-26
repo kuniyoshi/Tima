@@ -29,9 +29,9 @@ struct Memory24HourHorizontalView: View {
         }
         .allowsHitTesting(false)
         .onAppear {
-            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-                Task { @MainActor in
-                    self?.currentDate = Date()
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                Task { @MainActor [self] in
+                    self.currentDate = Date()
                 }
             }
             if let timer = self.timer {
