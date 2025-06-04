@@ -6,3 +6,4 @@
 /builds
 
 /Tima.v*
+.claude/settings.local.json
