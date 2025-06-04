@@ -45,8 +45,7 @@ struct ImageColorItem: View {
                                 }
                             }
                             .onKeyPress(keys: [.upArrow, .downArrow, .escape]) { press in
-                                handleKeyPress(press)
-                                return .handled
+                                return handleKeyPress(press)
                             }
                     }
                     .padding(8)
