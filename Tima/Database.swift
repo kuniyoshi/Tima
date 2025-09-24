@@ -9,33 +9,37 @@ import Foundation
 final class Database: ObservableObject {
     private static func mapToGroupedMeasurements(from measurements: [Measurement],
                                                  with imageColors: [ImageColor]) -> [[(Measurement, ImageColor)]] {
+        let colorLookup = Dictionary(uniqueKeysWithValues: imageColors.map { ($0.name, $0) })
         let dictionary = Dictionary(grouping: measurements, by: { measurement in
             Calendar.current.startOfDay(for: measurement.start)
         })
         let pairs = dictionary.sorted { $0.key > $1.key }
         let groups = pairs.map(\.1)
-        return groups.map { values in
+        let result: [[(Measurement, ImageColor)]] = groups.map { values in
             values
                 .sorted { $0.start > $1.start }
-                .compactMap { item in
-                    if let work = imageColors.first(where: { $0.name == item.work }) {
-                        return (item, work)
+                .compactMap { item -> (Measurement, ImageColor)? in
+                    guard let work = colorLookup[item.work] else {
+                        return nil
                     }
-                    return nil
+                    return (item, work)
                 }
         }
+        return result
     }
 
     private static func mapToMeasurementSpans(from measurements: [Measurement],
                                               with imageColors: [ImageColor]) -> [(Int, Int, Color)] {
         let from = Calendar.current.startOfDay(for: Date())
-        return measurements.filter { $0.start >= from }
-            .map { measurement in
-                let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
-                let duration = Int(measurement.duration) / 60
-                let color = imageColors.first(where: { $0.name == measurement.work })?.color.uiColor ?? .black
-                return (minutes, duration, color)
-            }
+        let colorLookup = Dictionary(uniqueKeysWithValues: imageColors.map { ($0.name, $0.color.uiColor) })
+        let result: [(Int, Int, Color)] = measurements.compactMap { measurement -> (Int, Int, Color)? in
+            guard measurement.start >= from else { return nil }
+            let minutes = Int(measurement.start.timeIntervalSince(from)) / 60
+            let duration = Int(measurement.duration) / 60
+            let color = colorLookup[measurement.work] ?? .black
+            return (minutes, duration, color)
+        }
+        return result
     }
 
     @Published private(set) var measurements: [Measurement] = []
@@ -105,8 +109,7 @@ final class Database: ObservableObject {
 
         try modelContext.save()
 
-        measurements = (measurements + [measurement])
-            .sorted { $0.start > $1.start }
+        insertMeasurementSorted(measurement)
     }
 
     func addTimeBox(_ timeBox: TimeBox) {
@@ -145,8 +148,14 @@ final class Database: ObservableObject {
         }
 
         try modelContext.save()
-        measurements[index] = measurement
-        measurements.sort { $0.start > $1.start }
+        measurements.remove(at: index)
+        insertMeasurementSorted(measurement)
+    }
+
+    private func insertMeasurementSorted(_ measurement: Measurement) {
+        measurements.removeAll { $0.id == measurement.id }
+        let insertIndex = measurements.firstIndex { $0.start < measurement.start } ?? measurements.endIndex
+        measurements.insert(measurement, at: insertIndex)
     }
 
     private func refreshAllMeasurements() {
@@ -199,4 +208,3 @@ final class Database: ObservableObject {
         }
     }
 }
-

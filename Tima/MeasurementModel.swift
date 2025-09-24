@@ -5,6 +5,10 @@ import Combine
 // Measurement model for editor
 @MainActor
 class MeasurementModel: ObservableObject {
+    private let persistInterval: TimeInterval = 30
+
+    private var lastPersistedAt: Date?
+
     private enum Transaction {
         case begin
         case stop
@@ -319,6 +323,7 @@ class MeasurementModel: ObservableObject {
             case .begin:
                 buffer = buffer.assuredForBegin()
                 elapsedSeconds = ""
+                lastPersistedAt = nil
             case .stop:
                 buffer = buffer.stopped()
                 do {
@@ -329,6 +334,7 @@ class MeasurementModel: ObservableObject {
                 }
                 buffer = buffer.cleared()
                 elapsedSeconds = ""
+                lastPersistedAt = nil
             case .resume(let work, let detail):
                 do {
                     current = try current.savedOnResume(buffer: buffer)
@@ -338,10 +344,13 @@ class MeasurementModel: ObservableObject {
                 }
                 buffer = buffer.begined(work: work, detail: detail)
                 elapsedSeconds = ""
+                lastPersistedAt = nil
         }
 
         if buffer.isRunning {
             current = current.buffered(buffer)
+            current.value?.end = Date()
+            persistRunningMeasurement(force: true)
             beginTick()
         } else {
             current = current.cleared()
@@ -364,19 +373,36 @@ class MeasurementModel: ObservableObject {
 
         if let runningMeasurement = current.value {
             runningMeasurement.end = Date()
+            persistRunningMeasurement(force: false)
+        }
+    }
 
-            do {
-                if database.hasMeasurement(runningMeasurement) {
-                    try database.updateMeasurement(runningMeasurement)
-                } else {
-                    try database.addMeasurement(runningMeasurement)
-                }
-            } catch {
-                alertDisplay = alertDisplay.weakWritten(
-                    title: "Error",
-                    message: "Could not update measurement: \(error.localizedDescription)"
-                )
+    private func persistRunningMeasurement(force: Bool) {
+        guard let runningMeasurement = current.value else {
+            return
+        }
+
+        let now = Date()
+        if !force {
+            if let lastPersistedAt, now.timeIntervalSince(lastPersistedAt) < persistInterval {
+                return
             }
         }
+
+        do {
+            if database.hasMeasurement(runningMeasurement) {
+                try database.updateMeasurement(runningMeasurement)
+            } else {
+                try database.addMeasurement(runningMeasurement)
+            }
+        } catch {
+            alertDisplay = alertDisplay.weakWritten(
+                title: "Error",
+                message: "Could not update measurement: \(error.localizedDescription)"
+            )
+            return
+        }
+
+        lastPersistedAt = now
     }
 }
