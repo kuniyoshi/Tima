@@ -70,7 +70,6 @@ Sound effects are from [効果音ラボ](https://soundeffect-lab.info).
 
 Just a TODO.
 
-- Switching to timebox is slow
 - Flicker while daily total minutes updating
 - Filter old measurements and timeboxes to improve performance
 
@@ -79,9 +78,8 @@ Just a TODO.
 These TODOs are optional suggestions rather ran strict requirements.
 
 - Make database singleton
-- Add some indicator to show wheter the app is currently in a timebox
 - Implement work completion
-- Fix memory leaks caused by ContentView's Picker
+- Fix memory leaks caused by ContentView's Picker (almost done, little leak left)
 
 ## Lower Priority TODO
 
@@ -90,7 +88,6 @@ These TODOs are optional suggestions rather ran strict requirements.
 - Change from alert to sheet
 - Add a work list view, it can edit each works
 - Maintain layout consistency in the Measurement view
-- Implement a data import feature
 - Allow editing of the date in the Measurement view (currently, only hours can be edited)
 - Allow empty text field to be edited in the Measurement view
 - Move sound file to settings?
@@ -101,4 +98,3 @@ These TODOs are optional suggestions rather ran strict requirements.
 - Display a graph of recorded
 - Set up a GitHub Action for building the application
 - Improve the visibility of the timebox count. However, making the count too explicit might not be ideal.
-- Use a logger for error messages instead of `print` <- Are the app users interesting in errors?
