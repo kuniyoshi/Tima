@@ -3,6 +3,7 @@ import SwiftUI
 // Shows TimeBox count by text
 struct TimeBoxListView: View {
     private let counts: [(String, Int)]
+    private let dotSpacing: CGFloat = 6
 
     init(_ counts: [(String, Int)]) {
         self.counts = counts
@@ -16,7 +17,7 @@ struct TimeBoxListView: View {
                         Text("\(date)")
                             .font(.headline)
                         Spacer()
-                        HStack(spacing: 2) {
+                        HStack(spacing: dotSpacing) {
                             ForEach(0..<count, id: \.self) { _ in
                                 Image(systemName: "circle.fill")
                                     .font(.caption)
