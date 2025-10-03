@@ -101,11 +101,13 @@ class TimeBoxModel: ObservableObject {
     }
 
     private var breakMinutes: Int {
-        UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
+        let value = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.breakMinutes.rawValue)
+        return value > 0 ? value : SettingsDefaults.TimeBox.breakMinutes
     }
 
     private var durationMinutes: Int {
-        UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+        let value = UserDefaults.standard.integer(forKey: SettingsKeys.TimeBox.workMinutes.rawValue)
+        return value > 0 ? value : SettingsDefaults.TimeBox.workMinutes
     }
 
     private var endRestNotification: UNMutableNotificationContent {
