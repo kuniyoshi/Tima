@@ -11,12 +11,16 @@ In `Measurement`,
 1. Enter the work name and details
 1. Press the play button.
 
+![measurement.png](images/measurement.png)
+
 In `TimeBox`,
 
 1. Press `Space` to start a timebox
 1. After the specific minutes passed, the app notifies you when timebox is over
 1. Take a short break
 1. The app notifies you when the next timebox to begin.
+
+![timebox.png](images/timebox.png)
 
 # KEY BINDINGS
 
